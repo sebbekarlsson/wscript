@@ -1,6 +1,5 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
-#include "TOKEN_TYPES.h"
 #include "Token.hpp"
 
 

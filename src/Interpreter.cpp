@@ -1,3 +1,4 @@
+#include "includes/TOKEN_TYPES.h"
 #include "includes/Interpreter.hpp"
 #include <ctype.h>
 
@@ -39,5 +40,23 @@ void Interpreter::eat(std::string token_type) {
 };
 
 std::string Interpreter::expr() {
-    return "";
+    this->current_token = this->get_next_token();
+
+    Token* left;
+    Token* op;
+    Token* right;
+
+    std::string result = "";
+
+    left = this->current_token;
+    this->eat(T_INTEGER);
+
+    op = this->current_token;
+    this->eat(T_PLUS);
+
+    right = this->current_token;
+    this->eat(T_INTEGER);
+
+    result = std::to_string(std::stoi(left->value) + std::stoi(right->value));
+    return result;
 };
