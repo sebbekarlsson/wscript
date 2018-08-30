@@ -1,6 +1,7 @@
 #ifndef TOKEN_TYPES_H
 #define TOKEN_TYPES_H
 #include <string>
+// https://www.promotic.eu/en/pmdoc/ScriptLangs/VBScript/DataTypes.htm
 
 
 std::string T_INTEGER = "INTEGER";
