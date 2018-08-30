@@ -31,7 +31,11 @@ Token* Interpreter::get_next_token() {
 };
 
 void Interpreter::eat(std::string token_type) {
-
+    if (this->current_token->type == token_type) {
+        this->current_token = this->get_next_token();
+    } else {
+        // TODO: raise error here
+    }
 };
 
 std::string Interpreter::expr() {
