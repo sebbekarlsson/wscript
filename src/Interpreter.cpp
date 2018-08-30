@@ -1,6 +1,7 @@
 #include "includes/TOKEN_TYPES.h"
 #include "includes/Interpreter.hpp"
 #include <ctype.h>
+#include <iostream>
 
 
 Interpreter::Interpreter(std::string text) {
@@ -14,16 +15,16 @@ Token* Interpreter::get_next_token() {
     if (this->pos > (int)this->text.length() - 1)
         return new Token(T_EOF, "");
 
-    const char& current_char = this->text[this->pos];
+    const char& current_char = this->text.at(this->pos);
 
     if (isdigit(current_char)) {
-        Token* token = new Token(T_INTEGER, current_char + "");
+        Token* token = new Token(T_INTEGER, std::string(1, current_char));
         this->pos += 1;
         return token;
     }
 
     if (current_char == '+') {
-        Token* token = new Token(T_PLUS, current_char + "");
+        Token* token = new Token(T_PLUS, std::string(1, current_char));
         this->pos += 1;
         return token;
     }
