@@ -1,4 +1,5 @@
 #include "includes/Interpreter.hpp"
+#include <ctype.h>
 
 
 Interpreter::Interpreter(std::string text) {
@@ -9,7 +10,24 @@ Interpreter::Interpreter(std::string text) {
 
 
 Token* Interpreter::get_next_token() {
-    return nullptr;
+    if (this->pos > (int)this->text.length() - 1)
+        return new Token(T_EOF, "");
+
+    const char& current_char = this->text[this->pos];
+
+    if (isdigit(current_char)) {
+        Token* token = new Token(T_INTEGER, current_char + "");
+        this->pos += 1;
+        return token;
+    }
+
+    if (current_char == '+') {
+        Token* token = new Token(T_PLUS, current_char + "");
+        this->pos += 1;
+        return token;
+    }
+
+    return nullptr; // TODO: raise error here
 };
 
 void Interpreter::eat(std::string token_type) {
