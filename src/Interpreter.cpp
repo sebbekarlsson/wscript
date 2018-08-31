@@ -8,28 +8,59 @@ Interpreter::Interpreter(std::string text) {
     this->text = text;
     this->pos = 0;
     this->current_token = nullptr;
+    this->current_char = this->text.at(this->pos);
 };
 
-
 Token* Interpreter::get_next_token() {
-    if (this->pos > (int)this->text.length() - 1)
-        return new Token(T_EOF, "");
+    while (this->current_char != '\0') {
+        if (this->current_char == ' ') {
+            this->skip_whitespace();
+            continue;
+        }
 
-    const char& current_char = this->text.at(this->pos);
+        if (isdigit(this->current_char))
+            return new Token(T_INTEGER, std::to_string(this->integer()));
 
-    if (isdigit(current_char)) {
-        Token* token = new Token(T_INTEGER, std::string(1, current_char));
-        this->pos += 1;
-        return token;
+        if (this->current_char == '+') {
+            this->advance();
+            return new Token(T_PLUS, "+");
+        }
+
+        if (this->current_char == '-') {
+            this->advance();
+            return new Token(T_MINUS, "-");
+        }
+
+        // TODO raise error here
     }
 
-    if (current_char == '+') {
-        Token* token = new Token(T_PLUS, std::string(1, current_char));
-        this->pos += 1;
-        return token;
+    return new Token(T_EOF, "");
+};
+
+int Interpreter::integer() {
+    std::string result = "";
+
+    while (this->current_char != '\0' && isdigit(this->current_char)) {
+        result += this->current_char;
+        this->advance();
     }
 
-    return nullptr; // TODO: raise error here
+    return std::stoi(result);
+};
+
+void Interpreter::advance() {
+    this->pos += 1;
+
+    if (this->pos > (int)this->text.length() - 1) {
+        this->current_char = '\0';
+    } else {
+        this->current_char = this->text.at(this->pos);
+    }
+};
+
+void Interpreter::skip_whitespace() {
+    while (this->current_char == ' ')
+        this->advance();
 };
 
 void Interpreter::eat(std::string token_type) {
@@ -53,11 +84,18 @@ std::string Interpreter::expr() {
     this->eat(T_INTEGER);
 
     op = this->current_token;
-    this->eat(T_PLUS);
+    if (op->type == T_PLUS)
+        this->eat(T_PLUS);
+    else
+        this->eat(T_MINUS);
 
     right = this->current_token;
     this->eat(T_INTEGER);
 
-    result = std::to_string(std::stoi(left->value) + std::stoi(right->value));
+    if (op->type == T_PLUS)
+        result = std::to_string(std::stoi(left->value) + std::stoi(right->value));
+    else
+        result = std::to_string(std::stoi(left->value) - std::stoi(right->value));
+
     return result;
 };
