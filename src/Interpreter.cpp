@@ -2,6 +2,7 @@
 #include "includes/Interpreter.hpp"
 #include <ctype.h>
 #include <iostream>
+#include <sstream>
 
 
 Interpreter::Interpreter(std::string text) {
@@ -18,30 +19,36 @@ Token* Interpreter::get_next_token() {
             continue;
         }
 
+        std::stringstream ss;
+        std::string s;
+        ss << this->current_char;
+        ss >> s;
+
         if (isdigit(this->current_char))
             return new Token(T_INTEGER, std::to_string(this->integer()));
 
         if (this->current_char == '+') {
             this->advance();
-            return new Token(T_PLUS, "+");
+            return new Token(T_PLUS, s);
         }
 
         if (this->current_char == '-') {
             this->advance();
-            return new Token(T_MINUS, "-");
+            return new Token(T_MINUS, s);
         }
 
         if (this->current_char == '*') {
             this->advance();
-            return new Token(T_MULTIPLY, "*");
+            return new Token(T_MULTIPLY, s);
         }
 
         if (this->current_char == '/') {
             this->advance();
-            return new Token(T_DIVIDE, "/");
+            return new Token(T_DIVIDE, s);
         }
 
-        // TODO raise error here
+
+        throw std::runtime_error("Unexpected: `" + s + "`");
     }
 
     return new Token(T_EOF, "");
@@ -77,7 +84,7 @@ void Interpreter::eat(std::string token_type) {
     if (this->current_token->type == token_type) {
         this->current_token = this->get_next_token();
     } else {
-        // TODO: raise error here
+        throw std::runtime_error("Unexpected token type");
     }
 };
 
