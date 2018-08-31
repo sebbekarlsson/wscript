@@ -56,7 +56,6 @@ Token* Lexer::get_next_token() {
             return new Token(T_DIVIDE, s);
         }
 
-        std::cout << (int)this->current_char << std::endl;
         throw std::runtime_error("Unexpected: `" + s + "`");
     }
 
