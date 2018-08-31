@@ -71,31 +71,30 @@ void Interpreter::eat(std::string token_type) {
     }
 };
 
+std::string Interpreter::term() {
+    Token* token = this->current_token;
+    this->eat(T_INTEGER);
+    return token->value;
+};
+
 std::string Interpreter::expr() {
     this->current_token = this->get_next_token();
 
-    Token* left;
-    Token* op;
-    Token* right;
+    Token* token = nullptr;
 
-    std::string result = "";
+    std::string result = this->term();
 
-    left = this->current_token;
-    this->eat(T_INTEGER);
+    while(this->current_token->type == T_PLUS || this->current_token->type == T_MINUS) {
+        token = this->current_token;
 
-    op = this->current_token;
-    if (op->type == T_PLUS)
-        this->eat(T_PLUS);
-    else
-        this->eat(T_MINUS);
-
-    right = this->current_token;
-    this->eat(T_INTEGER);
-
-    if (op->type == T_PLUS)
-        result = std::to_string(std::stoi(left->value) + std::stoi(right->value));
-    else
-        result = std::to_string(std::stoi(left->value) - std::stoi(right->value));
+        if (token->type == T_PLUS) {
+            this->eat(T_PLUS);
+            result = std::to_string(std::stoi(result) + std::stoi(this->term()));
+        } else if (token->type == T_MINUS) {
+            this->eat(T_MINUS);
+            result = std::to_string(std::stoi(result) - std::stoi(this->term()));
+        }
+    };
 
     return result;
 };

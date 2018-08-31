@@ -22,6 +22,7 @@ class Interpreter {
         void skip_whitespace();
         void eat(std::string token_type);
 
+        std::string term();
         std::string expr();
 };
 #endif
