@@ -84,7 +84,7 @@ void Interpreter::eat(std::string token_type) {
     if (this->current_token->type == token_type) {
         this->current_token = this->get_next_token();
     } else {
-        throw std::runtime_error("Unexpected token type");
+        throw std::runtime_error("Unexpected token type: `" + token_type + "`");
     }
 };
 
