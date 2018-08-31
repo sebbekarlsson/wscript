@@ -8,6 +8,7 @@ std::string T_INTEGER = "INTEGER";
 std::string T_PLUS = "PLUS";
 std::string T_MINUS = "MINUS";
 std::string T_MULTIPLY = "MULTIPLY";
+std::string T_DIVIDE = "DIVIDE";
 std::string T_BOOLEAN = "BOOLEAN";
 std::string T_BYTE = "BYTE";
 std::string T_LONG = "LONG";

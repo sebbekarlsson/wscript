@@ -36,6 +36,11 @@ Token* Interpreter::get_next_token() {
             return new Token(T_MULTIPLY, "*");
         }
 
+        if (this->current_char == '/') {
+            this->advance();
+            return new Token(T_DIVIDE, "/");
+        }
+
         // TODO raise error here
     }
 
@@ -92,7 +97,8 @@ std::string Interpreter::expr() {
     while(
         this->current_token->type == T_PLUS ||
         this->current_token->type == T_MINUS ||
-        this->current_token->type == T_MULTIPLY
+        this->current_token->type == T_MULTIPLY ||
+        this->current_token->type == T_DIVIDE
     ) {
         token = this->current_token;
 
@@ -105,6 +111,9 @@ std::string Interpreter::expr() {
         } else if (token->type == T_MULTIPLY) {
             this->eat(T_MULTIPLY);
             result = std::to_string(std::stoi(result) * std::stoi(this->term()));
+        } else if (token->type == T_DIVIDE) {
+            this->eat(T_DIVIDE);
+            result = std::to_string(std::stoi(result) / std::stoi(this->term()));
         }
     };
 
