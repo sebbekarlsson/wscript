@@ -3,7 +3,6 @@
 #include <string>
 // https://www.promotic.eu/en/pmdoc/ScriptLangs/VBScript/DataTypes.htm
 
-
 std::string T_INTEGER = "INTEGER";
 std::string T_PLUS = "PLUS";
 std::string T_MINUS = "MINUS";
