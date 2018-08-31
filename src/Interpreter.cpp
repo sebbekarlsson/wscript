@@ -12,6 +12,11 @@ Interpreter::Interpreter(std::string text) {
     this->current_char = this->text.at(this->pos);
 };
 
+/**
+ * Collects the next token in the text
+ *
+ * @return Token*
+ */
 Token* Interpreter::get_next_token() {
     while (this->current_char != '\0') {
         if (this->current_char == ' ') {
@@ -47,13 +52,17 @@ Token* Interpreter::get_next_token() {
             return new Token(T_DIVIDE, s);
         }
 
-
         throw std::runtime_error("Unexpected: `" + s + "`");
     }
 
     return new Token(T_EOF, "");
 };
 
+/**
+ * Append single numbers into complete integers
+ *
+ * @return int
+ */
 int Interpreter::integer() {
     std::string result = "";
 
@@ -65,6 +74,9 @@ int Interpreter::integer() {
     return std::stoi(result);
 };
 
+/**
+ * Tells the interpreter to go to the next character.
+ */
 void Interpreter::advance() {
     this->pos += 1;
 
@@ -75,11 +87,25 @@ void Interpreter::advance() {
     }
 };
 
+/**
+ * Tells the interpreter to go to the next character until the
+ * current_char is not whitespace.
+ */
 void Interpreter::skip_whitespace() {
     while (this->current_char == ' ')
         this->advance();
 };
 
+/**
+ * Takes an expected token_type as argument,
+ * if the current_token->type is equal to that, it will
+ * fetch the next token and assign it to this->current_token.
+ *
+ * If the token_type passed in is not equal to the current one, it will
+ * throw an error.
+ *
+ * @param std::string token_type - the expected current token type.
+ */
 void Interpreter::eat(std::string token_type) {
     if (this->current_token->type == token_type) {
         this->current_token = this->get_next_token();
@@ -88,12 +114,23 @@ void Interpreter::eat(std::string token_type) {
     }
 };
 
+/**
+ * executes the Interpretter::eats method with T_INTEGER
+ * and returns the current_token->value that was before `eat` was executed.
+ * 
+ * @return std::string
+ */
 std::string Interpreter::term() {
     Token* token = this->current_token;
     this->eat(T_INTEGER);
     return token->value;
 };
 
+/**
+ * Tells the interpreter to parse a mathematical expression
+ *
+ * @return std::string
+ */
 std::string Interpreter::expr() {
     this->current_token = this->get_next_token();
 
