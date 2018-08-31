@@ -1,5 +1,6 @@
 #include "includes/Lexer.hpp"
 #include <sstream>
+#include <iostream>
 
 
 extern std::string T_INTEGER;
@@ -21,7 +22,7 @@ Lexer::Lexer(std::string text) {
  * @return Token*
  */
 Token* Lexer::get_next_token() {
-    while (this->current_char != '\0') {
+    while (this->current_char != '\0' && (int)this->current_char != 10) {
         if (this->current_char == ' ') {
             this->skip_whitespace();
             continue;
@@ -55,6 +56,7 @@ Token* Lexer::get_next_token() {
             return new Token(T_DIVIDE, s);
         }
 
+        std::cout << (int)this->current_char << std::endl;
         throw std::runtime_error("Unexpected: `" + s + "`");
     }
 
