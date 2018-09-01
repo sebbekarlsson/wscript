@@ -9,6 +9,8 @@ extern std::string T_MINUS;
 extern std::string T_MULTIPLY;
 extern std::string T_DIVIDE;
 extern std::string T_EOF;
+extern std::string T_LPAREN;
+extern std::string T_RPAREN;
 
 Lexer::Lexer(std::string text) {
     this->text = text;
@@ -54,6 +56,16 @@ Token* Lexer::get_next_token() {
         if (this->current_char == '/') {
             this->advance();
             return new Token(T_DIVIDE, s);
+        }
+
+        if (this->current_char == '(') {
+            this->advance();
+            return new Token(T_LPAREN, "(");
+        }
+
+        if (this->current_char == ')') {
+            this->advance();
+            return new Token(T_RPAREN, ")");
         }
 
         throw std::runtime_error("Unexpected: `" + s + "`");

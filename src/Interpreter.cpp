@@ -9,6 +9,8 @@ extern std::string T_PLUS;
 extern std::string T_MINUS;
 extern std::string T_MULTIPLY;
 extern std::string T_DIVIDE;
+extern std::string T_LPAREN;
+extern std::string T_RPAREN;
 
 Interpreter::Interpreter(Lexer* lexer) {
     this->lexer = lexer;
@@ -42,8 +44,21 @@ void Interpreter::eat(std::string token_type) {
  */
 std::string Interpreter::factor() {
     Token* token = this->current_token;
-    this->eat(T_INTEGER);
-    return token->value;
+
+    if (token->type == T_INTEGER) {
+        this->eat(T_INTEGER);
+        return token->value;
+    }
+
+    if (token->type == T_LPAREN) {
+        std::string result = "";
+
+        this->eat(T_LPAREN);
+        result = this->expr();
+        this->eat(T_RPAREN);
+
+        return result;
+    }
 };
 
 /**

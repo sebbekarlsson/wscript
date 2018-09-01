@@ -19,5 +19,7 @@ std::string T_OBJECT = "OBJECT";
 std::string T_ARRAY = "ARRAY";
 std::string T_EMPTY = "EMPTY";
 std::string T_NULL = "NULL";
+std::string T_LPAREN = "(";
+std::string T_RPAREN = ")";
 std::string T_EOF = "EOF";
 #endif
