@@ -12,7 +12,7 @@ extern std::string T_DIVIDE;
 
 Interpreter::Interpreter(Lexer* lexer) {
     this->lexer = lexer;
-    this->current_token = nullptr;
+    this->current_token = this->lexer->get_next_token();
 };
 
 /**
@@ -36,32 +36,59 @@ void Interpreter::eat(std::string token_type) {
 /**
  * executes the Interpreter::eats method with T_INTEGER
  * and returns the current_token->value that was before `eat` was executed.
+ * factor: INTEGER
  * 
  * @return std::string
  */
-std::string Interpreter::term() {
+std::string Interpreter::factor() {
     Token* token = this->current_token;
     this->eat(T_INTEGER);
     return token->value;
 };
 
 /**
- * Tells the interpreter to parse a mathematical expression
+ * Handles multiplication and division
+ * term : factor ((MUL | DIV) factor)*
+ *
+ * @return std::string
+ */
+std::string Interpreter::term() {
+    Token* token = nullptr;
+    
+    std::string result = this->factor();
+
+    while (
+        this->current_token->type == T_MULTIPLY ||
+        this->current_token->type == T_DIVIDE
+    ) {
+        token = this->current_token;
+
+        if (token->type == T_MULTIPLY) {
+            this->eat(T_MULTIPLY);
+            result = std::to_string(std::stoi(result) * std::stoi(this->factor()));
+        } else if (token->type == T_DIVIDE) {
+            this->eat(T_DIVIDE);
+            result = std::to_string(std::stoi(result) / std::stoi(this->factor()));
+        }
+    }
+
+    return result;
+};
+
+/**
+ * Tells the interpreter to parse a mathematical expression,
+ * arithmetic expression parsing.
  *
  * @return std::string
  */
 std::string Interpreter::expr() {
-    this->current_token = this->lexer->get_next_token();
-
     Token* token = nullptr;
 
     std::string result = this->term();
 
     while(
         this->current_token->type == T_PLUS ||
-        this->current_token->type == T_MINUS ||
-        this->current_token->type == T_MULTIPLY ||
-        this->current_token->type == T_DIVIDE
+        this->current_token->type == T_MINUS
     ) {
         token = this->current_token;
 
@@ -71,12 +98,6 @@ std::string Interpreter::expr() {
         } else if (token->type == T_MINUS) {
             this->eat(T_MINUS);
             result = std::to_string(std::stoi(result) - std::stoi(this->term()));
-        } else if (token->type == T_MULTIPLY) {
-            this->eat(T_MULTIPLY);
-            result = std::to_string(std::stoi(result) * std::stoi(this->term()));
-        } else if (token->type == T_DIVIDE) {
-            this->eat(T_DIVIDE);
-            result = std::to_string(std::stoi(result) / std::stoi(this->term()));
         }
     };
 

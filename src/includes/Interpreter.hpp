@@ -13,6 +13,7 @@ class Interpreter {
 
         void eat(std::string token_type);
 
+        std::string factor();
         std::string term();
         std::string expr();
 };
