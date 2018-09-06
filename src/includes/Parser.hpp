@@ -1,13 +1,13 @@
-#ifndef INTERPRETER_H
-#define INTERPRETER_H
+#ifndef PARSER_H
+#define PARSER_H
 #include "Token.hpp"
 #include "Lexer.hpp"
 #include "AST.hpp"
 
 
-class Interpreter {
+class Parser {
     public:
-        Interpreter(Lexer* lexer);
+        Parser(Lexer* lexer);
 
         Lexer* lexer;
         Token* current_token;

@@ -1,4 +1,4 @@
-#include "includes/Interpreter.hpp"
+#include "includes/Parser.hpp"
 #include "includes/Num.hpp"
 #include "includes/BinOp.hpp"
 #include <ctype.h>
@@ -14,7 +14,7 @@ extern std::string T_DIVIDE;
 extern std::string T_LPAREN;
 extern std::string T_RPAREN;
 
-Interpreter::Interpreter(Lexer* lexer) {
+Parser::Parser(Lexer* lexer) {
     this->lexer = lexer;
     this->current_token = this->lexer->get_next_token();
 };
@@ -29,7 +29,7 @@ Interpreter::Interpreter(Lexer* lexer) {
  *
  * @param std::string token_type - the expected current token type.
  */
-void Interpreter::eat(std::string token_type) {
+void Parser::eat(std::string token_type) {
     if (this->current_token->type == token_type) {
         this->current_token = this->lexer->get_next_token();
     } else {
@@ -38,13 +38,13 @@ void Interpreter::eat(std::string token_type) {
 };
 
 /**
- * executes the Interpreter::eats method with T_INTEGER
+ * executes the Parser::eats method with T_INTEGER
  * and returns the current_token->value that was before `eat` was executed.
  * factor: INTEGER
  * 
  * @return std::string
  */
-AST* Interpreter::factor() {
+AST* Parser::factor() {
     Token* token = this->current_token;
 
     if (token->type == T_INTEGER) {
@@ -68,7 +68,7 @@ AST* Interpreter::factor() {
  *
  * @return std::string
  */
-AST* Interpreter::term() {
+AST* Parser::term() {
     Token* token = nullptr;
 
     // we actually dont know if "this->factor()" will
@@ -101,7 +101,7 @@ AST* Interpreter::term() {
  *
  * @return std::string
  */
-AST* Interpreter::expr() {
+AST* Parser::expr() {
     Token* token = nullptr;
 
     BinOp* node = (BinOp*)this->term();
@@ -124,6 +124,6 @@ AST* Interpreter::expr() {
     return node;
 };
 
-AST* Interpreter::parse() {
+AST* Parser::parse() {
     return this->expr();
 };

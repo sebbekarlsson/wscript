@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ResourceManager.h>
 #include "includes/TOKEN_TYPES.hpp"
-#include "includes/Interpreter.hpp"
+#include "includes/Parser.hpp"
 
 
 int main(int argc, char** argv) {
@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
     ResourceManager::load(argv[1]);
 
     Lexer* lexer = new Lexer(ResourceManager::get(argv[1]));
-    Interpreter* interpreter = new Interpreter(lexer);
+    Parser* interpreter = new Parser(lexer);
 
     std::cout << interpreter->expr() << std::endl;
 
