@@ -49,12 +49,15 @@ AST* Parser::factor() {
 
     if (token->type == T_INTEGER) {
         this->eat(T_INTEGER);
-        return new Num(token);
+        Num* num = new Num(token);
+        num->name = "Num";
+
+        return num;
     }
 
     if (token->type == T_LPAREN) {
         this->eat(T_LPAREN);
-        BinOp* node = (BinOp*)this->expr();
+        AST* node = this->expr();
         this->eat(T_RPAREN);
         return node;
     }
@@ -73,7 +76,13 @@ AST* Parser::term() {
 
     // we actually dont know if "this->factor()" will
     // return a BinOp* or a Num*.
-    BinOp* node = (BinOp*)this->factor();
+    AST* node = this->factor();
+    
+    if (node->name == "BinOp") {
+        node = (BinOp*) node;
+    } else if (node->name == "Num") {
+        node = (Num*) node;
+    }
 
     while (
         this->current_token->type == T_MULTIPLY ||
@@ -90,6 +99,7 @@ AST* Parser::term() {
         // we actually dont know if "this->factor()" will
         // return a BinOp* or a Num*.
         node = new BinOp(node, token, this->factor());
+        node->name = "BinOp";
     }
 
     return node;
@@ -104,7 +114,13 @@ AST* Parser::term() {
 AST* Parser::expr() {
     Token* token = nullptr;
 
-    BinOp* node = (BinOp*)this->term();
+    AST* node = this->term();
+    
+    if (node->name == "BinOp") {
+        node = (BinOp*) node;
+    } else if (node->name == "Num") {
+        node = (Num*) node;
+    }
 
     while(
         this->current_token->type == T_PLUS ||
@@ -119,6 +135,7 @@ AST* Parser::expr() {
         }
 
         node = new BinOp(node, token, this->term());
+        node->name = "BinOp";
     };
 
     return node;
