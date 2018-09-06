@@ -123,3 +123,7 @@ AST* Interpreter::expr() {
 
     return node;
 };
+
+AST* Interpreter::parse() {
+    return this->expr();
+};

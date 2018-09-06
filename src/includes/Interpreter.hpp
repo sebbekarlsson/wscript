@@ -17,5 +17,6 @@ class Interpreter {
         AST* factor();
         AST* term();
         AST* expr();
+        AST* parse();
 };
 #endif
