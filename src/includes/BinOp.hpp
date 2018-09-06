@@ -6,11 +6,11 @@
 
 class BinOp: public AST {
     public:
-        BinOp(Token* left, Token* op, Token* right);
+        BinOp(AST* left, Token* op, AST* right);
 
         Token* token;
-        Token* left;
+        AST* left;
         Token* op;
-        Token* right;
+        AST* right;
 };
 #endif

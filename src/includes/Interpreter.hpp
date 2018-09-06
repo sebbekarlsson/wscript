@@ -1,20 +1,17 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
-#include "Token.hpp"
-#include "Lexer.hpp"
+#include "NodeVisitor.hpp"
+#include "Parser.hpp"
 
 
-class Interpreter {
+class Interpreter: public NodeVisitor {
     public:
-        Interpreter(Lexer* lexer);
+        Interpreter(Parser* parser);
 
-        Lexer* lexer;
-        Token* current_token;
+        Parser* parser;
 
-        void eat(std::string token_type);
-
-        std::string factor();
-        std::string term();
-        std::string expr();
+        int visit_BinOp(BinOp* node);
+        int visit_Num(Num* node);
+        std::string interpret();
 };
 #endif

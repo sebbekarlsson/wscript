@@ -1,7 +1,7 @@
 #include "includes/BinOp.hpp"
 
 
-BinOp::BinOp(Token* left, Token* op, Token* right) {
+BinOp::BinOp(AST* left, Token* op, AST* right) {
     this->left = left;
     this->op = op;
     this->token = this->op;
