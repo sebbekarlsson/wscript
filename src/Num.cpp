@@ -3,5 +3,5 @@
 
 Num::Num(Token* token) {
     this->token = token;
-    this->value = token->value;
+    this->value = std::stoi(token->value);
 };

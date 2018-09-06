@@ -10,6 +10,6 @@ class Num: public AST {
         Num(Token* token);
 
         Token* token;
-        std::string value;
+        int value;
 };
 #endif

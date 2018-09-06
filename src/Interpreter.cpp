@@ -27,7 +27,7 @@ int Interpreter::visit_BinOp(BinOp* node) {
 };
 
 int Interpreter::visit_Num(Num* node) {
-    return std::stoi(node->value);
+    return node->value;
 };
 
 std::string Interpreter::interpret() {
