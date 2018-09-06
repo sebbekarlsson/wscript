@@ -2,6 +2,7 @@
 #define INTERPRETER_H
 #include "Token.hpp"
 #include "Lexer.hpp"
+#include "AST.hpp"
 
 
 class Interpreter {
@@ -13,8 +14,8 @@ class Interpreter {
 
         void eat(std::string token_type);
 
-        std::string factor();
-        std::string term();
-        std::string expr();
+        AST* factor();
+        AST* term();
+        AST* expr();
 };
 #endif

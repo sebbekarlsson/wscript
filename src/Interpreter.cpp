@@ -1,4 +1,6 @@
 #include "includes/Interpreter.hpp"
+#include "includes/Num.hpp"
+#include "includes/BinOp.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -42,23 +44,22 @@ void Interpreter::eat(std::string token_type) {
  * 
  * @return std::string
  */
-std::string Interpreter::factor() {
+AST* Interpreter::factor() {
     Token* token = this->current_token;
 
     if (token->type == T_INTEGER) {
         this->eat(T_INTEGER);
-        return token->value;
+        return new Num(token);
     }
 
     if (token->type == T_LPAREN) {
-        std::string result = "";
-
         this->eat(T_LPAREN);
-        result = this->expr();
+        BinOp* node = (BinOp*)this->expr();
         this->eat(T_RPAREN);
-
-        return result;
+        return node;
     }
+
+    return nullptr;
 };
 
 /**
@@ -67,10 +68,12 @@ std::string Interpreter::factor() {
  *
  * @return std::string
  */
-std::string Interpreter::term() {
+AST* Interpreter::term() {
     Token* token = nullptr;
-    
-    std::string result = this->factor();
+
+    // we actually dont know if "this->factor()" will
+    // return a BinOp* or a Num*.
+    BinOp* node = (BinOp*)this->factor();
 
     while (
         this->current_token->type == T_MULTIPLY ||
@@ -80,14 +83,16 @@ std::string Interpreter::term() {
 
         if (token->type == T_MULTIPLY) {
             this->eat(T_MULTIPLY);
-            result = std::to_string(std::stoi(result) * std::stoi(this->factor()));
         } else if (token->type == T_DIVIDE) {
             this->eat(T_DIVIDE);
-            result = std::to_string(std::stoi(result) / std::stoi(this->factor()));
         }
+
+        // we actually dont know if "this->factor()" will
+        // return a BinOp* or a Num*.
+        node = new BinOp(node, token, this->factor());
     }
 
-    return result;
+    return node;
 };
 
 /**
@@ -96,10 +101,10 @@ std::string Interpreter::term() {
  *
  * @return std::string
  */
-std::string Interpreter::expr() {
+AST* Interpreter::expr() {
     Token* token = nullptr;
 
-    std::string result = this->term();
+    BinOp* node = (BinOp*)this->term();
 
     while(
         this->current_token->type == T_PLUS ||
@@ -109,12 +114,12 @@ std::string Interpreter::expr() {
 
         if (token->type == T_PLUS) {
             this->eat(T_PLUS);
-            result = std::to_string(std::stoi(result) + std::stoi(this->term()));
         } else if (token->type == T_MINUS) {
             this->eat(T_MINUS);
-            result = std::to_string(std::stoi(result) - std::stoi(this->term()));
         }
+
+        node = new BinOp(node, token, this->term());
     };
 
-    return result;
+    return node;
 };
