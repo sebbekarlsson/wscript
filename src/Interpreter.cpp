@@ -26,6 +26,15 @@ int Interpreter::visit_BinOp(BinOp* node) {
     return 0;
 };
 
+int Interpreter::visit_UnaryOp(UnaryOp * node) {
+    if (node->op->type == T_PLUS)
+        return +this->visit(node->expr);
+    else if (node->op->type == T_MINUS)
+        return -this->visit(node->expr);
+
+    return this->visit(node->expr);
+}
+
 int Interpreter::visit_Num(Num* node) {
     return node->value;
 };

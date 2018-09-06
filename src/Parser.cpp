@@ -1,6 +1,7 @@
 #include "includes/Parser.hpp"
 #include "includes/Num.hpp"
 #include "includes/BinOp.hpp"
+#include "includes/UnaryOp.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -47,15 +48,25 @@ void Parser::eat(std::string token_type) {
 AST* Parser::factor() {
     Token* token = this->current_token;
 
-    if (token->type == T_INTEGER) {
+    if (token->type == T_PLUS) {
+        this->eat(T_PLUS);
+        UnaryOp* node = new UnaryOp(token, this->factor());
+        node->name = "UnaryOp";
+        return node;
+
+    } else if (token->type == T_MINUS) {
+        this->eat(T_MINUS);
+        UnaryOp* node = new UnaryOp(token, this->factor());
+        node->name = "UnaryOp";
+        return node;
+
+    } else if (token->type == T_INTEGER) {
         this->eat(T_INTEGER);
         Num* num = new Num(token);
         num->name = "Num";
 
         return num;
-    }
-
-    if (token->type == T_LPAREN) {
+    } else if (token->type == T_LPAREN) {
         this->eat(T_LPAREN);
         AST* node = this->expr();
         this->eat(T_RPAREN);

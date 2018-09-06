@@ -2,6 +2,7 @@
 #define NODEVISITOR_H
 #include "AST.hpp"
 #include "BinOp.hpp"
+#include "UnaryOp.hpp"
 #include "Num.hpp"
 #include <string>
 
@@ -12,6 +13,7 @@ class NodeVisitor {
         int visit_default(AST* node);
 
         virtual int visit_BinOp(BinOp* node) = 0;
+        virtual int visit_UnaryOp(UnaryOp* node) = 0;
         virtual int visit_Num(Num* node) = 0;
 };
 #endif

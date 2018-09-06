@@ -4,6 +4,8 @@
 int NodeVisitor::visit(AST* node) {
     if (node->name == "BinOp")
         return this->visit_BinOp((BinOp*) node);
+    else if (node->name == "UnaryOp")
+        return this->visit_UnaryOp((UnaryOp*) node);
     else if (node->name == "Num")
         return this->visit_Num((Num*) node);
     else

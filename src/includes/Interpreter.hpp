@@ -11,6 +11,7 @@ class Interpreter: public NodeVisitor {
         Parser* parser;
 
         int visit_BinOp(BinOp* node);
+        int visit_UnaryOp(UnaryOp* node);
         int visit_Num(Num* node);
         std::string interpret();
 };
