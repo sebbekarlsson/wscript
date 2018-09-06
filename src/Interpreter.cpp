@@ -12,3 +12,8 @@ std::string Interpreter::visit_BinOp(BinOp* node) {
 std::string Interpreter::visit_Num(Num* num) {
     return "";
 };
+
+std::string Interpreter::interpret() {
+    AST* tree = this->parser->parse();
+    return this->visit(tree);
+};

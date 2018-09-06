@@ -12,5 +12,6 @@ class Interpreter: public NodeVisitor {
 
         std::string visit_BinOp(BinOp* node);
         std::string visit_Num(Num* node);
+        std::string interpret();
 };
 #endif
