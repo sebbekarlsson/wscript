@@ -8,10 +8,10 @@
 
 class NodeVisitor {
     public:
-        std::string visit(AST* node);
-        std::string visit_default(AST* node);
+        int visit(AST* node);
+        int visit_default(AST* node);
 
-        virtual std::string visit_BinOp(BinOp* node) = 0;
-        virtual std::string visit_Num(Num* node) = 0;
+        virtual int visit_BinOp(BinOp* node) = 0;
+        virtual int visit_Num(Num* node) = 0;
 };
 #endif

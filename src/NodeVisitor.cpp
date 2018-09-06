@@ -1,7 +1,7 @@
 #include "includes/NodeVisitor.hpp"
 
 
-std::string NodeVisitor::visit(AST* node) {
+int NodeVisitor::visit(AST* node) {
     if (node->name == "BinOp")
         return this->visit_BinOp((BinOp*) node);
     else if (node->name == "Num")
@@ -10,7 +10,7 @@ std::string NodeVisitor::visit(AST* node) {
         return this->visit_default(node);
 };
 
-std::string NodeVisitor::visit_default(AST* node) {
+int NodeVisitor::visit_default(AST* node) {
     // TODO: Throw error here
-    return "";
+    return 0;
 };
