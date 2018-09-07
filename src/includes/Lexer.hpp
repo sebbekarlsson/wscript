@@ -21,6 +21,8 @@ class Lexer {
 
         char peek();
 
+        Token* _id();
+
         void advance();
         void skip_whitespace();
 };

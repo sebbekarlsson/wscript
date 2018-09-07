@@ -100,6 +100,20 @@ char Lexer::peek() {
     return this->text.at(peek_pos);
 };
 
+Token* Lexer::_id() {
+    std::string result = "";
+
+    while (this->current_char != '\0' && isalnum(this->current_char)) {
+        result += this->current_char;
+        this->advance();
+    }
+
+    // token = RESERVED_KEYWORDS.get(result, Token(ID, result))
+    //
+    
+    return nullptr; //token
+};
+
 /**
  * Tells the lexer to go to the next character.
  */
