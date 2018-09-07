@@ -22,4 +22,9 @@ std::string T_NULL = "NULL";
 std::string T_LPAREN = "(";
 std::string T_RPAREN = ")";
 std::string T_EOF = "EOF";
+
+std::map<std::string, std::string> RESERVED_TOKENS = {
+    {"BEGIN", "BEGIN"},
+    {"END", "END"}
+};
 #endif

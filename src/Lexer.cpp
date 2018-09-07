@@ -1,6 +1,7 @@
 #include "includes/Lexer.hpp"
 #include <sstream>
 #include <iostream>
+#include <map>
 
 
 extern std::string T_INTEGER;
@@ -11,6 +12,7 @@ extern std::string T_DIVIDE;
 extern std::string T_EOF;
 extern std::string T_LPAREN;
 extern std::string T_RPAREN;
+extern std::map<std::string, std::string> RESERVED_TOKENS;
 
 Lexer::Lexer(std::string text) {
     this->text = text;
@@ -37,6 +39,9 @@ Token* Lexer::get_next_token() {
 
         if (isdigit(this->current_char))
             return new Token(T_INTEGER, std::to_string(this->integer()));
+
+        if (isalpha(this->current_char))
+            return this->_id();
 
         if (this->current_char == '+') {
             this->advance();
@@ -103,15 +108,16 @@ char Lexer::peek() {
 Token* Lexer::_id() {
     std::string result = "";
 
+    Token* token;
+
     while (this->current_char != '\0' && isalnum(this->current_char)) {
         result += this->current_char;
         this->advance();
     }
 
-    // token = RESERVED_KEYWORDS.get(result, Token(ID, result))
-    //
-    
-    return nullptr; //token
+    token = new Token(RESERVED_TOKENS[result], RESERVED_TOKENS[result]);
+
+    return token;
 };
 
 /**
