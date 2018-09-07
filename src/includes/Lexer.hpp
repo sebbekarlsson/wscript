@@ -19,6 +19,8 @@ class Lexer {
 
         int integer();
 
+        char peek();
+
         void advance();
         void skip_whitespace();
 };

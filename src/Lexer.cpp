@@ -90,6 +90,16 @@ int Lexer::integer() {
     return std::stoi(result);
 };
 
+char Lexer::peek() {
+    int peek_pos = this->pos + 1;
+
+    if (peek_pos > (int)this->text.length()) {
+        return '\0';
+    }
+
+    return this->text.at(peek_pos);
+};
+
 /**
  * Tells the lexer to go to the next character.
  */
