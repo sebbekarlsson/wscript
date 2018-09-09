@@ -21,6 +21,12 @@ std::string T_EMPTY = "EMPTY";
 std::string T_NULL = "NULL";
 std::string T_LPAREN = "(";
 std::string T_RPAREN = ")";
+std::string T_DOT = "DOT";
+std::string T_SEMI = "SEMI";
+std::string T_ASSIGN = "ASSIGN";
+std::string T_ID = "ID";
+std::string T_BEGIN = "BEGIN";
+std::string T_END = "END";
 std::string T_EOF = "EOF";
 
 std::map<std::string, std::string> RESERVED_KEYWORDS = {

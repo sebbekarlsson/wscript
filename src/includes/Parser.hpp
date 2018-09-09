@@ -3,6 +3,7 @@
 #include "Token.hpp"
 #include "Lexer.hpp"
 #include "AST.hpp"
+#include "Var.hpp"
 
 
 class Parser {
@@ -17,6 +18,13 @@ class Parser {
         AST* factor();
         AST* term();
         AST* expr();
+        AST* program();
+        AST* compound_statement();
+        std::vector<AST*> statement_list();
+        AST* statement();
+        AST* assignment_statement();
+        Var* variable();
+        AST* empty();
         AST* parse();
 };
 #endif

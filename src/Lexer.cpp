@@ -12,6 +12,10 @@ extern std::string T_DIVIDE;
 extern std::string T_EOF;
 extern std::string T_LPAREN;
 extern std::string T_RPAREN;
+extern std::string T_ASSIGN;
+extern std::string T_DOT;
+extern std::string T_SEMI;
+extern std::string T_ID;
 extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 
 Lexer::Lexer(std::string text) {
@@ -26,8 +30,8 @@ Lexer::Lexer(std::string text) {
  * @return Token*
  */
 Token* Lexer::get_next_token() {
-    while (this->current_char != '\0' && (int)this->current_char != 10) {
-        if (this->current_char == ' ') {
+    while (this->current_char != '\0') {
+        if (this->current_char == ' ' || (int)this->current_char == 10) {
             this->skip_whitespace();
             continue;
         }
@@ -42,6 +46,23 @@ Token* Lexer::get_next_token() {
 
         if (isalpha(this->current_char))
             return this->_id();
+
+        if (this->current_char == ':' && this->peek() == '=') {
+            this->advance();
+            this->advance();
+
+            return new Token(T_ASSIGN, ":=");
+        }
+
+        if (this->current_char == ';') {
+            this->advance();
+            return new Token(T_SEMI, s);
+        }
+
+        if (this->current_char == '.') {
+            this->advance();
+            return new Token(T_DOT, s);
+        }
 
         if (this->current_char == '+') {
             this->advance();
@@ -76,7 +97,7 @@ Token* Lexer::get_next_token() {
         throw std::runtime_error("Unexpected: `" + s + "`");
     }
 
-    return new Token(T_EOF, "");
+    return new Token(T_EOF, T_EOF);
 };
 
 /**
@@ -115,7 +136,11 @@ Token* Lexer::_id() {
         this->advance();
     }
 
-    token = new Token(RESERVED_KEYWORDS[result], RESERVED_KEYWORDS[result]);
+    if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
+        token = new Token(RESERVED_KEYWORDS[result], RESERVED_KEYWORDS[result]);
+    } else {
+        token = new Token(T_ID, result);
+    }
 
     return token;
 };
@@ -138,6 +163,6 @@ void Lexer::advance() {
  * current_char is not whitespace.
  */
 void Lexer::skip_whitespace() {
-    while (this->current_char == ' ')
+    while (this->current_char == ' ' || (int)this->current_char == 10)
         this->advance();
 };

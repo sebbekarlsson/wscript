@@ -13,6 +13,11 @@ class Interpreter: public NodeVisitor {
         int visit_BinOp(BinOp* node);
         int visit_UnaryOp(UnaryOp* node);
         int visit_Num(Num* node);
+        int visit_Compound(Compound* node);
+        int visit_Assign(Assign* node);
+        int visit_Var(Var* node);
+        int visit_NoOp(NoOp* node);
+
         std::string interpret();
 };
 #endif
