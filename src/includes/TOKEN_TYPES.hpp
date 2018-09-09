@@ -23,7 +23,7 @@ std::string T_LPAREN = "(";
 std::string T_RPAREN = ")";
 std::string T_EOF = "EOF";
 
-std::map<std::string, std::string> RESERVED_TOKENS = {
+std::map<std::string, std::string> RESERVED_KEYWORDS = {
     {"BEGIN", "BEGIN"},
     {"END", "END"}
 };

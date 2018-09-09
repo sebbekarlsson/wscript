@@ -12,7 +12,7 @@ extern std::string T_DIVIDE;
 extern std::string T_EOF;
 extern std::string T_LPAREN;
 extern std::string T_RPAREN;
-extern std::map<std::string, std::string> RESERVED_TOKENS;
+extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 
 Lexer::Lexer(std::string text) {
     this->text = text;
@@ -115,7 +115,7 @@ Token* Lexer::_id() {
         this->advance();
     }
 
-    token = new Token(RESERVED_TOKENS[result], RESERVED_TOKENS[result]);
+    token = new Token(RESERVED_KEYWORDS[result], RESERVED_KEYWORDS[result]);
 
     return token;
 };
