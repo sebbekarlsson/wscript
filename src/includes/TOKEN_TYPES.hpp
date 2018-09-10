@@ -33,6 +33,7 @@ std::string T_IF = "IF";
 std::string T_THEN = "THEN";
 std::string T_LARGER_THAN = "LARGER_THAN";
 std::string T_LESS_THAN = "LESS_THAN";
+std::string T_EQUALS = "EQUALS";
 std::string T_END = "END";
 std::string T_EOF = "EOF";
 
