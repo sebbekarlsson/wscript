@@ -3,7 +3,6 @@
 
 
 int NodeVisitor::visit(AST* node) {
-    std::cout << node->name << std::endl;
     if (node->name == "BinOp")
         return this->visit_BinOp((BinOp*) node);
     else if (node->name == "UnaryOp")

@@ -52,13 +52,18 @@ int Interpreter::visit_Compound(Compound* node) {
 
 int Interpreter::visit_Assign(Assign* node) {
     std::string varname = node->left->value;
+    int value = this->visit(node->right);
 
-    return 0; // TODO fetch value from node->right
+    RAM::set_variable(varname, std::to_string(value));
+
+    return value;
 };
 
 int Interpreter::visit_Var(Var* node) {
     std::string varname = node->value;
-    return 12; // TODO fetch value from some sort of global map
+    std::string value = RAM::get_variable(varname);
+
+    return std::stoi(value);
 };
 
 int Interpreter::visit_NoOp(NoOp* node) { return 0;};
