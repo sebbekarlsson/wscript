@@ -175,6 +175,21 @@ AST* Parser::program() {
     return node;
 };
 
+AST* Parser::any_statement() {
+    std::vector<AST*> nodes;
+
+    nodes = this->statement_list();
+
+    Compound* root = new Compound();
+    root->name = "Compound";
+
+    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+        root->children.push_back((*it));
+    }
+
+    return root;
+};
+
 AST* Parser::compound_statement() {
     std::vector<AST*> nodes;
 
@@ -263,10 +278,10 @@ AST* Parser::empty() {
 };
 
 AST* Parser::parse() {
-    AST* node = this->program();
+    AST* node = this->any_statement();
 
-    if (this->current_token->type != T_EOF)
-        throw std::runtime_error("Expected EOF");
+    //if (this->current_token->type != T_EOF)
+    //    throw std::runtime_error("Expected EOF");
 
     return node;
 };

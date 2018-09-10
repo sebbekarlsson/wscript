@@ -1,3 +1,2 @@
-BEGIN
-    Dim x
-END.
+Dim x;
+x = 2;
