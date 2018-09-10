@@ -17,6 +17,7 @@ extern std::string T_DOT;
 extern std::string T_SEMI;
 extern std::string T_ID;
 extern std::string T_COMMA;
+extern std::string T_NEWLINE;
 extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 
 Lexer::Lexer(std::string text) {
@@ -32,14 +33,8 @@ Lexer::Lexer(std::string text) {
  */
 Token* Lexer::get_next_token() {
     while (this->current_char != '\0') {
-        if (this->current_char == ' ' || (int)this->current_char == 10) {
+        if (this->current_char == ' ') {
             this->skip_whitespace();
-            continue;
-        }
-
-        if (this->current_char == '\'') {
-            this->advance();
-            this->skip_comment();
             continue;
         }
 
@@ -47,6 +42,18 @@ Token* Lexer::get_next_token() {
         std::string s;
         ss << this->current_char;
         ss >> s;
+
+        if (this->current_char == '\n' || (int)this->current_char == 10) {
+            this->advance();
+            
+            return new Token(T_NEWLINE, s);
+        }
+
+        if (this->current_char == '\'') {
+            this->advance();
+            this->skip_comment();
+            continue;
+        }
 
         if (isdigit(this->current_char))
             return new Token(T_INTEGER, std::to_string(this->integer()));

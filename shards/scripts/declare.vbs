@@ -1,2 +1,2 @@
-Dim x;
-x = 2;
+Dim x
+x = 2

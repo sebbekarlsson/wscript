@@ -26,6 +26,7 @@ extern std::string T_ID;
 extern std::string T_SEMI;
 extern std::string T_ASSIGN;
 extern std::string T_DECLARE;
+extern std::string T_NEWLINE;
 extern std::string T_EOF;
 
 Parser::Parser(Lexer* lexer) {
@@ -213,8 +214,8 @@ std::vector<AST*> Parser::statement_list() {
 
     results.push_back(node);
 
-    while (this->current_token->type == T_SEMI) {
-        this->eat(T_SEMI);
+    while (this->current_token->type == T_NEWLINE) {
+        this->eat(T_NEWLINE);
         results.push_back(this->statement());
     }
 
