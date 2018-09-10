@@ -16,6 +16,7 @@ extern std::string T_ASSIGN;
 extern std::string T_DOT;
 extern std::string T_SEMI;
 extern std::string T_ID;
+extern std::string T_COMMA;
 extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 
 Lexer::Lexer(std::string text) {
@@ -53,12 +54,16 @@ Token* Lexer::get_next_token() {
         if (isalpha(this->current_char))
             return this->_id();
 
-        if (this->current_char == ':' && this->peek() == '=') {
-            this->advance();
+        if (this->current_char == '=') {
             this->advance();
 
-            return new Token(T_ASSIGN, ":=");
+            return new Token(T_ASSIGN, "=");
         }
+
+        if (this->current_char == ',') {
+            this->advance();
+            return new Token(T_COMMA, s);
+        };
 
         if (this->current_char == ';') {
             this->advance();
