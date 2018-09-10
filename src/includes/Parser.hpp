@@ -19,6 +19,7 @@ class Parser {
         AST* term();
         AST* expr();
         AST* program();
+        AST* any_statement();
         AST* compound_statement();
         std::vector<AST*> statement_list();
         AST* statement();
