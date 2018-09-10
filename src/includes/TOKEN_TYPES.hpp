@@ -27,6 +27,7 @@ std::string T_ASSIGN = "ASSIGN";
 std::string T_ID = "ID";
 std::string T_BEGIN = "BEGIN";
 std::string T_DECLARE = "DECLARE";
+std::string T_COMMA = "COMMA";
 std::string T_END = "END";
 std::string T_EOF = "EOF";
 
