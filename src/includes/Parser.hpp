@@ -15,6 +15,7 @@ class Parser {
         Token* current_token;
 
         void eat(std::string token_type);
+        void error(std::string message);
 
         AST* factor();
         AST* term();

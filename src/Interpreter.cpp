@@ -17,6 +17,10 @@ Interpreter::Interpreter(Parser* parser) {
     this->parser = parser;
 };
 
+void Interpreter::error(std::string message) {
+    throw std::runtime_error("[error][Interpreter]:(line=" + std::to_string(this->parser->lexer->line) + ",pos=" + std::to_string(this->parser->lexer->pos) + ") " + message);
+};
+
 int Interpreter::visit_BinOp(BinOp* node) {
     if (node->op->type == T_PLUS)
         return this->visit(node->left) + this->visit(node->right);
@@ -55,7 +59,7 @@ int Interpreter::visit_Assign(Assign* node) {
     std::string varname = node->left->value;
     
     if (!RAM::has_variable(varname))
-        throw std::runtime_error("Trying to assign to undeclared variable: `" + varname + "`");
+        this->error("Trying to assign to undeclared variable: `" + varname + "`");
 
     int value = this->visit(node->right);
 

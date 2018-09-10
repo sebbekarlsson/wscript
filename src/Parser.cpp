@@ -54,8 +54,12 @@ void Parser::eat(std::string token_type) {
     if (this->current_token->type == token_type) {
         this->current_token = this->lexer->get_next_token();
     } else {
-        throw std::runtime_error("Expected token type: `" + token_type + "`, but got `" + this->current_token->type + "`");
+        this->error("Expected token type: `" + token_type + "`, but got `" + this->current_token->type + "`");
     }
+};
+
+void Parser::error(std::string message) {
+    throw std::runtime_error("[error][Parser](line=" + std::to_string(this->lexer->line) + ",pos=" + std::to_string(this->lexer->pos) + "): " + message);
 };
 
 /**
@@ -226,7 +230,7 @@ std::vector<AST*> Parser::statement_list() {
     }
 
     if (this->current_token->type == T_ID) {
-        throw std::runtime_error("Something bad happened");
+        this->error("Something bad happened");
     }
 
     return results;
@@ -324,7 +328,7 @@ Comparison* Parser::comparison() {
     else if (this->current_token->type == T_EQUALS)
         this->eat(T_EQUALS);
     else
-        throw std::runtime_error("Unknown comparison with: `" + this->current_token->type + "`");
+        this->error("Unknown comparison with: `" + this->current_token->type + "`");
 
     AST* right = this->expr();
 

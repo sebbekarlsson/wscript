@@ -131,7 +131,7 @@ Token* Lexer::get_next_token() {
             return new Token(T_RPAREN, ")");
         }
 
-        throw std::runtime_error("Unexpected: `" + s + "`");
+        this->error("Unexpected: `" + s + "`");
     }
 
     return new Token(T_EOF, T_EOF);
@@ -210,4 +210,8 @@ void Lexer::skip_whitespace() {
 void Lexer::skip_comment() {
     while (this->current_char != '\n')
         this->advance();
+};
+
+void Lexer::error(std::string message) {
+    throw std::runtime_error("[error][Lexer]:(line=" + std::to_string(this->line) + ",pos=" + std::to_string(this->pos) + ") " + message);
 };
