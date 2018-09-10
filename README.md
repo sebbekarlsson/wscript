@@ -1,4 +1,4 @@
-# Visual Basic Script Interpreter
+# ![image/vbs.png](image/vbs.png) Visual Basic Script Interpreter
 > Run `*.vbs` scripts on your \*NIX machine, in a completely _libre_ way!
 
 > This is a complete rewrite of `wscript.exe`, for \*NIX machines.  
