@@ -36,6 +36,12 @@ Token* Lexer::get_next_token() {
             continue;
         }
 
+        if (this->current_char == '\'') {
+            this->advance();
+            this->skip_comment();
+            continue;
+        }
+
         std::stringstream ss;
         std::string s;
         ss << this->current_char;
@@ -164,5 +170,10 @@ void Lexer::advance() {
  */
 void Lexer::skip_whitespace() {
     while (this->current_char == ' ' || (int)this->current_char == 10)
+        this->advance();
+};
+
+void Lexer::skip_comment() {
+    while (this->current_char != '\n')
         this->advance();
 };

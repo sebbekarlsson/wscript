@@ -25,5 +25,6 @@ class Lexer {
 
         void advance();
         void skip_whitespace();
+        void skip_comment();
 };
 #endif
