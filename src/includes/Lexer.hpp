@@ -14,6 +14,7 @@ class Lexer {
         char current_char = '\0';
 
         int pos;
+        int line;
 
         Token* get_next_token();
 

@@ -27,6 +27,7 @@ extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 Lexer::Lexer(std::string text) {
     this->text = text;
     this->pos = 0;
+    this->line = 0;
     this->current_char = this->text.at(this->pos);
 };
 
@@ -49,7 +50,6 @@ Token* Lexer::get_next_token() {
 
         if (this->current_char == '\n' || (int)this->current_char == 10) {
             this->advance();
-            
             return new Token(T_NEWLINE, s);
         }
 
@@ -187,6 +187,9 @@ Token* Lexer::_id() {
  */
 void Lexer::advance() {
     this->pos += 1;
+
+    if (this->current_char == '\n')
+        this->line++;
 
     if (this->pos > (int)this->text.length() - 1) {
         this->current_char = '\0';
