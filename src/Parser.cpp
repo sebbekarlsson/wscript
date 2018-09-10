@@ -30,6 +30,7 @@ extern std::string T_DECLARE;
 extern std::string T_NEWLINE;
 extern std::string T_LARGER_THAN;
 extern std::string T_LESS_THAN;
+extern std::string T_EQUALS;
 extern std::string T_IF;
 extern std::string T_THEN;
 extern std::string T_EOF;
@@ -313,10 +314,15 @@ Comparison* Parser::comparison() {
     AST* left = this->expr();
     Token* token = this->current_token;
 
+    if (this->current_token->type == T_ASSIGN)
+        this->current_token->type = T_EQUALS;
+
     if (this->current_token->type == T_LARGER_THAN)
         this->eat(T_LARGER_THAN);
     else if (this->current_token->type == T_LESS_THAN)
         this->eat(T_LESS_THAN);
+    else if (this->current_token->type == T_EQUALS)
+        this->eat(T_EQUALS);
     else
         throw std::runtime_error("Unknown comparison with: `" + this->current_token->type + "`");
 
