@@ -27,6 +27,7 @@ extern std::string T_SEMI;
 extern std::string T_ASSIGN;
 extern std::string T_DECLARE;
 extern std::string T_NEWLINE;
+extern std::string T_IF;
 extern std::string T_EOF;
 
 Parser::Parser(Lexer* lexer) {
@@ -235,6 +236,8 @@ AST* Parser::statement() {
         node = this->assignment_statement();
     else if (this->current_token->type == T_DECLARE)
         node = this->variable_declaration();
+    else if (this->current_token->type == T_IF)
+        node = this->if_statement();
     else
         node = this->empty();
 
@@ -250,6 +253,10 @@ AST* Parser::assignment_statement() {
     node->name = "Assign";
 
     return node;
+};
+
+AST* Parser::if_statement() {
+    return new AST();
 };
 
 AST* Parser::variable_declaration() {

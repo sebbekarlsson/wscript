@@ -29,12 +29,14 @@ std::string T_BEGIN = "BEGIN";
 std::string T_DECLARE = "DECLARE";
 std::string T_COMMA = "COMMA";
 std::string T_NEWLINE = "\r";
+std::string T_IF = "IF";
 std::string T_END = "END";
 std::string T_EOF = "EOF";
 
 std::map<std::string, std::string> RESERVED_KEYWORDS = {
     {"BEGIN", T_BEGIN},
     {"END", T_END},
-    {"Dim", T_DECLARE}
+    {"Dim", T_DECLARE},
+    {"If", T_IF}
 };
 #endif

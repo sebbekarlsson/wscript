@@ -18,6 +18,7 @@ extern std::string T_SEMI;
 extern std::string T_ID;
 extern std::string T_COMMA;
 extern std::string T_NEWLINE;
+extern std::string T_IF;
 extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 
 Lexer::Lexer(std::string text) {
