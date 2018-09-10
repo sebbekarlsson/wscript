@@ -6,6 +6,7 @@
 #include "includes/Compound.hpp"
 #include "includes/Var.hpp"
 #include "includes/Assign.hpp"
+#include "includes/VarDecl.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -24,6 +25,7 @@ extern std::string T_END;
 extern std::string T_ID;
 extern std::string T_SEMI;
 extern std::string T_ASSIGN;
+extern std::string T_DECLARE;
 extern std::string T_EOF;
 
 Parser::Parser(Lexer* lexer) {
@@ -215,6 +217,8 @@ AST* Parser::statement() {
         node = this->compound_statement();
     else if (this->current_token->type == T_ID)
         node = this->assignment_statement();
+    else if (this->current_token->type == T_DECLARE)
+        node = this->variable_declaration();
     else
         node = this->empty();
 
@@ -230,6 +234,17 @@ AST* Parser::assignment_statement() {
     node->name = "Assign";
 
     return node;
+};
+
+AST* Parser::variable_declaration() {
+    VarDecl* decl;
+    
+    this->eat(T_DECLARE);
+    decl = new VarDecl(this->current_token);
+    decl->name = "VarDecl";
+    this->eat(T_ID);
+
+    return decl;
 };
 
 Var* Parser::variable() {
