@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     Parser* parser = new Parser(lexer);
     Interpreter* interpreter = new Interpreter(parser);
 
-    std::cout << interpreter->interpret() << std::endl;
+    interpreter->interpret();
 
     return EXIT_SUCCESS;
 }

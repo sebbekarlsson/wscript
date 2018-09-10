@@ -4,6 +4,7 @@
 #include "Lexer.hpp"
 #include "AST.hpp"
 #include "Var.hpp"
+#include "Comparison.hpp"
 
 
 class Parser {
@@ -29,5 +30,7 @@ class Parser {
         Var* variable();
         AST* empty();
         AST* parse();
+
+        Comparison* comparison();
 };
 #endif

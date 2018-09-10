@@ -19,6 +19,8 @@ extern std::string T_ID;
 extern std::string T_COMMA;
 extern std::string T_NEWLINE;
 extern std::string T_IF;
+extern std::string T_LARGER_THAN;
+extern std::string T_LESS_THAN;
 extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 
 Lexer::Lexer(std::string text) {
@@ -64,8 +66,17 @@ Token* Lexer::get_next_token() {
 
         if (this->current_char == '=') {
             this->advance();
-
             return new Token(T_ASSIGN, "=");
+        }
+
+        if (this->current_char == '>') {
+            this->advance();
+            return new Token(T_LARGER_THAN, s);
+        }
+
+        if (this->current_char == '<') {
+            this->advance();
+            return new Token(T_LESS_THAN, s);
         }
 
         if (this->current_char == ',') {

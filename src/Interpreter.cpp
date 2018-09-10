@@ -9,6 +9,8 @@ extern std::string T_MULTIPLY;
 extern std::string T_DIVIDE;
 extern std::string T_LPAREN;
 extern std::string T_RPAREN;
+extern std::string T_LESS_THAN;
+extern std::string T_LARGER_THAN;
 
 Interpreter::Interpreter(Parser* parser) {
     this->parser = parser;
@@ -41,13 +43,11 @@ int Interpreter::visit_Num(Num* node) {
 };
 
 int Interpreter::visit_Compound(Compound* node) {
-    int result = 0;
-
     for (std::vector<AST*>::iterator it = node->children.begin(); it != node->children.end(); ++it) {
-        result += this->visit((*it));
+        this->visit((*it));
     }
 
-    return result;
+    return 0;
 };
 
 int Interpreter::visit_Assign(Assign* node) {
@@ -70,13 +70,34 @@ int Interpreter::visit_Var(Var* node) {
     return std::stoi(value);
 };
 
-void Interpreter::visit_VarDecl(VarDecl* node) {
+int Interpreter::visit_VarDecl(VarDecl* node) {
     RAM::set_variable(node->key, "");
+
+    return 0;
 };
 
-int Interpreter::visit_NoOp(NoOp* node) { return 0;};
 
-std::string Interpreter::interpret() {
+int Interpreter::visit_If(If* node) {
+    bool comp = this->visit(node->comp);
+
+    if (comp)
+        return this->visit(node->root);
+
+    return 0;
+};
+
+int Interpreter::visit_Comparison(Comparison* node) {
+    if (node->token->type == T_LARGER_THAN)
+        return (int)(this->visit(node->left) > this->visit(node->right));
+    else if (node->token->type == T_LESS_THAN)
+        return (int)(this->visit(node->left) < this->visit(node->right));
+
+    return 0;
+};
+
+int Interpreter::visit_NoOp(NoOp* node) { return 0; };
+
+int Interpreter::interpret() {
     AST* tree = this->parser->parse();
-    return std::to_string(this->visit(tree));
+    return this->visit(tree);
 };
