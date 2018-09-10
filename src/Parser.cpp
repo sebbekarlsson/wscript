@@ -7,6 +7,7 @@
 #include "includes/Var.hpp"
 #include "includes/Assign.hpp"
 #include "includes/VarDecl.hpp"
+#include "includes/If.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -27,6 +28,10 @@ extern std::string T_SEMI;
 extern std::string T_ASSIGN;
 extern std::string T_DECLARE;
 extern std::string T_NEWLINE;
+extern std::string T_LARGER_THAN;
+extern std::string T_LESS_THAN;
+extern std::string T_IF;
+extern std::string T_THEN;
 extern std::string T_EOF;
 
 Parser::Parser(Lexer* lexer) {
@@ -235,6 +240,8 @@ AST* Parser::statement() {
         node = this->assignment_statement();
     else if (this->current_token->type == T_DECLARE)
         node = this->variable_declaration();
+    else if (this->current_token->type == T_IF)
+        node = this->if_statement();
     else
         node = this->empty();
 
@@ -250,6 +257,30 @@ AST* Parser::assignment_statement() {
     node->name = "Assign";
 
     return node;
+};
+
+AST* Parser::if_statement() {
+    std::vector<AST*> nodes;
+
+    this->eat(T_IF);
+    Comparison* comp = this->comparison();
+    this->eat(T_THEN);
+    nodes = this->statement_list();
+
+    Compound* root = new Compound();
+    root->name = "Compound";
+
+    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+        root->children.push_back((*it));
+    }
+
+    this->eat(T_END);
+    this->eat(T_IF);
+    
+    If* _if  = new If(comp, root);
+    _if->name = "If";
+
+    return _if;
 };
 
 AST* Parser::variable_declaration() {
@@ -276,6 +307,25 @@ AST* Parser::empty() {
     node->name = "NoOp";
 
     return node;
+};
+
+Comparison* Parser::comparison() {
+    AST* left = this->expr();
+    Token* token = this->current_token;
+
+    if (this->current_token->type == T_LARGER_THAN)
+        this->eat(T_LARGER_THAN);
+    else if (this->current_token->type == T_LESS_THAN)
+        this->eat(T_LESS_THAN);
+    else
+        throw std::runtime_error("Unknown comparison with: `" + this->current_token->type + "`");
+
+    AST* right = this->expr();
+
+    Comparison* comp = new Comparison(left, token, right);
+    comp->name = "Comparison";
+
+    return comp;
 };
 
 AST* Parser::parse() {

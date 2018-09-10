@@ -4,6 +4,7 @@
 #include "Lexer.hpp"
 #include "AST.hpp"
 #include "Var.hpp"
+#include "Comparison.hpp"
 
 
 class Parser {
@@ -24,9 +25,12 @@ class Parser {
         std::vector<AST*> statement_list();
         AST* statement();
         AST* assignment_statement();
+        AST* if_statement();
         AST* variable_declaration();
         Var* variable();
         AST* empty();
         AST* parse();
+
+        Comparison* comparison();
 };
 #endif
