@@ -23,6 +23,7 @@ class Parser {
         std::vector<AST*> statement_list();
         AST* statement();
         AST* assignment_statement();
+        AST* variable_declaration();
         Var* variable();
         AST* empty();
         AST* parse();

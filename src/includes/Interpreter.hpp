@@ -19,6 +19,8 @@ class Interpreter: public NodeVisitor {
         int visit_Var(Var* node);
         int visit_NoOp(NoOp* node);
 
+        void visit_VarDecl(VarDecl* node);
+        
         std::string interpret();
 };
 #endif

@@ -52,6 +52,10 @@ int Interpreter::visit_Compound(Compound* node) {
 
 int Interpreter::visit_Assign(Assign* node) {
     std::string varname = node->left->value;
+    
+    if (!RAM::has_variable(varname))
+        throw std::runtime_error("Trying to assign to undeclared variable: `" + varname + "`");
+
     int value = this->visit(node->right);
 
     RAM::set_variable(varname, std::to_string(value));
@@ -64,6 +68,10 @@ int Interpreter::visit_Var(Var* node) {
     std::string value = RAM::get_variable(varname);
 
     return std::stoi(value);
+};
+
+void Interpreter::visit_VarDecl(VarDecl* node) {
+    RAM::set_variable(node->key, "");
 };
 
 int Interpreter::visit_NoOp(NoOp* node) { return 0;};

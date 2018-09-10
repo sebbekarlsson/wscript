@@ -8,6 +8,7 @@
 #include "NoOp.hpp"
 #include "Assign.hpp"
 #include "Var.hpp"
+#include "VarDecl.hpp"
 #include <string>
 
 
@@ -23,5 +24,7 @@ class NodeVisitor {
         virtual int visit_NoOp(NoOp* node) = 0;
         virtual int visit_Assign(Assign* node) = 0;
         virtual int visit_Var(Var* node) = 0;
+        
+        virtual void visit_VarDecl(VarDecl* node) = 0;
 };
 #endif

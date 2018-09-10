@@ -26,11 +26,13 @@ std::string T_SEMI = "SEMI";
 std::string T_ASSIGN = "ASSIGN";
 std::string T_ID = "ID";
 std::string T_BEGIN = "BEGIN";
+std::string T_DECLARE = "DECLARE";
 std::string T_END = "END";
 std::string T_EOF = "EOF";
 
 std::map<std::string, std::string> RESERVED_KEYWORDS = {
-    {"BEGIN", "BEGIN"},
-    {"END", "END"}
+    {"BEGIN", T_BEGIN},
+    {"END", T_END},
+    {"Dim", T_DECLARE}
 };
 #endif

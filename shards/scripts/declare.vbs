@@ -1,0 +1,3 @@
+BEGIN
+    Dim x
+END.
