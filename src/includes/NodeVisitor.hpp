@@ -4,6 +4,10 @@
 #include "BinOp.hpp"
 #include "UnaryOp.hpp"
 #include "Num.hpp"
+#include "Compound.hpp"
+#include "NoOp.hpp"
+#include "Assign.hpp"
+#include "Var.hpp"
 #include <string>
 
 
@@ -15,5 +19,9 @@ class NodeVisitor {
         virtual int visit_BinOp(BinOp* node) = 0;
         virtual int visit_UnaryOp(UnaryOp* node) = 0;
         virtual int visit_Num(Num* node) = 0;
+        virtual int visit_Compound(Compound* node) = 0;
+        virtual int visit_NoOp(NoOp* node) = 0;
+        virtual int visit_Assign(Assign* node) = 0;
+        virtual int visit_Var(Var* node) = 0;
 };
 #endif

@@ -1,4 +1,5 @@
 #include "includes/Interpreter.hpp"
+#include <iostream>
 
 
 extern std::string T_INTEGER;
@@ -38,6 +39,34 @@ int Interpreter::visit_UnaryOp(UnaryOp * node) {
 int Interpreter::visit_Num(Num* node) {
     return node->value;
 };
+
+int Interpreter::visit_Compound(Compound* node) {
+    int result = 0;
+
+    for (std::vector<AST*>::iterator it = node->children.begin(); it != node->children.end(); ++it) {
+        result += this->visit((*it));
+    }
+
+    return result;
+};
+
+int Interpreter::visit_Assign(Assign* node) {
+    std::string varname = node->left->value;
+    int value = this->visit(node->right);
+
+    RAM::set_variable(varname, std::to_string(value));
+
+    return value;
+};
+
+int Interpreter::visit_Var(Var* node) {
+    std::string varname = node->value;
+    std::string value = RAM::get_variable(varname);
+
+    return std::stoi(value);
+};
+
+int Interpreter::visit_NoOp(NoOp* node) { return 0;};
 
 std::string Interpreter::interpret() {
     AST* tree = this->parser->parse();

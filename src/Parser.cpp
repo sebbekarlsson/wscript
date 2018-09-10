@@ -2,6 +2,10 @@
 #include "includes/Num.hpp"
 #include "includes/BinOp.hpp"
 #include "includes/UnaryOp.hpp"
+#include "includes/NoOp.hpp"
+#include "includes/Compound.hpp"
+#include "includes/Var.hpp"
+#include "includes/Assign.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -14,6 +18,13 @@ extern std::string T_MULTIPLY;
 extern std::string T_DIVIDE;
 extern std::string T_LPAREN;
 extern std::string T_RPAREN;
+extern std::string T_DOT;
+extern std::string T_BEGIN;
+extern std::string T_END;
+extern std::string T_ID;
+extern std::string T_SEMI;
+extern std::string T_ASSIGN;
+extern std::string T_EOF;
 
 Parser::Parser(Lexer* lexer) {
     this->lexer = lexer;
@@ -34,7 +45,7 @@ void Parser::eat(std::string token_type) {
     if (this->current_token->type == token_type) {
         this->current_token = this->lexer->get_next_token();
     } else {
-        throw std::runtime_error("Unexpected token type: `" + token_type + "`");
+        throw std::runtime_error("Expected token type: `" + token_type + "`, but got `" + this->current_token->type + "`");
     }
 };
 
@@ -70,6 +81,9 @@ AST* Parser::factor() {
         this->eat(T_LPAREN);
         AST* node = this->expr();
         this->eat(T_RPAREN);
+        return node;
+    } else {
+        AST* node = this->variable();
         return node;
     }
 
@@ -152,6 +166,92 @@ AST* Parser::expr() {
     return node;
 };
 
+AST* Parser::program() {
+    AST* node = this->compound_statement();
+    this->eat(T_DOT);
+
+    return node;
+};
+
+AST* Parser::compound_statement() {
+    std::vector<AST*> nodes;
+
+    this->eat(T_BEGIN);
+    nodes = this->statement_list();
+    this->eat(T_END);
+
+    Compound* root = new Compound();
+    root->name = "Compound";
+
+    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+        root->children.push_back((*it));
+    }
+
+    return root;
+};
+
+std::vector<AST*> Parser::statement_list() {
+    std::vector<AST*> results;
+    AST* node = this->statement();
+
+    results.push_back(node);
+
+    while (this->current_token->type == T_SEMI) {
+        this->eat(T_SEMI);
+        results.push_back(this->statement());
+    }
+
+    if (this->current_token->type == T_ID) {
+        throw std::runtime_error("Something bad happened");
+    }
+
+    return results;
+};
+
+AST* Parser::statement() {
+    AST* node;
+
+    if (this->current_token->type == T_BEGIN)
+        node = this->compound_statement();
+    else if (this->current_token->type == T_ID)
+        node = this->assignment_statement();
+    else
+        node = this->empty();
+
+    return node;
+};
+
+AST* Parser::assignment_statement() {
+    Var* left = this->variable();
+    Token* token = this->current_token;
+    this->eat(T_ASSIGN);
+    AST* right = this->expr();
+    Assign* node = new Assign(left, token, right);
+    node->name = "Assign";
+
+    return node;
+};
+
+Var* Parser::variable() {
+    Var* node = new Var(this->current_token);
+    node->name = "Var";
+    this->eat(T_ID);
+
+    return node;
+};
+
+AST* Parser::empty() {
+    NoOp* node = new NoOp();
+    node->name = "NoOp";
+
+    return node;
+};
+
 AST* Parser::parse() {
-    return this->expr();
+    AST* node = this->program();
+
+    if (this->current_token->type != T_EOF)
+        throw std::runtime_error("Expected EOF");
+
+    return node;
 };

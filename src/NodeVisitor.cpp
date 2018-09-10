@@ -1,4 +1,5 @@
 #include "includes/NodeVisitor.hpp"
+#include <iostream>
 
 
 int NodeVisitor::visit(AST* node) {
@@ -8,6 +9,14 @@ int NodeVisitor::visit(AST* node) {
         return this->visit_UnaryOp((UnaryOp*) node);
     else if (node->name == "Num")
         return this->visit_Num((Num*) node);
+    else if (node->name == "Var")
+        return this->visit_Var((Var*) node);
+    else if (node->name == "Compound")
+        return this->visit_Compound((Compound*) node);
+    else if (node->name == "Assign")
+        return this->visit_Assign((Assign*) node);
+    else if (node->name == "NoOp")
+        return this->visit_NoOp((NoOp*) node);
     else
         return this->visit_default(node);
 };
