@@ -9,6 +9,17 @@
 > just make sure that any contribution & modification you do is completely
 > libre.
 
+### _Refreshing reminder of what vbs looks like:_
+```vbs
+Dim x
+
+x = 2
+
+If x > 0 Then
+    Wscript.Echo "Hello World"
+End If
+```
+
 ## Usage
 > To use this software:
 
