@@ -20,4 +20,8 @@ If x > 1 Then
         x = 200
     End If
 
+    If 1 <> 2 Then
+        x = 1
+    End If
+
 End If
