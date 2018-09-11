@@ -32,6 +32,7 @@ extern std::string T_LARGER_THAN;
 extern std::string T_LESS_THAN;
 extern std::string T_LARGER_OR_EQUALS;
 extern std::string T_LESS_OR_EQUALS;
+extern std::string T_NOT_EQUALS;
 extern std::string T_EQUALS;
 extern std::string T_IF;
 extern std::string T_THEN;
@@ -333,6 +334,8 @@ Comparison* Parser::comparison() {
         this->eat(T_LESS_OR_EQUALS);
     else if (this->current_token->type == T_LARGER_OR_EQUALS)
         this->eat(T_LARGER_OR_EQUALS);
+    else if (this->current_token->type == T_NOT_EQUALS)
+        this->eat(T_NOT_EQUALS);
     else
         this->error("Unknown comparison with: `" + this->current_token->type + "`");
 

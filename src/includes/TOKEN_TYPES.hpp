@@ -35,6 +35,7 @@ std::string T_LARGER_THAN = "LARGER_THAN";
 std::string T_LESS_THAN = "LESS_THAN";
 std::string T_LARGER_OR_EQUALS = "LARGER_OR_EQUALS";
 std::string T_LESS_OR_EQUALS = "LESS_OR_EQUALS";
+std::string T_NOT_EQUALS = "NOT_EQUALS";
 std::string T_EQUALS = "EQUALS";
 std::string T_END = "END";
 std::string T_EOF = "EOF";
