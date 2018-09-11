@@ -11,6 +11,8 @@ extern std::string T_LPAREN;
 extern std::string T_RPAREN;
 extern std::string T_LESS_THAN;
 extern std::string T_LARGER_THAN;
+extern std::string T_LARGER_OR_EQUALS;
+extern std::string T_LESS_OR_EQUALS;
 extern std::string T_EQUALS;
 
 Interpreter::Interpreter(Parser* parser) {
@@ -98,6 +100,10 @@ int Interpreter::visit_Comparison(Comparison* node) {
         return (int)(this->visit(node->left) < this->visit(node->right));
     else if (node->token->type == T_EQUALS)
         return (int)(this->visit(node->left) == this->visit(node->right));
+    else if (node->token->type == T_LESS_OR_EQUALS)
+        return (int)(this->visit(node->left) <= this->visit(node->right));
+    else if (node->token->type == T_LARGER_OR_EQUALS)
+        return (int)(this->visit(node->left) >= this->visit(node->right));
 
     return 0;
 };

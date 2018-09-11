@@ -21,6 +21,8 @@ extern std::string T_NEWLINE;
 extern std::string T_IF;
 extern std::string T_LARGER_THAN;
 extern std::string T_LESS_THAN;
+extern std::string T_LARGER_OR_EQUALS;
+extern std::string T_LESS_OR_EQUALS;
 extern std::string T_EQUALS;
 extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 
@@ -65,6 +67,18 @@ Token* Lexer::get_next_token() {
         if (isalpha(this->current_char))
             return this->_id();
 
+        if (this->current_char == '>' && this->peek() == '=') {
+            this->advance();
+            this->advance();
+            return new Token(T_LARGER_OR_EQUALS, s);
+        }
+
+        if (this->current_char == '<' && this->peek() == '=') {
+            this->advance();
+            this->advance();
+            return new Token(T_LESS_OR_EQUALS, s);
+        }
+        
         if (this->current_char == '=' && this->peek() == '=') {
             this->advance();
             this->advance();

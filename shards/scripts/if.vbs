@@ -15,4 +15,9 @@ If x > 1 Then
     If x == 100 Then
         x = 200
     End If
+
+    If x <= 201 Then
+        x = 200
+    End If
+
 End If
