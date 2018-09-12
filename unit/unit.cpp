@@ -1,5 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
+#include <string>
 #include "../src/includes/TOKEN_TYPES.hpp"
 #include "../src/includes/Parser.hpp"
 #include "../src/includes/Interpreter.hpp"
@@ -13,10 +14,29 @@ extern std::string T_INTEGER;
 extern std::string T_PLUS;
 extern std::string T_MULTIPLY;
 extern std::string T_DIVIDE;
+extern std::string T_DECLARE;
+extern std::string T_ID;
+extern std::string T_NEWLINE;
     
 Lexer* lexer = new Lexer(" ");
 Parser* parser = new Parser(lexer);
 Interpreter* interpreter = new Interpreter(parser);
+
+TEST_CASE("Lexer", "[Testing Lexer]") {
+    Lexer* lex = new Lexer(
+        std::string("Dim x\n") +
+        std::string("x = 2 + 2")
+    );
+
+    REQUIRE(lex->get_next_token()->type == T_DECLARE);
+    REQUIRE(lex->get_next_token()->type == T_ID);
+    REQUIRE(lex->get_next_token()->type == T_NEWLINE);
+    REQUIRE(lex->get_next_token()->type == T_ID);
+    REQUIRE(lex->get_next_token()->type == T_ASSIGN);
+    REQUIRE(lex->get_next_token()->type == T_INTEGER);
+    REQUIRE(lex->get_next_token()->type == T_PLUS);
+    REQUIRE(lex->get_next_token()->type == T_INTEGER);
+};
 
 TEST_CASE("AST_BinOp", "[Testing AST_BinOp]") {
     AST_Num* num0 = new AST_Num(new Token(T_INTEGER, "10"));
