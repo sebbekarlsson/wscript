@@ -6,6 +6,7 @@
 #include "../src/includes/Token.hpp"
 #include "../src/includes/AST/AST_Num.hpp"
 #include "../src/includes/AST/AST_BinOp.hpp"
+#include "../src/includes/AST/AST_NoOp.hpp"
 
 
 extern std::string T_INTEGER;
@@ -17,7 +18,7 @@ Lexer* lexer = new Lexer(" ");
 Parser* parser = new Parser(lexer);
 Interpreter* interpreter = new Interpreter(parser);
 
-TEST_CASE("BinOp", "[Testing BinOp]") {
+TEST_CASE("AST_BinOp", "[Testing AST_BinOp]") {
     AST_Num* num0 = new AST_Num(new Token(T_INTEGER, "10"));
     AST_Num* num1 = new AST_Num(new Token(T_INTEGER, "20"));
 
@@ -30,4 +31,10 @@ TEST_CASE("BinOp", "[Testing BinOp]") {
     REQUIRE(interpreter->visit(BinOp_MINUS) == -10);
     REQUIRE(interpreter->visit(BinOp_MULTIPLY) == 200);
     REQUIRE(interpreter->visit(BinOp_DIVIDE) == 2);
+};
+
+TEST_CASE("AST_NoOp", "[Testing AST_NoOp]") {
+    AST_NoOp* op = new AST_NoOp();
+
+    REQUIRE(interpreter->visit(op) == 0);
 };
