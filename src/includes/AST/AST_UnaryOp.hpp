@@ -7,6 +7,7 @@
 class AST_UnaryOp: public AST {
     public:
         AST_UnaryOp(Token* op, AST* expr);
+        ~AST_UnaryOp();
 
         Token* op;
         Token* token;

@@ -2,3 +2,5 @@
 
 
 AST_Compound::AST_Compound() {};
+
+AST_Compound::~AST_Compound() {};

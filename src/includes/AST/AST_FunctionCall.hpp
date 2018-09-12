@@ -7,6 +7,8 @@
 class AST_FunctionCall: public AST {
     public:
         AST_FunctionCall(std::vector<AST*> args);
+        virtual ~AST_FunctionCall()
+        {}
 
         std::vector<AST*> args;
 

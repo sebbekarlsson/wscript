@@ -7,6 +7,7 @@
 class AST_Var: public AST {
     public:
         AST_Var(Token* token);
+        ~AST_Var();
 
         Token* token;
         std::string value;

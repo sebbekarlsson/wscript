@@ -8,6 +8,7 @@
 class AST_Assign: public AST {
     public:
         AST_Assign(AST_Var* left, Token* op, AST* right);
+        ~AST_Assign();
 
         Token* token;
         AST_Var* left;

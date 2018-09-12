@@ -6,7 +6,7 @@
 class AST {
     public:
         AST();
-
-        std::string name;
+        virtual ~AST()
+        {}
 };
 #endif

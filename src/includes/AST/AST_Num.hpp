@@ -8,6 +8,7 @@
 class AST_Num: public AST {
     public:
         AST_Num(Token* token);
+        ~AST_Num();
 
         Token* token;
         int value;

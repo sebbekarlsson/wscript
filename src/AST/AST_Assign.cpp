@@ -6,4 +6,6 @@ AST_Assign::AST_Assign(AST_Var* left, Token* op, AST* right) {
     this->op = op;
     this->token = this->op;
     this->right = right;
-};
+}
+
+AST_Assign::~AST_Assign() {};

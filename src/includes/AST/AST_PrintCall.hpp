@@ -6,6 +6,7 @@
 class AST_PrintCall: public AST_FunctionCall {
     public:
         AST_PrintCall(std::vector<AST*> args);
+        ~AST_PrintCall();
 
         AST* call(std::vector<int> call_args);
 };

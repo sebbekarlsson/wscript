@@ -6,6 +6,8 @@
 
 AST_PrintCall::AST_PrintCall(std::vector<AST*> args) : AST_FunctionCall(args) {};
 
+AST_PrintCall::~AST_PrintCall() {};
+
 AST* AST_PrintCall::call(std::vector<int> call_args) {
     if (call_args.size()) {
         for (

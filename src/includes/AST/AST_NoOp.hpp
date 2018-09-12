@@ -6,5 +6,6 @@
 class AST_NoOp: public AST {
     public:
         AST_NoOp();
+        ~AST_NoOp();
 };
 #endif

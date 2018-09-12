@@ -8,6 +8,7 @@
 class AST_Compound: public AST {
     public:
         AST_Compound();
+        ~AST_Compound();
 
         std::vector<AST*> children;
 };

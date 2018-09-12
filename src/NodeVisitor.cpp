@@ -3,25 +3,25 @@
 
 
 int NodeVisitor::visit(AST* node) {
-    if (node->name == "AST_BinOp")
+    if (dynamic_cast<AST_BinOp*>( node ))
         return this->visit_AST_BinOp((AST_BinOp*) node);
-    else if (node->name == "AST_UnaryOp")
+    else if (dynamic_cast<AST_UnaryOp*>( node ))
         return this->visit_AST_UnaryOp((AST_UnaryOp*) node);
-    else if (node->name == "AST_Num")
+    else if (dynamic_cast<AST_Num*>( node ))
         return this->visit_AST_Num((AST_Num*) node);
-    else if (node->name == "AST_Var")
+    else if (dynamic_cast<AST_Var*>( node ))
         return this->visit_AST_Var((AST_Var*) node);
-    else if (node->name == "AST_VarDecl")
+    else if (dynamic_cast<AST_VarDecl*>( node ))
         return this->visit_AST_VarDecl((AST_VarDecl*) node);
-    else if (node->name == "AST_Compound")
+    else if (dynamic_cast<AST_Compound*>( node ))
         return this->visit_AST_Compound((AST_Compound*) node);
-    else if (node->name == "AST_Assign")
+    else if (dynamic_cast<AST_Assign*>( node ))
         return this->visit_AST_Assign((AST_Assign*) node);
-    else if (node->name == "AST_If")
+    else if (dynamic_cast<AST_If*>( node ))
         return this->visit_AST_If((AST_If*) node);
-    else if (node->name == "AST_FunctionCall")
+    else if (dynamic_cast<AST_FunctionCall*>( node ))
         return this->visit_AST_functionCall((AST_FunctionCall*) node);
-    else if (node->name == "AST_NoOp")
+    else if (dynamic_cast<AST_NoOp*>( node ))
         return this->visit_AST_NoOp((AST_NoOp*) node);
     
     return this->visit_default(node);

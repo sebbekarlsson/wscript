@@ -7,6 +7,7 @@
 class AST_VarDecl: public AST {
     public:
         AST_VarDecl(Token* token);
+        ~AST_VarDecl();
 
         Token* token;
         std::string key;

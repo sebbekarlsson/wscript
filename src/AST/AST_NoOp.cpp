@@ -2,3 +2,5 @@
 
 
 AST_NoOp::AST_NoOp() {};
+
+AST_NoOp::~AST_NoOp() {};

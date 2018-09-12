@@ -6,6 +6,7 @@
 class AST_If: public AST {
     public:
         AST_If(AST* comp, AST* root);
+        ~AST_If();
 
         AST* comp;
         AST* root;

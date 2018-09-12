@@ -6,3 +6,5 @@ AST_UnaryOp::AST_UnaryOp(Token* op, AST* expr) {
     this->token = op;
     this->expr = expr;
 }
+
+AST_UnaryOp::~AST_UnaryOp() {};
