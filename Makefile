@@ -11,11 +11,15 @@ else
 endif
 
 EXEC = wscript.out
-SOURCES = $(wildcard src/*.cpp)
+SOURCES := $(wildcard src/*.cpp)
+SOURCES += $(wildcard src/*/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(EXEC): $(OBJECTS)
 	g++ $(OBJECTS) $(FLAGZ) -o $(EXEC)
+
+%.o: %.cpp ../includes/*/%.hpp
+	g++ -c $(G_FLAGZ) $< -o $@
 
 %.o: %.cpp includes/%.hpp
 	g++ -c $(G_FLAGZ) $< -o $@
@@ -24,3 +28,4 @@ clean:
 	-rm *.out
 	-rm *.o
 	-rm src/*.o
+	-rm src/*/*.o

@@ -24,7 +24,7 @@ void Interpreter::error(std::string message) {
     throw std::runtime_error("[error][Interpreter]:(line=" + std::to_string(this->parser->lexer->line) + ",pos=" + std::to_string(this->parser->lexer->pos) + ") " + message);
 };
 
-int Interpreter::visit_BinOp(BinOp* node) {
+int Interpreter::visit_AST_BinOp(AST_BinOp* node) {
     if (node->op->type == T_PLUS)
         return this->visit(node->left) + this->visit(node->right);
     else if (node->op->type == T_MINUS)
@@ -49,7 +49,7 @@ int Interpreter::visit_BinOp(BinOp* node) {
     return 0;
 };
 
-int Interpreter::visit_UnaryOp(UnaryOp * node) {
+int Interpreter::visit_AST_UnaryOp(AST_UnaryOp * node) {
     if (node->op->type == T_PLUS)
         return +this->visit(node->expr);
     else if (node->op->type == T_MINUS)
@@ -61,11 +61,11 @@ int Interpreter::visit_UnaryOp(UnaryOp * node) {
     return this->visit(node->expr);
 }
 
-int Interpreter::visit_Num(Num* node) {
+int Interpreter::visit_AST_Num(AST_Num* node) {
     return node->value;
 };
 
-int Interpreter::visit_Compound(Compound* node) {
+int Interpreter::visit_AST_Compound(AST_Compound* node) {
     for (std::vector<AST*>::iterator it = node->children.begin(); it != node->children.end(); ++it) {
         this->visit((*it));
     }
@@ -73,7 +73,7 @@ int Interpreter::visit_Compound(Compound* node) {
     return 0;
 };
 
-int Interpreter::visit_Assign(Assign* node) {
+int Interpreter::visit_AST_Assign(AST_Assign* node) {
     std::string varname = node->left->value;
     
     if (!RAM::has_variable(varname))
@@ -86,21 +86,21 @@ int Interpreter::visit_Assign(Assign* node) {
     return value;
 };
 
-int Interpreter::visit_Var(Var* node) {
+int Interpreter::visit_AST_Var(AST_Var* node) {
     std::string varname = node->value;
     std::string value = RAM::get_variable(varname);
 
     return std::stoi(value);
 };
 
-int Interpreter::visit_VarDecl(VarDecl* node) {
+int Interpreter::visit_AST_VarDecl(AST_VarDecl* node) {
     RAM::set_variable(node->key, "");
 
     return 0;
 };
 
 
-int Interpreter::visit_If(If* node) {
+int Interpreter::visit_AST_If(AST_If* node) {
     bool comp = this->visit(node->comp);
 
     if (comp)
@@ -109,7 +109,7 @@ int Interpreter::visit_If(If* node) {
     return 0;
 };
 
-int Interpreter::visit_functionCall(FunctionCall* node) {
+int Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
     std::vector<int> _args;
 
     for (std::vector<AST*>::iterator it = node->args.begin(); it != node->args.end(); ++it)
@@ -118,7 +118,7 @@ int Interpreter::visit_functionCall(FunctionCall* node) {
     return this->visit(node->call(_args));
 };
 
-int Interpreter::visit_NoOp(NoOp* node) { return 0; };
+int Interpreter::visit_AST_NoOp(AST_NoOp* node) { return 0; };
 
 int Interpreter::interpret() {
     AST* tree = this->parser->parse();

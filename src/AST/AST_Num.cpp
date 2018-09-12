@@ -1,7 +1,7 @@
-#include "includes/Num.hpp"
+#include "../includes/AST/AST_Num.hpp"
 
 
-Num::Num(Token* token) {
+AST_Num::AST_Num(Token* token) {
     this->token = token;
     this->value = std::stoi(token->value);
 };

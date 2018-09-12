@@ -1,12 +1,12 @@
-#ifndef FUNCTIONCALL_H
-#define FUNCTIONCALL_H
+#ifndef AST_FUNCTIONCALL_H
+#define AST_FUNCTIONCALL_H
 #include "AST.hpp"
 #include <vector>
 
 
-class FunctionCall: public AST {
+class AST_FunctionCall: public AST {
     public:
-        FunctionCall(std::vector<AST*> args);
+        AST_FunctionCall(std::vector<AST*> args);
 
         std::vector<AST*> args;
 

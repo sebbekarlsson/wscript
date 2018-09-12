@@ -1,14 +1,14 @@
 #include "includes/Parser.hpp"
-#include "includes/Num.hpp"
-#include "includes/BinOp.hpp"
-#include "includes/UnaryOp.hpp"
-#include "includes/NoOp.hpp"
-#include "includes/Compound.hpp"
-#include "includes/Var.hpp"
-#include "includes/Assign.hpp"
-#include "includes/VarDecl.hpp"
-#include "includes/If.hpp"
-#include "includes/PrintCall.hpp"
+#include "includes/AST/AST_Num.hpp"
+#include "includes/AST/AST_BinOp.hpp"
+#include "includes/AST/AST_UnaryOp.hpp"
+#include "includes/AST/AST_NoOp.hpp"
+#include "includes/AST/AST_Compound.hpp"
+#include "includes/AST/AST_Var.hpp"
+#include "includes/AST/AST_Assign.hpp"
+#include "includes/AST/AST_VarDecl.hpp"
+#include "includes/AST/AST_If.hpp"
+#include "includes/AST/AST_PrintCall.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -80,20 +80,20 @@ AST* Parser::factor() {
 
     if (token->type == T_PLUS) {
         this->eat(T_PLUS);
-        UnaryOp* node = new UnaryOp(token, this->factor());
-        node->name = "UnaryOp";
+        AST_UnaryOp* node = new AST_UnaryOp(token, this->factor());
+        node->name = "AST_UnaryOp";
         return node;
 
     } else if (token->type == T_MINUS) {
         this->eat(T_MINUS);
-        UnaryOp* node = new UnaryOp(token, this->factor());
-        node->name = "UnaryOp";
+        AST_UnaryOp* node = new AST_UnaryOp(token, this->factor());
+        node->name = "AST_UnaryOp";
         return node;
     
     } else if (token->type == T_INTEGER) {
         this->eat(T_INTEGER);
-        Num* num = new Num(token);
-        num->name = "Num";
+        AST_Num* num = new AST_Num(token);
+        num->name = "AST_Num";
 
         return num;
     } else if (token->type == T_LPAREN) {
@@ -125,10 +125,10 @@ AST* Parser::term() {
     // return a BinOp* or a Num*.
     AST* node = this->factor();
     
-    if (node->name == "BinOp") {
-        node = (BinOp*) node;
-    } else if (node->name == "Num") {
-        node = (Num*) node;
+    if (node->name == "AST_BinOp") {
+        node = (AST_BinOp*) node;
+    } else if (node->name == "AST_Num") {
+        node = (AST_Num*) node;
     }
 
     while (
@@ -145,8 +145,8 @@ AST* Parser::term() {
 
         // we actually dont know if "this->factor()" will
         // return a BinOp* or a Num*.
-        node = new BinOp(node, token, this->factor());
-        node->name = "BinOp";
+        node = new AST_BinOp(node, token, this->factor());
+        node->name = "AST_BinOp";
     }
 
     return node;
@@ -163,10 +163,10 @@ AST* Parser::expr() {
 
     AST* node = this->term();
     
-    if (node->name == "BinOp") {
-        node = (BinOp*) node;
-    } else if (node->name == "Num") {
-        node = (Num*) node;
+    if (node->name == "AST_BinOp") {
+        node = (AST_BinOp*) node;
+    } else if (node->name == "AST_Num") {
+        node = (AST_Num*) node;
     }
 
     while(
@@ -197,8 +197,8 @@ AST* Parser::expr() {
             this->eat(T_EQUALS);
         }
 
-        node = new BinOp(node, token, this->term());
-        node->name = "BinOp";
+        node = new AST_BinOp(node, token, this->term());
+        node->name = "AST_BinOp";
     };
 
     return node;
@@ -216,8 +216,8 @@ AST* Parser::any_statement() {
 
     nodes = this->statement_list();
 
-    Compound* root = new Compound();
-    root->name = "Compound";
+    AST_Compound* root = new AST_Compound();
+    root->name = "AST_Compound";
 
     for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
         root->children.push_back((*it));
@@ -233,8 +233,8 @@ AST* Parser::compound_statement() {
     nodes = this->statement_list();
     this->eat(T_END);
 
-    Compound* root = new Compound();
-    root->name = "Compound";
+    AST_Compound* root = new AST_Compound();
+    root->name = "AST_Compound";
 
     for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
         root->children.push_back((*it));
@@ -278,7 +278,7 @@ AST* Parser::statement() {
     return node;
 };
 
-FunctionCall* Parser::function_call() {
+AST_FunctionCall* Parser::function_call() {
     std::vector<AST*> args;
     std::string function_name = this->current_token->value;
 
@@ -295,23 +295,23 @@ FunctionCall* Parser::function_call() {
     
     this->eat(T_RPAREN);
 
-    FunctionCall* fc;
+    AST_FunctionCall* fc;
 
     if (function_name == "print")
-        fc = new PrintCall(args);
+        fc = new AST_PrintCall(args);
     
-    fc->name = "FunctionCall";
+    fc->name = "AST_FunctionCall";
 
     return fc;
 };
 
 AST* Parser::assignment_statement() {
-    Var* left = this->variable();
+    AST_Var* left = this->variable();
     Token* token = this->current_token;
     this->eat(T_ASSIGN);
     AST* right = this->expr();
-    Assign* node = new Assign(left, token, right);
-    node->name = "Assign";
+    AST_Assign* node = new AST_Assign(left, token, right);
+    node->name = "AST_Assign";
 
     return node;
 };
@@ -324,8 +324,8 @@ AST* Parser::if_statement() {
     this->eat(T_THEN);
     nodes = this->statement_list();
 
-    Compound* root = new Compound();
-    root->name = "Compound";
+    AST_Compound* root = new AST_Compound();
+    root->name = "AST_Compound";
 
     for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
         root->children.push_back((*it));
@@ -334,34 +334,34 @@ AST* Parser::if_statement() {
     this->eat(T_END);
     this->eat(T_IF);
     
-    If* _if  = new If(node, root);
-    _if->name = "If";
+    AST_If* _if  = new AST_If(node, root);
+    _if->name = "AST_If";
 
     return _if;
 };
 
 AST* Parser::variable_declaration() {
-    VarDecl* decl;
+    AST_VarDecl* decl;
     
     this->eat(T_DECLARE);
-    decl = new VarDecl(this->current_token);
-    decl->name = "VarDecl";
+    decl = new AST_VarDecl(this->current_token);
+    decl->name = "AST_VarDecl";
     this->eat(T_ID);
 
     return decl;
 };
 
-Var* Parser::variable() {
-    Var* node = new Var(this->current_token);
-    node->name = "Var";
+AST_Var* Parser::variable() {
+    AST_Var* node = new AST_Var(this->current_token);
+    node->name = "AST_Var";
     this->eat(T_ID);
 
     return node;
 };
 
 AST* Parser::empty() {
-    NoOp* node = new NoOp();
-    node->name = "NoOp";
+    AST_NoOp* node = new AST_NoOp();
+    node->name = "AST_NoOp";
 
     return node;
 };

@@ -1,11 +1,11 @@
-#ifndef IF_H
-#define IF_H
+#ifndef AST_IF_H
+#define AST_IF_H
 #include "AST.hpp"
 
 
-class If: public AST {
+class AST_If: public AST {
     public:
-        If(AST* comp, AST* root);
+        AST_If(AST* comp, AST* root);
 
         AST* comp;
         AST* root;

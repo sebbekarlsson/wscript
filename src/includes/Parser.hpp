@@ -2,9 +2,9 @@
 #define PARSER_H
 #include "Token.hpp"
 #include "Lexer.hpp"
-#include "AST.hpp"
-#include "Var.hpp"
-#include "FunctionCall.hpp"
+#include "AST/AST.hpp"
+#include "AST/AST_Var.hpp"
+#include "AST/AST_FunctionCall.hpp"
 
 
 class Parser {
@@ -28,9 +28,9 @@ class Parser {
         AST* assignment_statement();
         AST* if_statement();
         AST* variable_declaration();
-        Var* variable();
+        AST_Var* variable();
         AST* empty();
-        FunctionCall* function_call();
+        AST_FunctionCall* function_call();
         AST* parse();
 };
 #endif
