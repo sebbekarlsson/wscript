@@ -19,8 +19,8 @@ std::string T_OBJECT = "OBJECT";
 std::string T_ARRAY = "ARRAY";
 std::string T_EMPTY = "EMPTY";
 std::string T_NULL = "NULL";
-std::string T_LPAREN = "(";
-std::string T_RPAREN = ")";
+std::string T_LPAREN = "LPAREN";
+std::string T_RPAREN = "RPAREN";
 std::string T_DOT = "DOT";
 std::string T_SEMI = "SEMI";
 std::string T_ASSIGN = "ASSIGN";
@@ -39,12 +39,14 @@ std::string T_NOT_EQUALS = "NOT_EQUALS";
 std::string T_EQUALS = "EQUALS";
 std::string T_END = "END";
 std::string T_EOF = "EOF";
+std::string T_FUNCTION_CALL = "FUNCTION_CALL";
 
 std::map<std::string, std::string> RESERVED_KEYWORDS = {
     {"BEGIN", T_BEGIN},
     {"End", T_END},
     {"Dim", T_DECLARE},
     {"If", T_IF},
-    {"Then", T_THEN}
+    {"Then", T_THEN},
+    {"print", T_FUNCTION_CALL}
 };
 #endif
