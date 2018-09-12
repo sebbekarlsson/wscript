@@ -36,7 +36,7 @@ End If
 
     cp wscript.out /usr/local/bin/.
 
-## Running the unit test
+## Running the unit tests
 > To run the unit tests, do the following:
 
     make test
