@@ -6,4 +6,7 @@ def binexec(filename):
         './wscript.out', 'unit/output_tests/code/{}'.format(filename)
     ])
 
-    return out[:-1] if out[len(out) - 1] == '\n' else out
+    if out:
+        return out[:-1] if out[len(out) - 1] == '\n' else out
+    else:
+        return None

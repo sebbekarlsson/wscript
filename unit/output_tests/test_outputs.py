@@ -7,3 +7,7 @@ def test_0():
 
 def test_1():
     assert binexec('1.vbs') == '100'
+
+
+def test_2():
+    assert binexec('2.vbs') is None
