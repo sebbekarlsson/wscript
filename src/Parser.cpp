@@ -101,6 +101,9 @@ AST* Parser::factor() {
         AST* node = this->expr();
         this->eat(T_RPAREN);
         return node;
+    } else if (token->type == T_FUNCTION_CALL) {
+        AST* node = this->function_call();
+        return node;
     } else {
         AST* node = this->variable();
         return node;
@@ -261,9 +264,7 @@ std::vector<AST*> Parser::statement_list() {
 AST* Parser::statement() {
     AST* node;
 
-    if (this->current_token->type == T_BEGIN)
-        node = this->compound_statement();
-    else if (this->current_token->type == T_FUNCTION_CALL)
+    if (this->current_token->type == T_FUNCTION_CALL)
         return this->function_call();
     else if (this->current_token->type == T_ID)
         node = this->assignment_statement();
