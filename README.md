@@ -37,7 +37,9 @@ End If
     cp wscript.out /usr/local/bin/.
 
 ## Running the unit tests
-> To run the unit tests, do the following:
+> To run the unit tests, you will have to have these installed:
+* python2.7
+* python-virtualenv
+> If you have them installed, you can simply run:
 
-    make test
-    ./test.out
+    ./run_tests.sh
