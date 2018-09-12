@@ -35,3 +35,9 @@ End If
 > you have compiled it:
 
     cp wscript.out /usr/local/bin/.
+
+## Running the unit test
+> To run the unit tests, do the following:
+
+    make test
+    ./test.out
