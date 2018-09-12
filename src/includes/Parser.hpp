@@ -4,6 +4,7 @@
 #include "Lexer.hpp"
 #include "AST.hpp"
 #include "Var.hpp"
+#include "FunctionCall.hpp"
 
 
 class Parser {
@@ -29,6 +30,7 @@ class Parser {
         AST* variable_declaration();
         Var* variable();
         AST* empty();
+        FunctionCall* function_call();
         AST* parse();
 };
 #endif

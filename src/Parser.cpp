@@ -8,6 +8,7 @@
 #include "includes/Assign.hpp"
 #include "includes/VarDecl.hpp"
 #include "includes/If.hpp"
+#include "includes/PrintCall.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -37,6 +38,8 @@ extern std::string T_EQUALS;
 extern std::string T_IF;
 extern std::string T_THEN;
 extern std::string T_EOF;
+extern std::string T_FUNCTION_CALL;
+extern std::string T_COMMA;
 
 Parser::Parser(Lexer* lexer) {
     this->lexer = lexer;
@@ -97,6 +100,9 @@ AST* Parser::factor() {
         this->eat(T_LPAREN);
         AST* node = this->expr();
         this->eat(T_RPAREN);
+        return node;
+    } else if (token->type == T_FUNCTION_CALL) {
+        AST* node = this->function_call();
         return node;
     } else {
         AST* node = this->variable();
@@ -258,8 +264,8 @@ std::vector<AST*> Parser::statement_list() {
 AST* Parser::statement() {
     AST* node;
 
-    if (this->current_token->type == T_BEGIN)
-        node = this->compound_statement();
+    if (this->current_token->type == T_FUNCTION_CALL)
+        return this->function_call();
     else if (this->current_token->type == T_ID)
         node = this->assignment_statement();
     else if (this->current_token->type == T_DECLARE)
@@ -270,6 +276,33 @@ AST* Parser::statement() {
         node = this->empty();
 
     return node;
+};
+
+FunctionCall* Parser::function_call() {
+    std::vector<AST*> args;
+    std::string function_name = this->current_token->value;
+
+    this->eat(T_FUNCTION_CALL);
+    this->eat(T_LPAREN);
+
+    AST* node = this->expr();
+    args.push_back(node);
+
+    while(this->current_token->type == T_COMMA) {
+        this->eat(T_COMMA);
+        args.push_back(this->expr());
+    }
+    
+    this->eat(T_RPAREN);
+
+    FunctionCall* fc;
+
+    if (function_name == "print")
+        fc = new PrintCall(args);
+    
+    fc->name = "FunctionCall";
+
+    return fc;
 };
 
 AST* Parser::assignment_statement() {

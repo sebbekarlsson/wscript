@@ -195,7 +195,7 @@ Token* Lexer::_id() {
     }
 
     if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
-        token = new Token(RESERVED_KEYWORDS[result], RESERVED_KEYWORDS[result]);
+        token = new Token(RESERVED_KEYWORDS[result], result);
     } else {
         token = new Token(T_ID, result);
     }

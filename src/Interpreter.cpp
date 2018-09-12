@@ -109,6 +109,15 @@ int Interpreter::visit_If(If* node) {
     return 0;
 };
 
+int Interpreter::visit_functionCall(FunctionCall* node) {
+    std::vector<int> _args;
+
+    for (std::vector<AST*>::iterator it = node->args.begin(); it != node->args.end(); ++it)
+        _args.push_back(this->visit((*it)));
+
+    return this->visit(node->call(_args));
+};
+
 int Interpreter::visit_NoOp(NoOp* node) { return 0; };
 
 int Interpreter::interpret() {

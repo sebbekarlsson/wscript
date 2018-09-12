@@ -22,6 +22,7 @@ class Interpreter: public NodeVisitor {
         int visit_NoOp(NoOp* node);
         int visit_VarDecl(VarDecl* node);
         int visit_If(If* node);
+        int visit_functionCall(FunctionCall* node);
         int interpret();
 };
 #endif

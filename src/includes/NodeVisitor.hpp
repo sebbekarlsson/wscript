@@ -10,6 +10,7 @@
 #include "Var.hpp"
 #include "VarDecl.hpp"
 #include "If.hpp"
+#include "FunctionCall.hpp"
 #include <string>
 
 
@@ -28,5 +29,6 @@ class NodeVisitor {
         virtual int visit_NoOp(NoOp* node) = 0;
         virtual int visit_VarDecl(VarDecl* node) = 0;
         virtual int visit_If(If* node) = 0;
+        virtual int visit_functionCall(FunctionCall* node) = 0;
 };
 #endif
