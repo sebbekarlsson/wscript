@@ -33,6 +33,18 @@ int Interpreter::visit_BinOp(BinOp* node) {
         return this->visit(node->left) * this->visit(node->right);
     else if (node->op->type == T_DIVIDE)
         return this->visit(node->left) / this->visit(node->right);
+    else if (node->op->type == T_NOT_EQUALS)
+        return this->visit(node->left) != this->visit(node->right);
+    else if (node->op->type == T_LESS_THAN)
+        return this->visit(node->left) < this->visit(node->right);
+    else if (node->op->type == T_LARGER_THAN)
+        return this->visit(node->left) > this->visit(node->right);
+    else if (node->op->type == T_LARGER_OR_EQUALS)
+        return this->visit(node->left) >= this->visit(node->right);
+    else if (node->op->type == T_LESS_OR_EQUALS)
+        return this->visit(node->left) <= this->visit(node->right);
+    else if (node->op->type == T_EQUALS)
+        return this->visit(node->left) == this->visit(node->right);
 
     return 0;
 };
@@ -42,6 +54,9 @@ int Interpreter::visit_UnaryOp(UnaryOp * node) {
         return +this->visit(node->expr);
     else if (node->op->type == T_MINUS)
         return -this->visit(node->expr);
+    else if (node->op->type == T_NOT_EQUALS) {
+        return !this->visit(node->expr);
+    }
 
     return this->visit(node->expr);
 }
@@ -90,23 +105,6 @@ int Interpreter::visit_If(If* node) {
 
     if (comp)
         return this->visit(node->root);
-
-    return 0;
-};
-
-int Interpreter::visit_Comparison(Comparison* node) {
-    if (node->token->type == T_LARGER_THAN)
-        return (int)(this->visit(node->left) > this->visit(node->right));
-    else if (node->token->type == T_LESS_THAN)
-        return (int)(this->visit(node->left) < this->visit(node->right));
-    else if (node->token->type == T_EQUALS)
-        return (int)(this->visit(node->left) == this->visit(node->right));
-    else if (node->token->type == T_LESS_OR_EQUALS)
-        return (int)(this->visit(node->left) <= this->visit(node->right));
-    else if (node->token->type == T_LARGER_OR_EQUALS)
-        return (int)(this->visit(node->left) >= this->visit(node->right));
-    else if (node->token->type == T_NOT_EQUALS)
-        return (int)(this->visit(node->left) != this->visit(node->right));
 
     return 0;
 };
