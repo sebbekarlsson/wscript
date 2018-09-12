@@ -19,8 +19,6 @@ int NodeVisitor::visit(AST* node) {
         return this->visit_Assign((Assign*) node);
     else if (node->name == "If")
         return this->visit_If((If*) node);
-    else if (node->name == "Comparison")
-        return this->visit_Comparison((Comparison*) node);
     else if (node->name == "NoOp")
         return this->visit_NoOp((NoOp*) node);
     

@@ -86,7 +86,7 @@ AST* Parser::factor() {
         UnaryOp* node = new UnaryOp(token, this->factor());
         node->name = "UnaryOp";
         return node;
-
+    
     } else if (token->type == T_INTEGER) {
         this->eat(T_INTEGER);
         Num* num = new Num(token);
@@ -165,7 +165,13 @@ AST* Parser::expr() {
 
     while(
         this->current_token->type == T_PLUS ||
-        this->current_token->type == T_MINUS
+        this->current_token->type == T_MINUS ||
+        this->current_token->type == T_NOT_EQUALS ||
+        this->current_token->type == T_LESS_THAN ||
+        this->current_token->type == T_LARGER_THAN ||
+        this->current_token->type == T_LESS_OR_EQUALS ||
+        this->current_token->type == T_LARGER_OR_EQUALS ||
+        this->current_token->type == T_EQUALS
     ) {
         token = this->current_token;
 
@@ -173,6 +179,16 @@ AST* Parser::expr() {
             this->eat(T_PLUS);
         } else if (token->type == T_MINUS) {
             this->eat(T_MINUS);
+        } else if (token->type == T_NOT_EQUALS) {
+            this->eat(T_NOT_EQUALS);
+        } else if (token->type == T_LESS_THAN) {
+            this->eat(T_LESS_THAN);
+        } else if (token->type == T_LARGER_THAN) {
+            this->eat(T_LARGER_THAN);
+        } else if (token->type == T_LESS_OR_EQUALS) {
+            this->eat(T_LESS_OR_EQUALS);
+        } else if (token->type == T_EQUALS) {
+            this->eat(T_EQUALS);
         }
 
         node = new BinOp(node, token, this->term());
@@ -271,7 +287,7 @@ AST* Parser::if_statement() {
     std::vector<AST*> nodes;
 
     this->eat(T_IF);
-    Comparison* comp = this->comparison();
+    AST* node = this->expr();
     this->eat(T_THEN);
     nodes = this->statement_list();
 
@@ -285,7 +301,7 @@ AST* Parser::if_statement() {
     this->eat(T_END);
     this->eat(T_IF);
     
-    If* _if  = new If(comp, root);
+    If* _if  = new If(node, root);
     _if->name = "If";
 
     return _if;
@@ -315,36 +331,6 @@ AST* Parser::empty() {
     node->name = "NoOp";
 
     return node;
-};
-
-Comparison* Parser::comparison() {
-    AST* left = this->expr();
-    Token* token = this->current_token;
-
-    if (this->current_token->type == T_ASSIGN)
-        this->current_token->type = T_EQUALS;
-
-    if (this->current_token->type == T_LARGER_THAN)
-        this->eat(T_LARGER_THAN);
-    else if (this->current_token->type == T_LESS_THAN)
-        this->eat(T_LESS_THAN);
-    else if (this->current_token->type == T_EQUALS)
-        this->eat(T_EQUALS);
-    else if (this->current_token->type == T_LESS_OR_EQUALS)
-        this->eat(T_LESS_OR_EQUALS);
-    else if (this->current_token->type == T_LARGER_OR_EQUALS)
-        this->eat(T_LARGER_OR_EQUALS);
-    else if (this->current_token->type == T_NOT_EQUALS)
-        this->eat(T_NOT_EQUALS);
-    else
-        this->error("Unknown comparison with: `" + this->current_token->type + "`");
-
-    AST* right = this->expr();
-
-    Comparison* comp = new Comparison(left, token, right);
-    comp->name = "Comparison";
-
-    return comp;
 };
 
 AST* Parser::parse() {

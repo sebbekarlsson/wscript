@@ -1,27 +1,8 @@
 Dim x
-x = 2
 
-If x > 1 Then
-    x = 3
-    
-    If x > 2 Then
-        x = 4
-    End If
+x = 20 == 20 == 20
 
-    If 3 == (2 + 1) Then
-        x = 100
-    End If
-    
-    If x == 100 Then
-        x = 200
-    End If
-
-    If x <= 201 Then
-        x = 200
-    End If
-
-    If 1 <> 2 Then
-        x = 1
-    End If
-
+If x Then
+    Dim y
+    y = 20
 End If

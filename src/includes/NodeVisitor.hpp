@@ -10,7 +10,6 @@
 #include "Var.hpp"
 #include "VarDecl.hpp"
 #include "If.hpp"
-#include "Comparison.hpp"
 #include <string>
 
 
@@ -24,7 +23,6 @@ class NodeVisitor {
         virtual int visit_Num(Num* node) = 0;
         virtual int visit_Assign(Assign* node) = 0;
         virtual int visit_Var(Var* node) = 0;
-        virtual int visit_Comparison(Comparison* node) = 0;
         
         virtual int visit_Compound(Compound* node) = 0;
         virtual int visit_NoOp(NoOp* node) = 0;
