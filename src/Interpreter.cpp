@@ -94,7 +94,8 @@ int Interpreter::visit_AST_Var(AST_Var* node) {
 };
 
 int Interpreter::visit_AST_VarDecl(AST_VarDecl* node) {
-    RAM::set_variable(node->key, "");
+    for (std::vector<Token*>::iterator it = node->tokens.begin(); it != node->tokens.end(); ++it)
+        RAM::set_variable((*it)->value, "");
 
     return 0;
 };

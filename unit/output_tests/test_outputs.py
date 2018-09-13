@@ -16,3 +16,6 @@ def test_2():
 def test_3():
     '''this test should be changed later when we have added floats'''
     assert binexec('3.vbs') == '2'
+
+def test_4():
+    assert binexec('4.vbs') == '40'
