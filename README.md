@@ -20,6 +20,10 @@ If x > 0 Then
 End If
 ```
 
+## Requirements
+> You will need to compile and install the following:
+* [https://github.com/sebbekarlsson/ResourceManager](https://github.com/sebbekarlsson/ResourceManager)
+
 ## Usage
 > To use this software:
 
