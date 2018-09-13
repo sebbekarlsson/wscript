@@ -11,6 +11,7 @@
 
 
 extern std::string T_INTEGER;
+extern std::string T_FLOAT;
 extern std::string T_PLUS;
 extern std::string T_MULTIPLY;
 extern std::string T_DIVIDE;
@@ -25,7 +26,7 @@ Interpreter* interpreter = new Interpreter(parser);
 TEST_CASE("Lexer", "[Testing Lexer]") {
     Lexer* lex = new Lexer(
         std::string("Dim x\n") +
-        std::string("x = 2 + 2")
+        std::string("x = 2 + 2 + 5.45")
     );
 
     REQUIRE(lex->get_next_token()->type == T_DECLARE);
@@ -36,6 +37,8 @@ TEST_CASE("Lexer", "[Testing Lexer]") {
     REQUIRE(lex->get_next_token()->type == T_INTEGER);
     REQUIRE(lex->get_next_token()->type == T_PLUS);
     REQUIRE(lex->get_next_token()->type == T_INTEGER);
+    REQUIRE(lex->get_next_token()->type == T_PLUS);
+    REQUIRE(lex->get_next_token()->type == T_FLOAT);
 };
 
 TEST_CASE("AST_BinOp", "[Testing AST_BinOp]") {

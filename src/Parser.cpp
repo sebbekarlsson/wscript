@@ -15,6 +15,7 @@
 
 
 extern std::string T_INTEGER;
+extern std::string T_FLOAT;
 extern std::string T_PLUS;
 extern std::string T_MINUS;
 extern std::string T_MULTIPLY;
@@ -91,8 +92,13 @@ AST* Parser::factor() {
     } else if (token->type == T_INTEGER) {
         this->eat(T_INTEGER);
         AST_Num* num = new AST_Num(token);
-
         return num;
+
+    } else if (token->type == T_FLOAT) {
+        this->eat(T_FLOAT);
+        AST_Num* num = new AST_Num(token);
+        return num;
+
     } else if (token->type == T_LPAREN) {
         this->eat(T_LPAREN);
         AST* node = this->expr();

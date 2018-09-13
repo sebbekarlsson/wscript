@@ -5,6 +5,7 @@
 
 
 extern std::string T_INTEGER;
+extern std::string T_FLOAT;
 extern std::string T_PLUS;
 extern std::string T_MINUS;
 extern std::string T_MULTIPLY;
@@ -63,7 +64,7 @@ Token* Lexer::get_next_token() {
         }
 
         if (isdigit(this->current_char))
-            return new Token(T_INTEGER, std::to_string(this->number()));
+            return this->number();
 
         if (isalpha(this->current_char))
             return this->_id();
@@ -161,9 +162,11 @@ Token* Lexer::get_next_token() {
 /**
  * Append single numbers into complete integers or floats
  *
- * @return int
+ * @return Token*
  */
-float Lexer::number() {
+Token* Lexer::number() {
+    Token* token;
+
     std::string result = "";
 
     while (this->current_char != '\0' && isdigit(this->current_char)) {
@@ -174,14 +177,18 @@ float Lexer::number() {
     if (this->current_char == '.') {
         result += this->current_char;
         this->advance();
+
+        while (this->current_char != '\0' && isdigit(this->current_char)) {
+            result += this->current_char;
+            this->advance();
+        }
+
+        token = new Token(T_FLOAT, result);
+    } else {
+        token = new Token(T_INTEGER, result);
     }
 
-    while (this->current_char != '\0' && isdigit(this->current_char)) {
-        result += this->current_char;
-        this->advance();
-    }
-
-    return std::stoi(result);
+    return token;
 };
 
 char Lexer::peek() {

@@ -13,6 +13,7 @@ std::string T_BYTE = "BYTE";
 std::string T_LONG = "LONG";
 std::string T_SINGLE = "SINGLE";
 std::string T_DOUBLE = "DOUBLE";
+std::string T_FLOAT = "FLOAT";
 std::string T_DATE = "DATE";
 std::string T_STRING = "STRING";
 std::string T_OBJECT = "OBJECT";
