@@ -26,6 +26,7 @@ extern std::string T_LARGER_OR_EQUALS;
 extern std::string T_LESS_OR_EQUALS;
 extern std::string T_NOT_EQUALS;
 extern std::string T_EQUALS;
+extern std::string T_COLON;
 extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 
 Lexer::Lexer(std::string text) {
@@ -151,6 +152,11 @@ Token* Lexer::get_next_token() {
         if (this->current_char == ')') {
             this->advance();
             return new Token(T_RPAREN, ")");
+        }
+
+        if (this->current_char == ':') {
+            this->advance();
+            return new Token(T_COLON, s);
         }
 
         this->error("Unexpected: `" + s + "`");
