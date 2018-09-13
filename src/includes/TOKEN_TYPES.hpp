@@ -41,6 +41,7 @@ std::string T_EQUALS = "EQUALS";
 std::string T_END = "END";
 std::string T_EOF = "EOF";
 std::string T_FUNCTION_CALL = "FUNCTION_CALL";
+std::string T_COLON = "COLON";
 
 std::map<std::string, std::string> RESERVED_KEYWORDS = {
     {"BEGIN", T_BEGIN},

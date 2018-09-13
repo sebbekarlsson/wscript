@@ -41,6 +41,7 @@ extern std::string T_THEN;
 extern std::string T_EOF;
 extern std::string T_FUNCTION_CALL;
 extern std::string T_COMMA;
+extern std::string T_COLON;
 
 Parser::Parser(Lexer* lexer) {
     this->lexer = lexer;
@@ -236,6 +237,11 @@ std::vector<AST*> Parser::statement_list() {
 
     results.push_back(node);
 
+    while (this->current_token->type == T_COLON) {
+        this->eat(T_COLON);
+        results.push_back(this->statement());
+    }
+    
     while (this->current_token->type == T_NEWLINE) {
         this->eat(T_NEWLINE);
         results.push_back(this->statement());
