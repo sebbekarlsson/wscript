@@ -18,7 +18,7 @@ class Lexer {
 
         Token* get_next_token();
 
-        int integer();
+        float number();
 
         char peek();
 

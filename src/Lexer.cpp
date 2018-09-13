@@ -63,7 +63,7 @@ Token* Lexer::get_next_token() {
         }
 
         if (isdigit(this->current_char))
-            return new Token(T_INTEGER, std::to_string(this->integer()));
+            return new Token(T_INTEGER, std::to_string(this->number()));
 
         if (isalpha(this->current_char))
             return this->_id();
@@ -159,12 +159,22 @@ Token* Lexer::get_next_token() {
 };
 
 /**
- * Append single numbers into complete integers
+ * Append single numbers into complete integers or floats
  *
  * @return int
  */
-int Lexer::integer() {
+float Lexer::number() {
     std::string result = "";
+
+    while (this->current_char != '\0' && isdigit(this->current_char)) {
+        result += this->current_char;
+        this->advance();
+    }
+    
+    if (this->current_char == '.') {
+        result += this->current_char;
+        this->advance();
+    }
 
     while (this->current_char != '\0' && isdigit(this->current_char)) {
         result += this->current_char;
