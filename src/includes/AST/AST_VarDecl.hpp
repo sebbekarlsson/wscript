@@ -2,14 +2,14 @@
 #define AST_VARDECL_H
 #include "AST.hpp"
 #include "../Token.hpp"
+#include <vector>
 
 
 class AST_VarDecl: public AST {
     public:
-        AST_VarDecl(Token* token);
+        AST_VarDecl(std::vector<Token*> tokens);
         ~AST_VarDecl();
 
-        Token* token;
-        std::string key;
+        std::vector<Token*> tokens;
 };
 #endif

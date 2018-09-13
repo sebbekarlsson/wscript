@@ -324,10 +324,20 @@ AST* Parser::if_statement() {
 
 AST* Parser::variable_declaration() {
     AST_VarDecl* decl;
+    std::vector<Token*> tokens;
     
     this->eat(T_DECLARE);
-    decl = new AST_VarDecl(this->current_token);
+
+    tokens.push_back(this->current_token);
     this->eat(T_ID);
+
+    while (this->current_token->type == T_COMMA) {
+        this->eat(T_COMMA);
+        tokens.push_back(this->current_token);
+        this->eat(T_ID);
+    }
+
+    decl = new AST_VarDecl(tokens);
 
     return decl;
 };
