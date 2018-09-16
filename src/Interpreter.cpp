@@ -65,6 +65,10 @@ int Interpreter::visit_AST_Num(AST_Num* node) {
     return node->value;
 };
 
+std::string Interpreter::visit_AST_Str(AST_Str* node) {
+    return node->value;
+};
+
 int Interpreter::visit_AST_Compound(AST_Compound* node) {
     for (std::vector<AST*>::iterator it = node->children.begin(); it != node->children.end(); ++it) {
         this->visit((*it));

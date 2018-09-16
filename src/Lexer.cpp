@@ -5,6 +5,7 @@
 
 
 extern std::string T_INTEGER;
+extern std::string T_STRING;
 extern std::string T_FLOAT;
 extern std::string T_PLUS;
 extern std::string T_MINUS;
@@ -63,6 +64,9 @@ Token* Lexer::get_next_token() {
             this->skip_comment();
             continue;
         }
+
+        if (this->current_char == '"')
+            return this->str();
 
         if (isdigit(this->current_char))
             return this->number();
@@ -195,6 +199,23 @@ Token* Lexer::number() {
     }
 
     return token;
+};
+
+Token* Lexer::str() {
+    std::string result = "";
+    
+    this->advance();
+
+    while (
+        this->current_char != '\0' &&
+        this->current_char != '\n' &&
+        this->current_char != '"'
+    ) {
+        result += this->current_char;
+        this->advance();
+    }
+
+    return new Token(T_STRING, result);
 };
 
 char Lexer::peek() {
