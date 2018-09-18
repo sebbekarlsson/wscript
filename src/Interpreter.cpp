@@ -104,14 +104,10 @@ int Interpreter::visit_AST_VarDecl(AST_VarDecl* node) {
     return 0;
 };
 
-
 int Interpreter::visit_AST_If(AST_If* node) {
     bool comp = this->visit(node->comp);
 
-    if (comp)
-        return this->visit(node->root);
-
-    return 0;
+    return this->visit(node->root) ? comp : 0;
 };
 
 int Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
