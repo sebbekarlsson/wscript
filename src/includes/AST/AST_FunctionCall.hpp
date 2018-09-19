@@ -2,7 +2,10 @@
 #define AST_FUNCTIONCALL_H
 #include "AST.hpp"
 #include <vector>
+#include "../typedefs.hpp"
 
+
+class Interpreter;
 
 class AST_FunctionCall: public AST {
     public:
@@ -12,6 +15,6 @@ class AST_FunctionCall: public AST {
 
         std::vector<AST*> args;
 
-        virtual AST* call(std::vector<int> call_args) = 0;
+        virtual AST* call(Interpreter* interpreter) = 0;
 };
 #endif

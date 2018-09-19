@@ -2,17 +2,18 @@
 #define RAMZ_H
 #include <string>
 #include <map>
+#include "typedefs.hpp"
 
 
 class RAM {
     public:
-        static void set_variable(std::string key, std::string value);
+        static void set_variable(std::string key, anything);
 
-        static std::string get_variable(std::string key);
+        static anything get_variable(std::string key);
 
         static bool has_variable(std::string key);
 
     private:
-        static std::map<std::string, std::string> variables;
+        static std::map<std::string, anything> variables;
 };
 #endif

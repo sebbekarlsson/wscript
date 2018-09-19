@@ -11,6 +11,5 @@ class AST_Str: public AST {
         ~AST_Str();
 
         Token* token;
-        std::string value;
 };
 #endif

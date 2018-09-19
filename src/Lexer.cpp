@@ -215,6 +215,8 @@ Token* Lexer::str() {
         this->advance();
     }
 
+    this->advance();
+
     return new Token(T_STRING, result);
 };
 

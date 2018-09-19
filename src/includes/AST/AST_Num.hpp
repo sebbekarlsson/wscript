@@ -11,6 +11,5 @@ class AST_Num: public AST {
         ~AST_Num();
 
         Token* token;
-        int value;
 };
 #endif
