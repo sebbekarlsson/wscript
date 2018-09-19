@@ -50,14 +50,14 @@ TEST_CASE("AST_BinOp", "[Testing AST_BinOp]") {
     AST_BinOp* BinOp_MULTIPLY = new AST_BinOp(num0, new Token(T_MULTIPLY, "*"), num1);
     AST_BinOp* BinOp_DIVIDE = new AST_BinOp(num1, new Token(T_DIVIDE, "/"), num0);
 
-    REQUIRE(interpreter->visit(BinOp_PLUS) == 30);
-    REQUIRE(interpreter->visit(BinOp_MINUS) == -10);
-    REQUIRE(interpreter->visit(BinOp_MULTIPLY) == 200);
-    REQUIRE(interpreter->visit(BinOp_DIVIDE) == 2);
+    REQUIRE(boost::get<int>(interpreter->visit(BinOp_PLUS)) == 30);
+    REQUIRE(boost::get<int>(interpreter->visit(BinOp_MINUS)) == -10);
+    REQUIRE(boost::get<int>(interpreter->visit(BinOp_MULTIPLY)) == 200);
+    REQUIRE(boost::get<int>(interpreter->visit(BinOp_DIVIDE)) == 2);
 };
 
 TEST_CASE("AST_NoOp", "[Testing AST_NoOp]") {
     AST_NoOp* op = new AST_NoOp();
 
-    REQUIRE(interpreter->visit(op) == 0);
+    REQUIRE(boost::get<int>(interpreter->visit(op)) == 0);
 };
