@@ -5,7 +5,7 @@
 #include "../src/includes/Parser.hpp"
 #include "../src/includes/Interpreter.hpp"
 #include "../src/includes/Token.hpp"
-#include "../src/includes/AST/AST_Num.hpp"
+#include "../src/includes/AST/AST_Integer.hpp"
 #include "../src/includes/AST/AST_BinOp.hpp"
 #include "../src/includes/AST/AST_NoOp.hpp"
 
@@ -42,8 +42,8 @@ TEST_CASE("Lexer", "[Testing Lexer]") {
 };
 
 TEST_CASE("AST_BinOp", "[Testing AST_BinOp]") {
-    AST_Num* num0 = new AST_Num(new Token(T_INTEGER, "10"));
-    AST_Num* num1 = new AST_Num(new Token(T_INTEGER, "20"));
+    AST_Integer* num0 = new AST_Integer(new Token(T_INTEGER, "10"));
+    AST_Integer* num1 = new AST_Integer(new Token(T_INTEGER, "20"));
 
     AST_BinOp* BinOp_PLUS = new AST_BinOp(num0, new Token(T_PLUS, "+"), num1);
     AST_BinOp* BinOp_MINUS = new AST_BinOp(num0, new Token(T_MINUS, "-"), num1);

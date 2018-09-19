@@ -3,7 +3,8 @@
 #include "AST/AST.hpp"
 #include "AST/AST_BinOp.hpp"
 #include "AST/AST_UnaryOp.hpp"
-#include "AST/AST_Num.hpp"
+#include "AST/AST_Integer.hpp"
+#include "AST/AST_Float.hpp"
 #include "AST/AST_Str.hpp"
 #include "AST/AST_Compound.hpp"
 #include "AST/AST_NoOp.hpp"
@@ -24,7 +25,8 @@ class NodeVisitor {
 
         virtual anything visit_AST_BinOp(AST_BinOp* node) = 0;
         virtual anything visit_AST_UnaryOp(AST_UnaryOp* node) = 0;
-        virtual int visit_AST_Num(AST_Num* node) = 0;
+        virtual int visit_AST_Integer(AST_Integer* node) = 0;
+        virtual float visit_AST_Float(AST_Float* node) = 0;
         virtual anything visit_AST_Assign(AST_Assign* node) = 0;
         virtual anything visit_AST_Var(AST_Var* node) = 0;
         virtual int visit_AST_Compound(AST_Compound* node) = 0;

@@ -10,8 +10,10 @@ anything NodeVisitor::visit(AST* node) {
         return (anything)this->visit_AST_BinOp((AST_BinOp*) node);
     else if (dynamic_cast<AST_UnaryOp*>( node ))
         return (anything)this->visit_AST_UnaryOp((AST_UnaryOp*) node);
-    else if (dynamic_cast<AST_Num*>( node ))
-        return (anything)this->visit_AST_Num((AST_Num*) node);
+    else if (dynamic_cast<AST_Integer*>( node ))
+        return (anything)this->visit_AST_Integer((AST_Integer*) node);
+    else if (dynamic_cast<AST_Float*>( node ))
+        return (anything)this->visit_AST_Float((AST_Float*) node);
     else if (dynamic_cast<AST_Str*>( node ))
         return (anything)this->visit_AST_Str((AST_Str*) node); // TODO: fix
     else if (dynamic_cast<AST_Var*>( node ))

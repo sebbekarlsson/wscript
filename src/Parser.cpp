@@ -1,5 +1,6 @@
 #include "includes/Parser.hpp"
-#include "includes/AST/AST_Num.hpp"
+#include "includes/AST/AST_Integer.hpp"
+#include "includes/AST/AST_Float.hpp"
 #include "includes/AST/AST_Str.hpp"
 #include "includes/AST/AST_BinOp.hpp"
 #include "includes/AST/AST_UnaryOp.hpp"
@@ -94,7 +95,7 @@ AST* Parser::factor() {
     
     } else if (token->type == T_INTEGER) {
         this->eat(T_INTEGER);
-        AST_Num* num = new AST_Num(token);
+        AST_Integer* num = new AST_Integer(token);
         return num;
 
     } else if (token->type == T_STRING) {
@@ -104,7 +105,7 @@ AST* Parser::factor() {
     
     } else if (token->type == T_FLOAT) {
         this->eat(T_FLOAT);
-        AST_Num* num = new AST_Num(token);
+        AST_Float* num = new AST_Float(token);
         return num;
 
     } else if (token->type == T_LPAREN) {

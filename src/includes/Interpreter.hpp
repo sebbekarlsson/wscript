@@ -15,7 +15,8 @@ class Interpreter: public NodeVisitor {
 
         anything visit_AST_BinOp(AST_BinOp* node);
         anything visit_AST_UnaryOp(AST_UnaryOp* node);
-        int visit_AST_Num(AST_Num* node);
+        int visit_AST_Integer(AST_Integer* node);
+        float visit_AST_Float(AST_Float* node);
         std::string visit_AST_Str(AST_Str* node);
 
         anything visit_AST_Assign(AST_Assign* node);

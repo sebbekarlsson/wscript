@@ -190,8 +190,12 @@ anything Interpreter::visit_AST_UnaryOp(AST_UnaryOp * node) {
     return this->unary_operation(node->op->type, this->visit(node->expr));
 }
 
-int Interpreter::visit_AST_Num(AST_Num* node) {
+int Interpreter::visit_AST_Integer(AST_Integer* node) {
     return node->token->get_integer();
+};
+
+float Interpreter::visit_AST_Float(AST_Float* node) {
+    return node->token->get_float();
 };
 
 std::string Interpreter::visit_AST_Str(AST_Str* node) {
