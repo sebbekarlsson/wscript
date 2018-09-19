@@ -18,6 +18,7 @@ class Lexer {
 
         Token* get_next_token();
         Token* number();
+        Token* str();
         Token* _id();
         
         char peek();

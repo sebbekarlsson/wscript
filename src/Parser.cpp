@@ -1,5 +1,6 @@
 #include "includes/Parser.hpp"
 #include "includes/AST/AST_Num.hpp"
+#include "includes/AST/AST_Str.hpp"
 #include "includes/AST/AST_BinOp.hpp"
 #include "includes/AST/AST_UnaryOp.hpp"
 #include "includes/AST/AST_NoOp.hpp"
@@ -15,6 +16,7 @@
 
 
 extern std::string T_INTEGER;
+extern std::string T_STRING;
 extern std::string T_FLOAT;
 extern std::string T_PLUS;
 extern std::string T_MINUS;
@@ -95,6 +97,11 @@ AST* Parser::factor() {
         AST_Num* num = new AST_Num(token);
         return num;
 
+    } else if (token->type == T_STRING) {
+        this->eat(T_STRING);
+        AST_Str* node = new AST_Str(token);
+        return node;
+    
     } else if (token->type == T_FLOAT) {
         this->eat(T_FLOAT);
         AST_Num* num = new AST_Num(token);
