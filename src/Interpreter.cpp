@@ -25,8 +25,45 @@ void Interpreter::error(std::string message) {
     throw std::runtime_error("[error][Interpreter]:(line=" + std::to_string(this->parser->lexer->line) + ",pos=" + std::to_string(this->parser->lexer->pos) + ") " + message);
 };
 
+anything Interpreter::operation(int left, std::string op, std::string right) {
+    if (op == T_PLUS)
+        return std::to_string(left) + right;
+
+    this->error(op + " is not supported for string and float");
+
+    return "";
+};
+
+anything Interpreter::operation(std::string left, std::string op, int right) {
+    if (op == T_PLUS)
+        return left + std::to_string(right);
+
+    this->error(op + " is not supported for string and float");
+
+    return "";
+};
+
+
+anything Interpreter::operation(float left, std::string op, std::string right) {
+    if (op == T_PLUS)
+        return std::to_string(left) + right;
+
+    this->error(op + " is not supported for string and float");
+
+    return "";
+};
+
+anything Interpreter::operation(std::string left, std::string op, float right) {
+    if (op == T_PLUS)
+        return left + std::to_string(right);
+
+    this->error(op + " is not supported for string and float");
+
+    return "";
+};
+
 anything Interpreter::operation(float left, std::string op, float right) {
-     if (op == T_PLUS)
+    if (op == T_PLUS)
         return left + right;
     else if (op == T_MINUS)
         return left - right;
@@ -88,7 +125,11 @@ anything Interpreter::operation(anything left, std::string op, anything right) {
     if (left.type() == typeid(std::string) && right.type() == typeid(std::string))
         return this->operation(boost::get<std::string>(left), op, boost::get<std::string>(right));
 
+    if (left.type() == typeid(std::string) && right.type() == typeid(int))
+        return this->operation(boost::get<std::string>(left), op, boost::get<int>(right));
 
+    if (left.type() == typeid(int) && right.type() == typeid(std::string))
+        return this->operation(boost::get<int>(left), op, boost::get<std::string>(right));
 
     return 0;
 };

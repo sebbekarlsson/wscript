@@ -29,9 +29,13 @@ class Interpreter: public NodeVisitor {
 
 
         anything operation(anything left, std::string op, anything right);
-        anything operation(int left, std::string op, int right);
         anything operation(float left, std::string op, float right);
+        anything operation(float left, std::string op, std::string right);
         anything operation(std::string left, std::string op, std::string right);
+        anything operation(std::string left, std::string op, int right);
+        anything operation(std::string left, std::string op, float right);
+        anything operation(int left, std::string op, std::string right);
+        anything operation(int left, std::string op, int right);
 
 
         anything unary_operation(std::string op, anything right);

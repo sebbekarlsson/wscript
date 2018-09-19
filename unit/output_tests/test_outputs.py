@@ -24,3 +24,11 @@ def test_4():
 
 def test_5():
     assert binexec('5.vbs') == '10'
+
+
+def test_6():
+    assert binexec('6.vbs') == 'hello world'
+
+
+def test_7():
+    assert binexec('7.vbs') == 'hello 12'
