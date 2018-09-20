@@ -142,7 +142,11 @@ anything Interpreter::operation(anything left, std::string op, anything right) {
 
 anything Interpreter::operation(std::string left, std::string op, std::string right) {
      if (op == T_PLUS)
-        return left + right; 
+        return left + right;
+     if (op == T_EQUALS)
+         return left == right;
+     if (op == T_NOT_EQUALS)
+         return left != right;
 
      this->error(op + " is not supported for string");
 };
@@ -183,9 +187,12 @@ anything Interpreter::unary_operation(std::string op, int right) {
 };
 
 anything Interpreter::unary_operation(std::string op, std::string right) {
+    if (op == T_NOT_EQUALS)
+        return right.empty();
+
     this->error(op + " is not supported for string");
 
-    return "";
+    return 0;
 };
 
 anything Interpreter::visit_AST_BinOp(AST_BinOp* node) {

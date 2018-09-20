@@ -93,6 +93,11 @@ AST* Parser::factor() {
         AST_UnaryOp* node = new AST_UnaryOp(token, this->factor());
         return node;
     
+    } else if (token->type == T_NOT_EQUALS) {
+        this->eat(T_NOT_EQUALS);
+        AST_UnaryOp* node = new AST_UnaryOp(token, this->factor());
+        return node;
+
     } else if (token->type == T_INTEGER) {
         this->eat(T_INTEGER);
         AST_Integer* num = new AST_Integer(token);
