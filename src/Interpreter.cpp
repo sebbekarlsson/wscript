@@ -131,6 +131,12 @@ anything Interpreter::operation(anything left, std::string op, anything right) {
     if (left.type() == typeid(int) && right.type() == typeid(std::string))
         return this->operation(boost::get<int>(left), op, boost::get<std::string>(right));
 
+    if (left.type() == typeid(std::string) && right.type() == typeid(float))
+        return this->operation(boost::get<std::string>(left), op, boost::get<float>(right));
+
+    if (left.type() == typeid(float) && right.type() == typeid(std::string))
+        return this->operation(boost::get<float>(left), op, boost::get<std::string>(right));
+
     return 0;
 };
 

@@ -35,3 +35,7 @@ def test_7():
 
 def test_8():
     assert binexec('8.vbs') == '45.7'
+
+
+def test_9():
+    assert binexec('9.vbs') == 'hello 0.450000'
