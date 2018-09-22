@@ -312,8 +312,7 @@ AST_FunctionCall* Parser::function_call() {
         fc = new AST_PrintCall(args);
         return fc;
     } else {
-        AST_FunctionDefinition* definition = RAM::get_function_definition(function_name);
-        udfc = new AST_UserDefinedFunctionCall(args, definition);
+        udfc = new AST_UserDefinedFunctionCall(args, function_name);
         return udfc;
     }
     
@@ -354,8 +353,6 @@ AST_FunctionDefinition* Parser::function_definition() {
         args,
         body
     );
-
-    RAM::define_function(fd);
 
     return fd;
 };

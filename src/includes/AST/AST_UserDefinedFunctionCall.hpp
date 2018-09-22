@@ -11,10 +11,11 @@ class Interpreter;
 
 class AST_UserDefinedFunctionCall: public AST_FunctionCall {
     public:
-        AST_UserDefinedFunctionCall(std::vector<AST*> args, AST_FunctionDefinition* definition);
+        AST_UserDefinedFunctionCall(std::vector<AST*> args, std::string name);
         ~AST_UserDefinedFunctionCall();
 
         AST_FunctionDefinition* definition;
+        std::string name;
 
         AST* call(Interpreter* interpreter);
 };
