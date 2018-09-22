@@ -284,10 +284,18 @@ int Interpreter::visit_AST_If(AST_If* node) {
 };
 
 anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
+    if (dynamic_cast<AST_UserDefinedFunctionCall*>( node )) {
+        AST_UserDefinedFunctionCall* udfc = (AST_UserDefinedFunctionCall*) node;
+        udfc->definition = RAM::get_function_definition(udfc->name);
+
+        return this->visit(udfc->call(this));
+    }
+
     return this->visit(node->call(this));
 };
 
 anything Interpreter::visit_AST_functionDefinition(AST_FunctionDefinition* node) {
+    RAM::define_function(node);
     return new AST_NoOp();
 }
 

@@ -5,8 +5,8 @@
 #include <iostream>
 
 
-AST_UserDefinedFunctionCall::AST_UserDefinedFunctionCall(std::vector<AST*> args, AST_FunctionDefinition* definition) : AST_FunctionCall(args) {
-    this->definition = definition;
+AST_UserDefinedFunctionCall::AST_UserDefinedFunctionCall(std::vector<AST*> args, std::string name) : AST_FunctionCall(args) {
+    this->name = name;
 };
 
 AST_UserDefinedFunctionCall::~AST_UserDefinedFunctionCall() {};

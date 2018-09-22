@@ -13,6 +13,7 @@
 #include "AST/AST_VarDecl.hpp"
 #include "AST/AST_If.hpp"
 #include "AST/AST_FunctionCall.hpp"
+#include "AST/AST_UserDefinedFunctionCall.hpp"
 #include "AST/AST_FunctionDefinition.hpp"
 #include <string>
 #include "typedefs.hpp"
