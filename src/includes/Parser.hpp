@@ -1,10 +1,12 @@
 #ifndef PARSER_H
 #define PARSER_H
+#include "RAM.hpp"
 #include "Token.hpp"
 #include "Lexer.hpp"
 #include "AST/AST.hpp"
 #include "AST/AST_Var.hpp"
 #include "AST/AST_FunctionCall.hpp"
+#include "AST/AST_FunctionDefinition.hpp"
 
 
 class Parser {
@@ -31,6 +33,7 @@ class Parser {
         AST_Var* variable();
         AST* empty();
         AST_FunctionCall* function_call();
+        AST_FunctionDefinition* function_definition();
         AST* parse();
 };
 #endif
