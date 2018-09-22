@@ -43,6 +43,7 @@ extern std::string T_IF;
 extern std::string T_THEN;
 extern std::string T_EOF;
 extern std::string T_FUNCTION_CALL;
+extern std::string T_FUNCTION_DEFINITION;
 extern std::string T_COMMA;
 extern std::string T_COLON;
 
@@ -270,7 +271,9 @@ std::vector<AST*> Parser::statement_list() {
 AST* Parser::statement() {
     AST* node;
 
-    if (this->current_token->type == T_FUNCTION_CALL)
+    if (this->current_token->type == T_FUNCTION_DEFINITION)
+        return this->function_definition();
+    else if (this->current_token->type == T_FUNCTION_CALL)
         return this->function_call();
     else if (this->current_token->type == T_ID)
         node = this->assignment_statement();
@@ -307,6 +310,44 @@ AST_FunctionCall* Parser::function_call() {
         fc = new AST_PrintCall(args);
     
     return fc;
+};
+
+AST_FunctionDefinition* Parser::function_definition() {
+    std::vector<Token*> args;
+    AST_Compound* body;
+    std::vector<AST*> nodes;
+    std::string function_name;
+
+    this->eat(T_FUNCTION_DEFINITION);
+    function_name = this->current_token->value;
+    this->eat(T_ID);
+    this->eat(T_LPAREN);
+
+    args.push_back(this->current_token);
+    this->eat(T_ID);
+
+    while(this->current_token->type == T_COMMA) {
+        this->eat(T_COMMA);
+        args.push_back(this->current_token);
+        this->eat(T_ID);
+    }
+    
+    this->eat(T_RPAREN);
+    nodes = this->statement_list();
+    this->eat(T_END);
+    this->eat(T_FUNCTION_DEFINITION);
+    
+    for (std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+        body->children.push_back((*it));
+    }
+
+    AST_FunctionDefinition* fd = new AST_FunctionDefinition(
+        function_name,
+        args,
+        body
+    );
+
+    return fd;
 };
 
 AST* Parser::assignment_statement() {
