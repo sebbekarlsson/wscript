@@ -71,16 +71,17 @@ void Parser::eat(std::string token_type) {
     }
 };
 
+/**
+ * Raises an error
+ *
+ * @param std::string message
+ */
 void Parser::error(std::string message) {
     throw std::runtime_error("[error][Parser](line=" + std::to_string(this->lexer->line) + ",pos=" + std::to_string(this->lexer->pos) + "): " + message);
 };
 
 /**
- * executes the Parser::eats method with T_INTEGER
- * and returns the current_token->value that was before `eat` was executed.
- * factor: INTEGER
- * 
- * @return std::string
+ * @return AST*
  */
 AST* Parser::factor() {
     Token* token = this->current_token;
@@ -135,13 +136,11 @@ AST* Parser::factor() {
  * Handles multiplication and division
  * term : factor ((MUL | DIV) factor)*
  *
- * @return std::string
+ * @return AST*
  */
 AST* Parser::term() {
     Token* token = nullptr;
 
-    // we actually dont know if "this->factor()" will
-    // return a BinOp* or a Num*.
     AST* node = this->factor();
     
     while (
@@ -156,8 +155,6 @@ AST* Parser::term() {
             this->eat(T_DIVIDE);
         }
 
-        // we actually dont know if "this->factor()" will
-        // return a BinOp* or a Num*.
         node = new AST_BinOp(node, token, this->factor());
     }
 
@@ -209,6 +206,11 @@ AST* Parser::expr() {
     return node;
 };
 
+/**
+ * @deprecated
+ *
+ * @return AST*
+ */
 AST* Parser::program() {
     AST* node = this->compound_statement();
     this->eat(T_DOT);
@@ -216,6 +218,11 @@ AST* Parser::program() {
     return node;
 };
 
+/**
+ * This literally tries to parse anything.
+ *
+ * @return AST*
+ */
 AST* Parser::any_statement() {
     std::vector<AST*> nodes;
 
@@ -230,6 +237,9 @@ AST* Parser::any_statement() {
     return root;
 };
 
+/**
+ * @return AST*
+ */
 AST* Parser::compound_statement() {
     std::vector<AST*> nodes;
 
@@ -246,6 +256,9 @@ AST* Parser::compound_statement() {
     return root;
 };
 
+/**
+ * @return std::vector<AST*>
+ */
 std::vector<AST*> Parser::statement_list() {
     std::vector<AST*> results;
     AST* node = this->statement();
@@ -269,6 +282,11 @@ std::vector<AST*> Parser::statement_list() {
     return results;
 };
 
+/**
+ * Parses a single statement
+ *
+ * @return AST*
+ */
 AST* Parser::statement() {
     AST* node;
 
@@ -288,6 +306,11 @@ AST* Parser::statement() {
     return node;
 };
 
+/**
+ * Parses a function call
+ *
+ * @return AST_FunctionCall*
+ */
 AST_FunctionCall* Parser::function_call() {
     std::vector<AST*> args;
     std::string function_name = this->current_token->value;
@@ -295,6 +318,9 @@ AST_FunctionCall* Parser::function_call() {
     this->eat(T_FUNCTION_CALL);
     this->eat(T_LPAREN);
 
+    // if we encounter a RPAREN, we assume no arguments are specified
+    // and we dont have to try and parse any arguments.
+    // Because of this, functions are not required to have any arguments.
     if (this->current_token->type != T_RPAREN) {
         AST* node = this->expr();
         args.push_back(node);
@@ -321,6 +347,11 @@ AST_FunctionCall* Parser::function_call() {
     return nullptr;
 };
 
+/**
+ * Parses a function definition
+ *
+ * @return AST_FunctionDefinition*
+ */
 AST_FunctionDefinition* Parser::function_definition() {
     std::vector<Token*> args;
     AST_Compound* body = new AST_Compound();
@@ -332,6 +363,9 @@ AST_FunctionDefinition* Parser::function_definition() {
     this->eat(T_ID);
     this->eat(T_LPAREN);
 
+    // if we encounter a RPAREN, we assume no arguments are specified
+    // and we dont have to try and parse any arguments.
+    // Because of this, functions are not required to have any arguments.
     if (this->current_token->type != T_RPAREN) {
         args.push_back(this->current_token);
         this->eat(T_ID);
@@ -361,6 +395,11 @@ AST_FunctionDefinition* Parser::function_definition() {
     return fd;
 };
 
+/**
+ * Parses an assign statement
+ *
+ * @return AST*
+ */
 AST* Parser::assignment_statement() {
     AST_Var* left = this->variable();
     Token* token = this->current_token;
@@ -371,6 +410,22 @@ AST* Parser::assignment_statement() {
     return node;
 };
 
+/**
+ * NOTE: this method ought to be modified to support ELSE, ELSEIF ...
+ * What I mean:
+ *
+ *  If something Then
+ *      <compound>
+ *  Else If somethingelse Then
+ *      <compound>
+ *  ...
+ *
+ *  we obviously need a compound list.
+ *
+ * and also the `AST_If` should probably have a list of compounds
+ * instead of just one.
+ * We should also consider renaming that class.
+ */
 AST* Parser::if_statement() {
     std::vector<AST*> nodes;
 
@@ -393,6 +448,11 @@ AST* Parser::if_statement() {
     return _if;
 };
 
+/**
+ * Parses the declaration of a variable
+ *
+ * @return AST*
+ */
 AST* Parser::variable_declaration() {
     AST_VarDecl* decl;
     std::vector<Token*> tokens;
@@ -413,6 +473,11 @@ AST* Parser::variable_declaration() {
     return decl;
 };
 
+/**
+ * Parses a variable
+ *
+ * @return AST_Var*
+ */
 AST_Var* Parser::variable() {
     AST_Var* node = new AST_Var(this->current_token);
     this->eat(T_ID);
@@ -420,17 +485,22 @@ AST_Var* Parser::variable() {
     return node;
 };
 
+/**
+ * Parses a none operation
+ *
+ * @return AST*
+ */
 AST* Parser::empty() {
     AST_NoOp* node = new AST_NoOp();
 
     return node;
 };
 
+/**
+ * Parses everything, the main endpoint of the Parser.
+ *
+ * @return AST*
+ */
 AST* Parser::parse() {
-    AST* node = this->any_statement();
-
-    //if (this->current_token->type != T_EOF)
-    //    throw std::runtime_error("Expected EOF");
-
-    return node;
+    return this->any_statement();
 };
