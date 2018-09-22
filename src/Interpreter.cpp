@@ -287,6 +287,10 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
     return this->visit(node->call(this));
 };
 
+anything Interpreter::visit_AST_functionDefinition(AST_FunctionDefinition* node) {
+    return new AST_NoOp();
+}
+
 int Interpreter::visit_AST_NoOp(AST_NoOp* node) { return 0; };
 
 anything Interpreter::interpret() {

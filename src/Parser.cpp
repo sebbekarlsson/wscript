@@ -11,6 +11,7 @@
 #include "includes/AST/AST_VarDecl.hpp"
 #include "includes/AST/AST_If.hpp"
 #include "includes/AST/AST_PrintCall.hpp"
+#include "includes/AST/AST_UserDefinedFunctionCall.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -305,16 +306,23 @@ AST_FunctionCall* Parser::function_call() {
     this->eat(T_RPAREN);
 
     AST_FunctionCall* fc;
+    AST_UserDefinedFunctionCall* udfc;
 
-    if (function_name == "print")
+    if (function_name == "print") {
         fc = new AST_PrintCall(args);
+        return fc;
+    } else {
+        AST_FunctionDefinition* definition = RAM::get_function_definition(function_name);
+        udfc = new AST_UserDefinedFunctionCall(args, definition);
+        return udfc;
+    }
     
-    return fc;
+    return nullptr;
 };
 
 AST_FunctionDefinition* Parser::function_definition() {
     std::vector<Token*> args;
-    AST_Compound* body;
+    AST_Compound* body = new AST_Compound();
     std::vector<AST*> nodes;
     std::string function_name;
 
@@ -346,6 +354,8 @@ AST_FunctionDefinition* Parser::function_definition() {
         args,
         body
     );
+
+    RAM::define_function(fd);
 
     return fd;
 };

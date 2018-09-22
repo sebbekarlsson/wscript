@@ -28,6 +28,8 @@ extern std::string T_LESS_OR_EQUALS;
 extern std::string T_NOT_EQUALS;
 extern std::string T_EQUALS;
 extern std::string T_COLON;
+extern std::string T_FUNCTION_DEFINITION;
+extern std::string T_FUNCTION_CALL;
 extern std::map<std::string, std::string> RESERVED_KEYWORDS;
 
 Lexer::Lexer(std::string text) {
@@ -35,6 +37,13 @@ Lexer::Lexer(std::string text) {
     this->pos = 0;
     this->line = 0;
     this->current_char = this->text.at(this->pos);
+    this->latest_token = new Token("", "");
+};
+
+Token* Lexer::get_next_token() {
+    this->latest_token = this->_get_next_token();
+
+    return this->latest_token;
 };
 
 /**
@@ -42,7 +51,7 @@ Lexer::Lexer(std::string text) {
  *
  * @return Token*
  */
-Token* Lexer::get_next_token() {
+Token* Lexer::_get_next_token() {
     while (this->current_char != '\0') {
         if (this->current_char == ' ') {
             this->skip_whitespace();
@@ -230,6 +239,24 @@ char Lexer::peek() {
     return this->text.at(peek_pos);
 };
 
+char Lexer::peek_next(int start) {
+    int peek_pos = start;
+    char c = '\0';
+
+    while (peek_pos < (int)this->text.length()) {
+        c = this->text.at(peek_pos);
+
+        if (c == '\0' || c == ' ' || c == '\n') {
+            peek_pos++;
+            continue;
+        } else {
+            break;
+        }
+    }
+
+    return c;
+};
+
 Token* Lexer::_id() {
     std::string result = "";
 
@@ -240,7 +267,9 @@ Token* Lexer::_id() {
         this->advance();
     }
 
-    if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
+    if (this->latest_token->type != T_FUNCTION_DEFINITION && this->peek_next(this->pos) == '(') {
+        return new Token(T_FUNCTION_CALL, result);
+    } else if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
         token = new Token(RESERVED_KEYWORDS[result], result);
     } else {
         token = new Token(T_ID, result);

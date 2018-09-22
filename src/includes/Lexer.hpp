@@ -16,12 +16,16 @@ class Lexer {
         int pos;
         int line;
 
+        Token* latest_token;
+
         Token* get_next_token();
+        Token* _get_next_token();
         Token* number();
         Token* str();
         Token* _id();
         
         char peek();
+        char peek_next(int start);
 
         void advance();
         void skip_whitespace();
