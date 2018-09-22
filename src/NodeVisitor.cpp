@@ -26,6 +26,8 @@ anything NodeVisitor::visit(AST* node) {
         return (anything)this->visit_AST_Assign((AST_Assign*) node);
     else if (dynamic_cast<AST_If*>( node ))
         return (anything)this->visit_AST_If((AST_If*) node);
+    else if (dynamic_cast<AST_DoWhile*>( node ))
+        return (anything)this->visit_AST_DoWhile((AST_DoWhile*) node);
     else if (dynamic_cast<AST_FunctionCall*>( node ))
         return (anything)this->visit_AST_functionCall((AST_FunctionCall*) node);
     else if (dynamic_cast<AST_FunctionDefinition*>( node ))

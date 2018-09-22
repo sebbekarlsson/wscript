@@ -283,6 +283,32 @@ int Interpreter::visit_AST_If(AST_If* node) {
     return 0;
 };
 
+int Interpreter::visit_AST_DoWhile(AST_DoWhile* node) {
+    int loop = false;
+    anything expr = this->visit(node->expr);
+
+    if (expr.type() == typeid(int))
+        loop = boost::get<int>(expr);
+    else if (expr.type() == typeid(float))
+        loop = (int)boost::get<float>(expr);
+    else if (expr.type() == typeid(bool))
+        loop = (int)boost::get<bool>(expr);
+
+    while (loop) {
+        this->visit(node->body);
+        expr = this->visit(node->expr);
+
+        if (expr.type() == typeid(int))
+            loop = boost::get<int>(expr);
+        else if (expr.type() == typeid(float))
+            loop = (int)boost::get<float>(expr);
+        else if (expr.type() == typeid(bool))
+            loop = (int)boost::get<bool>(expr);
+    }
+
+    return 1;
+};
+
 anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
     if (dynamic_cast<AST_UserDefinedFunctionCall*>( node )) {
         AST_UserDefinedFunctionCall* udfc = (AST_UserDefinedFunctionCall*) node;

@@ -7,6 +7,7 @@
 #include "AST/AST_Var.hpp"
 #include "AST/AST_FunctionCall.hpp"
 #include "AST/AST_FunctionDefinition.hpp"
+#include "AST/AST_DoWhile.hpp"
 
 
 class Parser {
@@ -29,6 +30,7 @@ class Parser {
         AST* statement();
         AST* assignment_statement();
         AST* if_statement();
+        AST_DoWhile* do_while();
         AST* variable_declaration();
         AST_Var* variable();
         AST* empty();

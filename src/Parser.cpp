@@ -12,6 +12,7 @@
 #include "includes/AST/AST_If.hpp"
 #include "includes/AST/AST_PrintCall.hpp"
 #include "includes/AST/AST_UserDefinedFunctionCall.hpp"
+#include "includes/AST/AST_DoWhile.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -47,6 +48,9 @@ extern std::string T_FUNCTION_CALL;
 extern std::string T_FUNCTION_DEFINITION;
 extern std::string T_COMMA;
 extern std::string T_COLON;
+extern std::string T_DO;
+extern std::string T_LOOP;
+extern std::string T_WHILE;
 
 Parser::Parser(Lexer* lexer) {
     this->lexer = lexer;
@@ -300,6 +304,8 @@ AST* Parser::statement() {
         node = this->variable_declaration();
     else if (this->current_token->type == T_IF)
         node = this->if_statement();
+    else if (this->current_token->type == T_DO)
+        return this->do_while();
     else
         node = this->empty();
 
@@ -446,6 +452,32 @@ AST* Parser::if_statement() {
     AST_If* _if  = new AST_If(node, root);
 
     return _if;
+};
+
+AST_DoWhile* Parser::do_while() {
+    AST* expr = nullptr;
+    AST_Compound* body = new AST_Compound();
+    std::vector<AST*> nodes;
+
+    this->eat(T_DO);
+
+    if (this->current_token->type == T_WHILE) {
+        this->eat(T_WHILE);
+        expr = this->expr();
+        nodes = this->statement_list();
+        this->eat(T_LOOP);
+    } else {
+        nodes = this->statement_list();
+        this->eat(T_LOOP);
+        this->eat(T_WHILE);
+        expr = this->expr();
+    }
+
+    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+        body->children.push_back((*it));
+    }
+
+    return new AST_DoWhile(expr, body);
 };
 
 /**

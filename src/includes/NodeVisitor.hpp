@@ -15,6 +15,7 @@
 #include "AST/AST_FunctionCall.hpp"
 #include "AST/AST_UserDefinedFunctionCall.hpp"
 #include "AST/AST_FunctionDefinition.hpp"
+#include "AST/AST_DoWhile.hpp"
 #include <string>
 #include "typedefs.hpp"
 
@@ -35,6 +36,7 @@ class NodeVisitor {
         virtual int visit_AST_NoOp(AST_NoOp* node) = 0;
         virtual int visit_AST_VarDecl(AST_VarDecl* node) = 0;
         virtual int visit_AST_If(AST_If* node) = 0;
+        virtual int visit_AST_DoWhile(AST_DoWhile* node) = 0;
         virtual anything visit_AST_functionCall(AST_FunctionCall* node) = 0;
         virtual anything visit_AST_functionDefinition(AST_FunctionDefinition* node) = 0;
         virtual std::string visit_AST_Str(AST_Str* node) = 0;

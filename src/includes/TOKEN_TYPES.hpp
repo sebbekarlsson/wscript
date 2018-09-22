@@ -42,6 +42,9 @@ std::string T_END = "END";
 std::string T_EOF = "EOF";
 std::string T_FUNCTION_CALL = "FUNCTION_CALL";
 std::string T_FUNCTION_DEFINITION = "FUNCTION_DEFINITION";
+std::string T_DO = "DO";
+std::string T_WHILE = "WHILE";
+std::string T_LOOP = "LOOP";
 std::string T_COLON = "COLON";
 
 std::map<std::string, std::string> RESERVED_KEYWORDS = {
@@ -51,6 +54,9 @@ std::map<std::string, std::string> RESERVED_KEYWORDS = {
     {"If", T_IF},
     {"Then", T_THEN},
     {"Function", T_FUNCTION_DEFINITION},
+    {"Do", T_DO},
+    {"Loop", T_LOOP},
+    {"While", T_WHILE},
     {"print", T_FUNCTION_CALL}
 };
 #endif
