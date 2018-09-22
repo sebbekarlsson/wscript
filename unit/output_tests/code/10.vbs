@@ -3,12 +3,12 @@ Dim x
 
 x = 0
 
-Function Recursion(Arg)
+Function Recursion()
     If x < 3 * 100 Then
         x = x + 1
         print(x)
-        Recursion(1, 2)
+        Recursion()
     End If
 End Function
 
-Recursion(1)
+Recursion()

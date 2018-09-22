@@ -295,12 +295,14 @@ AST_FunctionCall* Parser::function_call() {
     this->eat(T_FUNCTION_CALL);
     this->eat(T_LPAREN);
 
-    AST* node = this->expr();
-    args.push_back(node);
+    if (this->current_token->type != T_RPAREN) {
+        AST* node = this->expr();
+        args.push_back(node);
 
-    while(this->current_token->type == T_COMMA) {
-        this->eat(T_COMMA);
-        args.push_back(this->expr());
+        while(this->current_token->type == T_COMMA) {
+            this->eat(T_COMMA);
+            args.push_back(this->expr());
+        }
     }
     
     this->eat(T_RPAREN);
@@ -330,13 +332,15 @@ AST_FunctionDefinition* Parser::function_definition() {
     this->eat(T_ID);
     this->eat(T_LPAREN);
 
-    args.push_back(this->current_token);
-    this->eat(T_ID);
-
-    while(this->current_token->type == T_COMMA) {
-        this->eat(T_COMMA);
+    if (this->current_token->type != T_RPAREN) {
         args.push_back(this->current_token);
         this->eat(T_ID);
+
+        while(this->current_token->type == T_COMMA) {
+            this->eat(T_COMMA);
+            args.push_back(this->current_token);
+            this->eat(T_ID);
+        }
     }
     
     this->eat(T_RPAREN);
