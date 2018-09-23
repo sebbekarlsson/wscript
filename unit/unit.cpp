@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include <string>
+#include "../src/includes/Scope.hpp"
 #include "../src/includes/TOKEN_TYPES.hpp"
 #include "../src/includes/Parser.hpp"
 #include "../src/includes/Interpreter.hpp"
@@ -9,6 +10,8 @@
 #include "../src/includes/AST/AST_BinOp.hpp"
 #include "../src/includes/AST/AST_NoOp.hpp"
 
+
+Scope* global_scope = new Scope();
 
 extern std::string T_INTEGER;
 extern std::string T_FLOAT;

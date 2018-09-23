@@ -1,6 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 #include "RAM.hpp"
+#include "Scope.hpp"
 #include "Token.hpp"
 #include "Lexer.hpp"
 #include "AST/AST.hpp"
