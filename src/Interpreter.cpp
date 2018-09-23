@@ -226,26 +226,26 @@ int Interpreter::visit_AST_Compound(AST_Compound* node) {
 anything Interpreter::visit_AST_Assign(AST_Assign* node) {
     std::string varname = node->left->value;
     
-    if (!RAM::has_variable(varname))
+    if (!node->get_scope()->has_variable(varname))
         this->error("Trying to assign to undeclared variable: `" + varname + "`");
 
     anything value = this->visit(node->right);
 
-    RAM::set_variable(varname, value);
+    node->get_scope()->set_variable(varname, value);
 
     return value;
 };
 
 anything Interpreter::visit_AST_Var(AST_Var* node) {
     std::string varname = node->value;
-    anything value = RAM::get_variable(varname);
+    anything value = node->get_scope()->get_variable(varname);
 
     return value;
 };
 
 int Interpreter::visit_AST_VarDecl(AST_VarDecl* node) {
     for (std::vector<Token*>::iterator it = node->tokens.begin(); it != node->tokens.end(); ++it)
-        RAM::set_variable((*it)->value, "");
+        node->get_scope()->set_variable((*it)->value, "");
 
     return 0;
 };
@@ -312,7 +312,20 @@ int Interpreter::visit_AST_DoWhile(AST_DoWhile* node) {
 anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
     if (dynamic_cast<AST_UserDefinedFunctionCall*>( node )) {
         AST_UserDefinedFunctionCall* udfc = (AST_UserDefinedFunctionCall*) node;
-        udfc->definition = RAM::get_function_definition(udfc->name);
+        udfc->definition = node->get_scope()->get_function_definition(udfc->name);
+        if (udfc->definition == nullptr)
+            this->error("Could not find definition for: " + udfc->name);
+
+        int missing_arguments = udfc->definition->args.size() - node->args.size();
+
+        if (missing_arguments > 0)
+            this->error("Missing " + std::to_string(missing_arguments) + " arguments when calling: " + udfc->name);
+
+        int i = 0;
+        for (std::vector<Token*>::iterator it = udfc->definition->args.begin(); it != udfc->definition->args.end(); ++it) {
+            udfc->definition->get_scope()->set_variable((*it)->value, this->visit(node->args[i]));
+            i++;
+        }
 
         return this->visit(udfc->call(this));
     }
@@ -321,7 +334,7 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
 };
 
 anything Interpreter::visit_AST_functionDefinition(AST_FunctionDefinition* node) {
-    RAM::define_function(node);
+    node->get_scope()->define_function(node);
     return new AST_NoOp();
 }
 

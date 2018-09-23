@@ -39,3 +39,15 @@ def test_8():
 
 def test_9():
     assert binexec('9.vbs') == 'hello 0.450000'
+
+
+def test_10():
+    assert binexec('10.vbs') == '1\n2\n3'
+
+
+def test_11():
+    assert binexec('11.vbs') == '1\n2\n3\n2\n1\n0'
+
+
+def test_12():
+    assert binexec('12.vbs') == '40'

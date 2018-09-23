@@ -387,8 +387,12 @@ AST_FunctionDefinition* Parser::function_definition() {
     nodes = this->statement_list();
     this->eat(T_END);
     this->eat(T_FUNCTION_DEFINITION);
+
+    Scope* scope = new Scope();
+    body->scope = scope;
     
     for (std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+        (*it)->scope = scope;
         body->children.push_back((*it));
     }
 
