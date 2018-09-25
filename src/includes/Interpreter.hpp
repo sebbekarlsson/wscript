@@ -2,7 +2,6 @@
 #define INTERPRETER_H
 #include "NodeVisitor.hpp"
 #include "Parser.hpp"
-#include "RAM.hpp"
 
 
 class Interpreter: public NodeVisitor {
