@@ -12,9 +12,8 @@ AST_UserDefinedFunctionCall::AST_UserDefinedFunctionCall(std::vector<AST*> args,
 AST_UserDefinedFunctionCall::~AST_UserDefinedFunctionCall() {};
 
 AST* AST_UserDefinedFunctionCall::call(Interpreter* interpreter) {
-    if (this->definition != nullptr) {
+    if (this->definition != nullptr)
         return this->definition->body;
-    }
 
     return new AST_NoOp();
 };

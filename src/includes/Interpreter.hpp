@@ -28,8 +28,6 @@ class Interpreter: public NodeVisitor {
         anything visit_AST_functionCall(AST_FunctionCall* node);
         anything visit_AST_functionDefinition(AST_FunctionDefinition* node);
 
-
-
         anything operation(anything left, std::string op, anything right);
         anything operation(float left, std::string op, float right);
         anything operation(float left, std::string op, std::string right);
@@ -38,7 +36,6 @@ class Interpreter: public NodeVisitor {
         anything operation(std::string left, std::string op, float right);
         anything operation(int left, std::string op, std::string right);
         anything operation(int left, std::string op, int right);
-
 
         anything unary_operation(std::string op, anything right);
         anything unary_operation(std::string op, int right);

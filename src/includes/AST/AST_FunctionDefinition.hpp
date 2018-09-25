@@ -18,7 +18,5 @@ class AST_FunctionDefinition: public AST {
         std::string name;
         std::vector<Token*> args;
         AST_Compound* body;
-
-        // virtual AST* call(Interpreter* interpreter) = 0;
 };
 #endif

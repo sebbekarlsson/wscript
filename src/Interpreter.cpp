@@ -216,9 +216,8 @@ std::string Interpreter::visit_AST_Str(AST_Str* node) {
 };
 
 int Interpreter::visit_AST_Compound(AST_Compound* node) {
-    for (std::vector<AST*>::iterator it = node->children.begin(); it != node->children.end(); ++it) {
+    for (std::vector<AST*>::iterator it = node->children.begin(); it != node->children.end(); ++it)
         this->visit((*it));
-    }
 
     return 0;
 };

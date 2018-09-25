@@ -15,9 +15,8 @@ AST* AST_PrintCall::call(Interpreter* interpreter) {
             std::vector<AST*>::iterator it = this->args.begin();
             it != this->args.end();
             ++it
-        ) {
+        )
             std::cout << interpreter->visit((*it)) << std::endl;
-        }
     }
 
     return new AST_NoOp();

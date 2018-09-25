@@ -71,11 +71,10 @@ Parser::Parser(Lexer* lexer) {
  * @param std::string token_type - the expected current token type.
  */
 void Parser::eat(std::string token_type) {
-    if (this->current_token->type == token_type) {
+    if (this->current_token->type == token_type)
         this->current_token = this->lexer->get_next_token();
-    } else {
+    else
         this->error("Expected token type: `" + token_type + "`, but got `" + this->current_token->type + "`");
-    }
 };
 
 /**
@@ -237,9 +236,8 @@ AST* Parser::any_statement() {
 
     AST_Compound* root = new AST_Compound();
 
-    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         root->children.push_back((*it));
-    }
 
     return root;
 };
@@ -256,9 +254,8 @@ AST* Parser::compound_statement() {
 
     AST_Compound* root = new AST_Compound();
 
-    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         root->children.push_back((*it));
-    }
 
     return root;
 };
@@ -282,9 +279,8 @@ std::vector<AST*> Parser::statement_list() {
         results.push_back(this->statement());
     }
 
-    if (this->current_token->type == T_ID) {
+    if (this->current_token->type == T_ID)
         this->error("Something bad happened");
-    }
 
     return results;
 };
@@ -399,13 +395,11 @@ AST_FunctionDefinition* Parser::function_definition() {
         body->children.push_back((*it));
     }
 
-    AST_FunctionDefinition* fd = new AST_FunctionDefinition(
+    return new AST_FunctionDefinition(
         function_name,
         args,
         body
     );
-
-    return fd;
 };
 
 /**
@@ -437,9 +431,8 @@ AST* Parser::if_statement() {
 
     AST_Compound* if_body = new AST_Compound();
 
-    for(std::vector<AST*>::iterator it = if_nodes.begin(); it != if_nodes.end(); ++it) {
+    for(std::vector<AST*>::iterator it = if_nodes.begin(); it != if_nodes.end(); ++it)
         if_body->children.push_back((*it));
-    }
 
     std::vector<AST_Else*> elses;
 
@@ -493,9 +486,8 @@ AST_DoWhile* Parser::do_while() {
         expr = this->expr();
     }
 
-    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         body->children.push_back((*it));
-    }
 
     return new AST_DoWhile(expr, body);
 };
@@ -506,7 +498,6 @@ AST_DoWhile* Parser::do_while() {
  * @return AST*
  */
 AST* Parser::variable_declaration() {
-    AST_VarDecl* decl;
     std::vector<Token*> tokens;
     
     this->eat(T_DECLARE);
@@ -520,9 +511,7 @@ AST* Parser::variable_declaration() {
         this->eat(T_ID);
     }
 
-    decl = new AST_VarDecl(tokens);
-
-    return decl;
+    return new AST_VarDecl(tokens);
 };
 
 /**

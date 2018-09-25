@@ -21,10 +21,9 @@ bool Scope::has_variable(std::string key) {
 };
 
 AST_FunctionDefinition* Scope::get_function_definition(std::string name) {
-    for (std::vector<AST_FunctionDefinition*>::iterator it = this->function_definitions.begin(); it != this->function_definitions.end(); ++it) {
+    for (std::vector<AST_FunctionDefinition*>::iterator it = this->function_definitions.begin(); it != this->function_definitions.end(); ++it)
         if ((*it)->name == name)
             return (*it);
-    }
 
     return nullptr;
 };
