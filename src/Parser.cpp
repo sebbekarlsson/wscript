@@ -10,6 +10,7 @@
 #include "includes/AST/AST_Assign.hpp"
 #include "includes/AST/AST_VarDecl.hpp"
 #include "includes/AST/AST_If.hpp"
+#include "includes/AST/AST_Else.hpp"
 #include "includes/AST/AST_PrintCall.hpp"
 #include "includes/AST/AST_UserDefinedFunctionCall.hpp"
 #include "includes/AST/AST_DoWhile.hpp"
@@ -42,6 +43,8 @@ extern std::string T_LESS_OR_EQUALS;
 extern std::string T_NOT_EQUALS;
 extern std::string T_EQUALS;
 extern std::string T_IF;
+extern std::string T_ELSE;
+extern std::string T_ELSE_IF;
 extern std::string T_THEN;
 extern std::string T_EOF;
 extern std::string T_FUNCTION_CALL;
@@ -421,39 +424,52 @@ AST* Parser::assignment_statement() {
 };
 
 /**
- * NOTE: this method ought to be modified to support ELSE, ELSEIF ...
- * What I mean:
- *
- *  If something Then
- *      <compound>
- *  Else If somethingelse Then
- *      <compound>
- *  ...
- *
- *  we obviously need a compound list.
- *
- * and also the `AST_If` should probably have a list of compounds
- * instead of just one.
- * We should also consider renaming that class.
+ * TODO: add documentation
  */
 AST* Parser::if_statement() {
-    std::vector<AST*> nodes;
+    std::vector<AST*> if_nodes;
+    std::vector<AST_Else*> empty_else_vector;
 
     this->eat(T_IF);
-    AST* node = this->expr();
+    AST* if_expr = this->expr();
     this->eat(T_THEN);
-    nodes = this->statement_list();
+    if_nodes = this->statement_list();
 
-    AST_Compound* root = new AST_Compound();
+    AST_Compound* if_body = new AST_Compound();
 
-    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
-        root->children.push_back((*it));
+    for(std::vector<AST*>::iterator it = if_nodes.begin(); it != if_nodes.end(); ++it) {
+        if_body->children.push_back((*it));
+    }
+
+    std::vector<AST_Else*> elses;
+
+    while (this->current_token->type == T_ELSE_IF) {
+        this->eat(T_ELSE_IF);
+        AST* else_expr = this->expr();
+        this->eat(T_THEN);
+        AST_Compound* else_body = new AST_Compound();
+        std::vector<AST*> else_nodes = this->statement_list();
+        for(std::vector<AST*>::iterator it = else_nodes.begin(); it != else_nodes.end(); ++it)
+            else_body->children.push_back((*it));
+
+        elses.push_back(new AST_Else(else_expr, else_body, empty_else_vector));
+    }
+
+    if (this->current_token->type == T_ELSE) {
+        this->eat(T_ELSE);
+        AST_Integer* else_expr = new AST_Integer(new Token(T_INTEGER, "1"));
+        AST_Compound* else_body = new AST_Compound();
+        std::vector<AST*> else_nodes = this->statement_list();
+        for(std::vector<AST*>::iterator it = else_nodes.begin(); it != else_nodes.end(); ++it)
+            else_body->children.push_back((*it));
+
+        elses.push_back(new AST_Else(else_expr, else_body, empty_else_vector));
     }
 
     this->eat(T_END);
     this->eat(T_IF);
     
-    AST_If* _if  = new AST_If(node, root);
+    AST_If* _if  = new AST_If(if_expr, if_body, elses);
 
     return _if;
 };

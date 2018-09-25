@@ -250,33 +250,40 @@ int Interpreter::visit_AST_VarDecl(AST_VarDecl* node) {
     return 0;
 };
 
-int Interpreter::visit_AST_If(AST_If* node) {
-    anything comp = this->visit(node->comp);
+int Interpreter::visit_AST_Abstract_Condition(AST_Abstract_Condition* node) {
+    std::vector<AST_Abstract_Condition*> conditions;
+    conditions.push_back(node);
+    for (std::vector<AST_Else*>::iterator it = node->ast_elses.begin(); it != node->ast_elses.end(); ++it)
+        conditions.push_back((AST_Abstract_Condition*)(*it));
 
-    if (comp.type() == typeid(int)) {
-        int x = boost::get<int>(comp);
+    for (std::vector<AST_Abstract_Condition*>::iterator it = conditions.begin(); it != conditions.end(); ++it) {
+        anything expr = this->visit((*it)->expr);
 
-        if (x) {
-            this->visit(node->root);
-            return 1;
+        if (expr.type() == typeid(int)) {
+            int x = boost::get<int>(expr);
+
+            if (x) {
+                this->visit((*it)->body);
+                return 1;
+            }
         }
-    }
 
-    if (comp.type() == typeid(bool)) {
-        int x = (int)boost::get<bool>(comp);
+        if (expr.type() == typeid(bool)) {
+            int x = (int)boost::get<bool>(expr);
 
-        if (x) {
-            this->visit(node->root);
-            return 1;
+            if (x) {
+                this->visit((*it)->body);
+                return 1;
+            }
         }
-    }
 
-    if (comp.type() == typeid(float)) {
-        float x = boost::get<float>(comp);
+        if (expr.type() == typeid(float)) {
+            float x = boost::get<float>(expr);
 
-        if (x) {
-            this->visit(node->root);
-            return 1;
+            if (x) {
+                this->visit((*it)->body);
+                return 1;
+            }
         }
     }
 

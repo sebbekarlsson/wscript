@@ -24,7 +24,7 @@ class Interpreter: public NodeVisitor {
         int visit_AST_Compound(AST_Compound* node);
         int visit_AST_NoOp(AST_NoOp* node);
         int visit_AST_VarDecl(AST_VarDecl* node);
-        int visit_AST_If(AST_If* node);
+        int visit_AST_Abstract_Condition(AST_Abstract_Condition* node);
         int visit_AST_DoWhile(AST_DoWhile* node);
         anything visit_AST_functionCall(AST_FunctionCall* node);
         anything visit_AST_functionDefinition(AST_FunctionDefinition* node);

@@ -31,6 +31,8 @@ std::string T_DECLARE = "DECLARE";
 std::string T_COMMA = "COMMA";
 std::string T_NEWLINE = "NEWLINE";
 std::string T_IF = "IF";
+std::string T_ELSE = "ELSE";
+std::string T_ELSE_IF = "ELSE_IF";
 std::string T_THEN = "THEN";
 std::string T_LARGER_THAN = "LARGER_THAN";
 std::string T_LESS_THAN = "LESS_THAN";
@@ -52,6 +54,8 @@ std::map<std::string, std::string> RESERVED_KEYWORDS = {
     {"End", T_END},
     {"Dim", T_DECLARE},
     {"If", T_IF},
+    {"Else", T_ELSE},
+    {"ElseIf", T_ELSE_IF},
     {"Then", T_THEN},
     {"Function", T_FUNCTION_DEFINITION},
     {"Do", T_DO},

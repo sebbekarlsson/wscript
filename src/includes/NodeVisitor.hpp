@@ -11,7 +11,7 @@
 #include "AST/AST_Assign.hpp"
 #include "AST/AST_Var.hpp"
 #include "AST/AST_VarDecl.hpp"
-#include "AST/AST_If.hpp"
+#include "AST/AST_Abstract_Condition.hpp"
 #include "AST/AST_FunctionCall.hpp"
 #include "AST/AST_UserDefinedFunctionCall.hpp"
 #include "AST/AST_FunctionDefinition.hpp"
@@ -35,7 +35,7 @@ class NodeVisitor {
         virtual int visit_AST_Compound(AST_Compound* node) = 0;
         virtual int visit_AST_NoOp(AST_NoOp* node) = 0;
         virtual int visit_AST_VarDecl(AST_VarDecl* node) = 0;
-        virtual int visit_AST_If(AST_If* node) = 0;
+        virtual int visit_AST_Abstract_Condition(AST_Abstract_Condition* node) = 0;
         virtual int visit_AST_DoWhile(AST_DoWhile* node) = 0;
         virtual anything visit_AST_functionCall(AST_FunctionCall* node) = 0;
         virtual anything visit_AST_functionDefinition(AST_FunctionDefinition* node) = 0;

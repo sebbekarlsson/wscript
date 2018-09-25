@@ -51,3 +51,6 @@ def test_11():
 
 def test_12():
     assert binexec('12.vbs') == '40'
+
+def test_13():
+    assert binexec('13.vbs') == 'hello\nworld\nstrawberries'
