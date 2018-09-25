@@ -11,6 +11,7 @@ class Scope {
     public:
         void set_variable(std::string key, anything);
         void define_function(AST_FunctionDefinition* definition);
+        void free_var(std::string key);
 
         anything get_variable(std::string key);
 

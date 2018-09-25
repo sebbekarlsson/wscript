@@ -9,6 +9,10 @@ void Scope::define_function(AST_FunctionDefinition* definition) {
     this->function_definitions.push_back(definition);
 };
 
+void Scope::free_var(std::string key) {
+    this->variables.erase(key);
+};
+
 anything Scope::get_variable(std::string key) {
     if (this->variables.find(key) == this->variables.end())
         throw std::runtime_error("Trying to access undefined variable: `" + key + "`");

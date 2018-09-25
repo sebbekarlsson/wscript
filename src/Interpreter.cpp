@@ -333,7 +333,13 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
             i++;
         }
 
-        return this->visit(udfc->call(this));
+        anything ret = this->visit(udfc->call(this));
+
+        // only for freeing memory
+        for (std::vector<Token*>::iterator it = udfc->definition->args.begin(); it != udfc->definition->args.end(); ++it)
+            udfc->definition->get_scope()->free_var((*it)->value);
+
+        return ret;
     }
 
     return this->visit(node->call(this));
