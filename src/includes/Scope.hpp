@@ -9,6 +9,8 @@
 
 class Scope {
     public:
+        Scope();
+
         void set_variable(std::string key, anything);
         void define_function(AST_FunctionDefinition* definition);
         void free_var(std::string key);
@@ -18,6 +20,9 @@ class Scope {
         bool has_variable(std::string key);
 
         AST_FunctionDefinition* get_function_definition(std::string name);
+
+        AST& owner_node;
+        AST* return_node;
 
     private:
         std::map<std::string, anything> variables;

@@ -89,22 +89,22 @@ void Parser::error(std::string message) {
 /**
  * @return AST*
  */
-AST* Parser::factor() {
+AST* Parser::factor(Scope* scope) {
     Token* token = this->current_token;
 
     if (token->type == T_PLUS) {
         this->eat(T_PLUS);
-        AST_UnaryOp* node = new AST_UnaryOp(token, this->factor());
+        AST_UnaryOp* node = new AST_UnaryOp(token, this->factor(scope));
         return node;
 
     } else if (token->type == T_MINUS) {
         this->eat(T_MINUS);
-        AST_UnaryOp* node = new AST_UnaryOp(token, this->factor());
+        AST_UnaryOp* node = new AST_UnaryOp(token, this->factor(scope));
         return node;
     
     } else if (token->type == T_NOT_EQUALS) {
         this->eat(T_NOT_EQUALS);
-        AST_UnaryOp* node = new AST_UnaryOp(token, this->factor());
+        AST_UnaryOp* node = new AST_UnaryOp(token, this->factor(scope));
         return node;
 
     } else if (token->type == T_INTEGER) {
@@ -124,14 +124,14 @@ AST* Parser::factor() {
 
     } else if (token->type == T_LPAREN) {
         this->eat(T_LPAREN);
-        AST* node = this->expr();
+        AST* node = this->expr(scope);
         this->eat(T_RPAREN);
         return node;
     } else if (token->type == T_FUNCTION_CALL) {
-        AST* node = this->function_call();
+        AST* node = this->function_call(scope);
         return node;
     } else {
-        AST* node = this->variable();
+        AST* node = this->variable(scope);
         return node;
     }
 
@@ -144,10 +144,10 @@ AST* Parser::factor() {
  *
  * @return AST*
  */
-AST* Parser::term() {
+AST* Parser::term(Scope* scope) {
     Token* token = nullptr;
 
-    AST* node = this->factor();
+    AST* node = this->factor(scope);
     
     while (
         this->current_token->type == T_MULTIPLY ||
@@ -161,7 +161,7 @@ AST* Parser::term() {
             this->eat(T_DIVIDE);
         }
 
-        node = new AST_BinOp(node, token, this->factor());
+        node = new AST_BinOp(node, token, this->factor(scope));
     }
 
     return node;
@@ -173,10 +173,10 @@ AST* Parser::term() {
  *
  * @return std::string
  */
-AST* Parser::expr() {
+AST* Parser::expr(Scope* scope) {
     Token* token = nullptr;
 
-    AST* node = this->term();
+    AST* node = this->term(scope);
     
     while(
         this->current_token->type == T_PLUS ||
@@ -206,7 +206,7 @@ AST* Parser::expr() {
             this->eat(T_EQUALS);
         }
 
-        node = new AST_BinOp(node, token, this->term());
+        node = new AST_BinOp(node, token, this->term(scope));
     };
 
     return node;
@@ -217,8 +217,8 @@ AST* Parser::expr() {
  *
  * @return AST*
  */
-AST* Parser::program() {
-    AST* node = this->compound_statement();
+AST* Parser::program(Scope* scope) {
+    AST* node = this->compound_statement(scope);
     this->eat(T_DOT);
 
     return node;
@@ -229,10 +229,10 @@ AST* Parser::program() {
  *
  * @return AST*
  */
-AST* Parser::any_statement() {
+AST* Parser::any_statement(Scope* scope) {
     std::vector<AST*> nodes;
 
-    nodes = this->statement_list();
+    nodes = this->statement_list(scope);
 
     AST_Compound* root = new AST_Compound();
 
@@ -245,11 +245,11 @@ AST* Parser::any_statement() {
 /**
  * @return AST*
  */
-AST* Parser::compound_statement() {
+AST* Parser::compound_statement(Scope* scope) {
     std::vector<AST*> nodes;
 
     this->eat(T_BEGIN);
-    nodes = this->statement_list();
+    nodes = this->statement_list(scope);
     this->eat(T_END);
 
     AST_Compound* root = new AST_Compound();
@@ -263,20 +263,20 @@ AST* Parser::compound_statement() {
 /**
  * @return std::vector<AST*>
  */
-std::vector<AST*> Parser::statement_list() {
+std::vector<AST*> Parser::statement_list(Scope* scope) {
     std::vector<AST*> results;
-    AST* node = this->statement();
+    AST* node = this->statement(scope);
 
     results.push_back(node);
 
     while (this->current_token->type == T_COLON) {
         this->eat(T_COLON);
-        results.push_back(this->statement());
+        results.push_back(this->statement(scope));
     }
     
     while (this->current_token->type == T_NEWLINE) {
         this->eat(T_NEWLINE);
-        results.push_back(this->statement());
+        results.push_back(this->statement(scope));
     }
 
     if (this->current_token->type == T_ID)
@@ -290,23 +290,23 @@ std::vector<AST*> Parser::statement_list() {
  *
  * @return AST*
  */
-AST* Parser::statement() {
+AST* Parser::statement(Scope* scope) {
     AST* node;
 
     if (this->current_token->type == T_FUNCTION_DEFINITION)
-        return this->function_definition();
+        return this->function_definition(scope);
     else if (this->current_token->type == T_FUNCTION_CALL)
-        return this->function_call();
+        return this->function_call(scope);
     else if (this->current_token->type == T_ID)
-        node = this->assignment_statement();
+        node = this->assignment_statement(scope);
     else if (this->current_token->type == T_DECLARE)
-        node = this->variable_declaration();
+        node = this->variable_declaration(scope);
     else if (this->current_token->type == T_IF)
-        node = this->if_statement();
+        node = this->if_statement(scope);
     else if (this->current_token->type == T_DO)
-        return this->do_while();
+        return this->do_while(scope);
     else
-        node = this->empty();
+        node = this->empty(scope);
 
     return node;
 };
@@ -316,7 +316,7 @@ AST* Parser::statement() {
  *
  * @return AST_FunctionCall*
  */
-AST_FunctionCall* Parser::function_call() {
+AST_FunctionCall* Parser::function_call(Scope* scope) {
     std::vector<AST*> args;
     std::string function_name = this->current_token->value;
 
@@ -327,12 +327,12 @@ AST_FunctionCall* Parser::function_call() {
     // and we dont have to try and parse any arguments.
     // Because of this, functions are not required to have any arguments.
     if (this->current_token->type != T_RPAREN) {
-        AST* node = this->expr();
+        AST* node = this->expr(scope);
         args.push_back(node);
 
         while(this->current_token->type == T_COMMA) {
             this->eat(T_COMMA);
-            args.push_back(this->expr());
+            args.push_back(this->expr(scope));
         }
     }
     
@@ -357,7 +357,13 @@ AST_FunctionCall* Parser::function_call() {
  *
  * @return AST_FunctionDefinition*
  */
-AST_FunctionDefinition* Parser::function_definition() {
+AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
+    if (scope == nullptr)
+        scope = new Scope();
+
+    AST_FunctionDefinition* fd = nullptr;
+    scope->owner_node = &fd;
+    AST_Return* return_node = nullptr;
     std::vector<Token*> args;
     AST_Compound* body = new AST_Compound();
     std::vector<AST*> nodes;
@@ -383,11 +389,10 @@ AST_FunctionDefinition* Parser::function_definition() {
     }
     
     this->eat(T_RPAREN);
-    nodes = this->statement_list();
+    nodes = this->statement_list(scope);
     this->eat(T_END);
     this->eat(T_FUNCTION_DEFINITION);
 
-    Scope* scope = new Scope();
     body->scope = scope;
     
     // making sure all children of this function definition node are within
@@ -402,16 +407,21 @@ AST_FunctionDefinition* Parser::function_definition() {
 
             for (std::vector<AST*>::iterator it = udfc->args.begin(); it != udfc->args.end(); ++it)
                 (*it)->scope = udfc->scope;
+
         }
 
         body->children.push_back((*it));
     }
 
-    return new AST_FunctionDefinition(
+    fd = new AST_FunctionDefinition(
         function_name,
         args,
         body
     );
+
+    scope->owner_node = fd;
+
+    return fd;
 };
 
 /**
@@ -419,13 +429,23 @@ AST_FunctionDefinition* Parser::function_definition() {
  *
  * @return AST*
  */
-AST* Parser::assignment_statement() {
-    AST_Var* left = this->variable();
+AST* Parser::assignment_statement(Scope* scope) {
+    AST_Var* left = this->variable(scope);
     Token* token = this->current_token;
     this->eat(T_ASSIGN);
-    AST* right = this->expr();
+    AST* right = this->expr(scope);
 
-    right->scope = left->scope;
+    if (left->get_scope()->owner_node != nullptr) {
+        std::cout << "has owner" << std::endl;
+        if (dynamic_cast<AST_FunctionDefinition*>( left->get_scope()->owner_node )) {
+            std::cout << "owner is function def" << std::endl;
+            AST_FunctionDefinition* fd = (AST_FunctionDefinition*)left->get_scope()->owner_node;
+
+            if (left->value == fd->name) {
+                std::cout << fd->name << std::endl;
+            }
+        }
+    }
 
     AST_Assign* node = new AST_Assign(left, token, right);
 
@@ -435,14 +455,14 @@ AST* Parser::assignment_statement() {
 /**
  * TODO: add documentation
  */
-AST* Parser::if_statement() {
+AST* Parser::if_statement(Scope* scope) {
     std::vector<AST*> if_nodes;
     std::vector<AST_Else*> empty_else_vector;
 
     this->eat(T_IF);
-    AST* if_expr = this->expr();
+    AST* if_expr = this->expr(scope);
     this->eat(T_THEN);
-    if_nodes = this->statement_list();
+    if_nodes = this->statement_list(scope);
 
     AST_Compound* if_body = new AST_Compound();
 
@@ -453,10 +473,10 @@ AST* Parser::if_statement() {
 
     while (this->current_token->type == T_ELSE_IF) {
         this->eat(T_ELSE_IF);
-        AST* else_expr = this->expr();
+        AST* else_expr = this->expr(scope);
         this->eat(T_THEN);
         AST_Compound* else_body = new AST_Compound();
-        std::vector<AST*> else_nodes = this->statement_list();
+        std::vector<AST*> else_nodes = this->statement_list(scope);
         for(std::vector<AST*>::iterator it = else_nodes.begin(); it != else_nodes.end(); ++it)
             else_body->children.push_back((*it));
 
@@ -467,7 +487,7 @@ AST* Parser::if_statement() {
         this->eat(T_ELSE);
         AST_Integer* else_expr = new AST_Integer(new Token(T_INTEGER, "1"));
         AST_Compound* else_body = new AST_Compound();
-        std::vector<AST*> else_nodes = this->statement_list();
+        std::vector<AST*> else_nodes = this->statement_list(scope);
         for(std::vector<AST*>::iterator it = else_nodes.begin(); it != else_nodes.end(); ++it)
             else_body->children.push_back((*it));
 
@@ -482,7 +502,7 @@ AST* Parser::if_statement() {
     return _if;
 };
 
-AST_DoWhile* Parser::do_while() {
+AST_DoWhile* Parser::do_while(Scope* scope) {
     AST* expr = nullptr;
     AST_Compound* body = new AST_Compound();
     std::vector<AST*> nodes;
@@ -491,14 +511,14 @@ AST_DoWhile* Parser::do_while() {
 
     if (this->current_token->type == T_WHILE) {
         this->eat(T_WHILE);
-        expr = this->expr();
-        nodes = this->statement_list();
+        expr = this->expr(scope);
+        nodes = this->statement_list(scope);
         this->eat(T_LOOP);
     } else {
-        nodes = this->statement_list();
+        nodes = this->statement_list(scope);
         this->eat(T_LOOP);
         this->eat(T_WHILE);
-        expr = this->expr();
+        expr = this->expr(scope);
     }
 
     for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -512,7 +532,7 @@ AST_DoWhile* Parser::do_while() {
  *
  * @return AST*
  */
-AST* Parser::variable_declaration() {
+AST* Parser::variable_declaration(Scope* scope) {
     std::vector<Token*> tokens;
     
     this->eat(T_DECLARE);
@@ -534,8 +554,9 @@ AST* Parser::variable_declaration() {
  *
  * @return AST_Var*
  */
-AST_Var* Parser::variable() {
+AST_Var* Parser::variable(Scope* scope) {
     AST_Var* node = new AST_Var(this->current_token);
+    node->scope = scope;
     this->eat(T_ID);
 
     return node;
@@ -546,7 +567,7 @@ AST_Var* Parser::variable() {
  *
  * @return AST*
  */
-AST* Parser::empty() {
+AST* Parser::empty(Scope* scope) {
     AST_NoOp* node = new AST_NoOp();
 
     return node;
@@ -558,5 +579,5 @@ AST* Parser::empty() {
  * @return AST*
  */
 AST* Parser::parse() {
-    return this->any_statement();
+    return this->any_statement(nullptr);
 };

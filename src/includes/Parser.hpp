@@ -20,22 +20,22 @@ class Parser {
         void eat(std::string token_type);
         void error(std::string message);
 
-        AST* factor();
-        AST* term();
-        AST* expr();
-        AST* program();
-        AST* any_statement();
-        AST* compound_statement();
-        std::vector<AST*> statement_list();
-        AST* statement();
-        AST* assignment_statement();
-        AST* if_statement();
-        AST_DoWhile* do_while();
-        AST* variable_declaration();
-        AST_Var* variable();
-        AST* empty();
-        AST_FunctionCall* function_call();
-        AST_FunctionDefinition* function_definition();
+        AST* factor(Scope* scope);
+        AST* term(Scope* scope);
+        AST* expr(Scope* scope);
+        AST* program(Scope* scope);
+        AST* any_statement(Scope* scope);
+        AST* compound_statement(Scope* scope);
+        std::vector<AST*> statement_list(Scope* scope);
+        AST* statement(Scope* scope);
+        AST* assignment_statement(Scope* scope);
+        AST* if_statement(Scope* scope);
+        AST_DoWhile* do_while(Scope* scope);
+        AST* variable_declaration(Scope* scope);
+        AST_Var* variable(Scope* scope);
+        AST* empty(Scope* scope);
+        AST_FunctionCall* function_call(Scope* scope);
+        AST_FunctionDefinition* function_definition(Scope* scope);
         AST* parse();
 };
 #endif

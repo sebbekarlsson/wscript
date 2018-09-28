@@ -32,6 +32,8 @@ anything NodeVisitor::visit(AST* node) {
         return (anything)this->visit_AST_functionCall((AST_FunctionCall*) node);
     else if (dynamic_cast<AST_FunctionDefinition*>( node ))
         return (anything)this->visit_AST_functionDefinition((AST_FunctionDefinition*) node);
+    else if (dynamic_cast<AST_Return*>( node ))
+        return (anything)this->visit_AST_Return((AST_Return*) node);
     else if (dynamic_cast<AST_NoOp*>( node ))
         return (anything)this->visit_AST_NoOp((AST_NoOp*) node);
     

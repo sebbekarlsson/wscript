@@ -333,7 +333,10 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
             i++;
         }
 
-        anything ret = this->visit(udfc->call(this));
+        anything ret = (anything)0;
+        this->visit(udfc->call(this));
+        if (udfc->get_scope()->return_node != nullptr)
+            ret = this->visit(udfc->get_scope()->return_node);
 
         // only for freeing memory
         for (std::vector<Token*>::iterator it = udfc->definition->args.begin(); it != udfc->definition->args.end(); ++it)
@@ -349,6 +352,10 @@ anything Interpreter::visit_AST_functionDefinition(AST_FunctionDefinition* node)
     node->get_scope()->define_function(node);
     return new AST_NoOp();
 }
+
+anything Interpreter::visit_AST_Return(AST_Return* node) {
+    return this->visit(node->value);
+};
 
 int Interpreter::visit_AST_NoOp(AST_NoOp* node) { return 0; };
 
