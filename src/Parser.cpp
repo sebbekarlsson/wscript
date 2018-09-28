@@ -390,8 +390,20 @@ AST_FunctionDefinition* Parser::function_definition() {
     Scope* scope = new Scope();
     body->scope = scope;
     
+    // making sure all children of this function definition node are within
+    // the same scope as the function definition node.
     for (std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
         (*it)->scope = scope;
+
+        // making sure the function calls arguments are in within the same
+        // scope as the caller.
+        if (dynamic_cast<AST_FunctionCall*>( (*it) )) {
+            AST_FunctionCall* udfc = (AST_FunctionCall*)(*it);
+
+            for (std::vector<AST*>::iterator it = udfc->args.begin(); it != udfc->args.end(); ++it)
+                (*it)->scope = udfc->scope;
+        }
+
         body->children.push_back((*it));
     }
 
@@ -412,6 +424,9 @@ AST* Parser::assignment_statement() {
     Token* token = this->current_token;
     this->eat(T_ASSIGN);
     AST* right = this->expr();
+
+    right->scope = left->scope;
+
     AST_Assign* node = new AST_Assign(left, token, right);
 
     return node;
