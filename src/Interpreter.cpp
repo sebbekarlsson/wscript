@@ -319,6 +319,7 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
     if (dynamic_cast<AST_UserDefinedFunctionCall*>( node )) {
         AST_UserDefinedFunctionCall* udfc = (AST_UserDefinedFunctionCall*) node;
         udfc->definition = node->get_scope()->get_function_definition(udfc->name);
+
         if (udfc->definition == nullptr)
             this->error("Could not find definition for: " + udfc->name);
 
@@ -339,8 +340,8 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
             ret = this->visit(udfc->get_scope()->return_node);
 
         // only for freeing memory
-        for (std::vector<Token*>::iterator it = udfc->definition->args.begin(); it != udfc->definition->args.end(); ++it)
-            udfc->definition->get_scope()->free_var((*it)->value);
+        //for (std::vector<Token*>::iterator it = udfc->definition->args.begin(); it != udfc->definition->args.end(); ++it)
+          //  udfc->definition->get_scope()->free_var((*it)->value);
 
         return ret;
     }

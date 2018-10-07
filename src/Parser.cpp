@@ -55,6 +55,8 @@ extern std::string T_DO;
 extern std::string T_LOOP;
 extern std::string T_WHILE;
 
+extern Scope* global_scope;
+
 Parser::Parser(Lexer* lexer) {
     this->lexer = lexer;
     this->current_token = this->lexer->get_next_token();
@@ -95,43 +97,52 @@ AST* Parser::factor(Scope* scope) {
     if (token->type == T_PLUS) {
         this->eat(T_PLUS);
         AST_UnaryOp* node = new AST_UnaryOp(token, this->factor(scope));
+        node->scope = scope;
         return node;
 
     } else if (token->type == T_MINUS) {
         this->eat(T_MINUS);
         AST_UnaryOp* node = new AST_UnaryOp(token, this->factor(scope));
+        node->scope = scope;
         return node;
     
     } else if (token->type == T_NOT_EQUALS) {
         this->eat(T_NOT_EQUALS);
         AST_UnaryOp* node = new AST_UnaryOp(token, this->factor(scope));
+        node->scope = scope;
         return node;
 
     } else if (token->type == T_INTEGER) {
         this->eat(T_INTEGER);
         AST_Integer* num = new AST_Integer(token);
+        num->scope = scope;
         return num;
 
     } else if (token->type == T_STRING) {
         this->eat(T_STRING);
         AST_Str* node = new AST_Str(token);
+        node->scope = scope;
         return node;
     
     } else if (token->type == T_FLOAT) {
         this->eat(T_FLOAT);
         AST_Float* num = new AST_Float(token);
+        num->scope = scope;
         return num;
 
     } else if (token->type == T_LPAREN) {
         this->eat(T_LPAREN);
         AST* node = this->expr(scope);
         this->eat(T_RPAREN);
+        node->scope = scope;
         return node;
     } else if (token->type == T_FUNCTION_CALL) {
         AST* node = this->function_call(scope);
+        node->scope = scope;
         return node;
     } else {
         AST* node = this->variable(scope);
+        node->scope = scope;
         return node;
     }
 
@@ -162,6 +173,7 @@ AST* Parser::term(Scope* scope) {
         }
 
         node = new AST_BinOp(node, token, this->factor(scope));
+        node->scope = scope;
     }
 
     return node;
@@ -207,6 +219,7 @@ AST* Parser::expr(Scope* scope) {
         }
 
         node = new AST_BinOp(node, token, this->term(scope));
+        node->scope = scope;
     };
 
     return node;
@@ -235,6 +248,7 @@ AST* Parser::any_statement(Scope* scope) {
     nodes = this->statement_list(scope);
 
     AST_Compound* root = new AST_Compound();
+    root->scope = scope;
 
     for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         root->children.push_back((*it));
@@ -253,6 +267,7 @@ AST* Parser::compound_statement(Scope* scope) {
     this->eat(T_END);
 
     AST_Compound* root = new AST_Compound();
+    root->scope = scope;
 
     for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         root->children.push_back((*it));
@@ -343,9 +358,11 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
 
     if (function_name == "print") {
         fc = new AST_PrintCall(args);
+        fc->scope = scope;
         return fc;
     } else {
         udfc = new AST_UserDefinedFunctionCall(args, function_name);
+        udfc->scope = scope;
         return udfc;
     }
     
@@ -358,19 +375,19 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
  * @return AST_FunctionDefinition*
  */
 AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
-    if (scope == nullptr)
-        scope = new Scope();
-
     AST_FunctionDefinition* fd = nullptr;
-    scope->owner_node = &fd;
     AST_Return* return_node = nullptr;
     std::vector<Token*> args;
     AST_Compound* body = new AST_Compound();
+    body->scope = scope;
     std::vector<AST*> nodes;
     std::string function_name;
 
     this->eat(T_FUNCTION_DEFINITION);
     function_name = this->current_token->value;
+    Scope* new_scope = new Scope(function_name);
+    new_scope->variables = scope->variables;
+    new_scope->function_definitions = scope->function_definitions;
     this->eat(T_ID);
     this->eat(T_LPAREN);
 
@@ -389,27 +406,14 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
     }
     
     this->eat(T_RPAREN);
-    nodes = this->statement_list(scope);
+    nodes = this->statement_list(new_scope);
+    scope->return_node = new_scope->return_node;
     this->eat(T_END);
     this->eat(T_FUNCTION_DEFINITION);
 
-    body->scope = scope;
-    
     // making sure all children of this function definition node are within
     // the same scope as the function definition node.
     for (std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
-        (*it)->scope = scope;
-
-        // making sure the function calls arguments are in within the same
-        // scope as the caller.
-        if (dynamic_cast<AST_FunctionCall*>( (*it) )) {
-            AST_FunctionCall* udfc = (AST_FunctionCall*)(*it);
-
-            for (std::vector<AST*>::iterator it = udfc->args.begin(); it != udfc->args.end(); ++it)
-                (*it)->scope = udfc->scope;
-
-        }
-
         body->children.push_back((*it));
     }
 
@@ -418,8 +422,8 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
         args,
         body
     );
-
-    scope->owner_node = fd;
+    scope->define_function(fd);
+    fd->scope = new_scope;
 
     return fd;
 };
@@ -435,19 +439,16 @@ AST* Parser::assignment_statement(Scope* scope) {
     this->eat(T_ASSIGN);
     AST* right = this->expr(scope);
 
-    if (left->get_scope()->owner_node != nullptr) {
-        std::cout << "has owner" << std::endl;
-        if (dynamic_cast<AST_FunctionDefinition*>( left->get_scope()->owner_node )) {
-            std::cout << "owner is function def" << std::endl;
-            AST_FunctionDefinition* fd = (AST_FunctionDefinition*)left->get_scope()->owner_node;
-
-            if (left->value == fd->name) {
-                std::cout << fd->name << std::endl;
-            }
-        }
+    std::cout << "var:  " << left->value << " is in scope: " << scope->name << std::endl;
+    if (left->value == scope->name) {
+        std::cout << "found return: " << left->value << std::endl;
+        AST_Return* ret = new AST_Return(right);
+        scope->return_node = ret;
+        return ret;
     }
 
     AST_Assign* node = new AST_Assign(left, token, right);
+    node->scope = scope;
 
     return node;
 };
@@ -465,6 +466,7 @@ AST* Parser::if_statement(Scope* scope) {
     if_nodes = this->statement_list(scope);
 
     AST_Compound* if_body = new AST_Compound();
+    if_body->scope = scope;
 
     for(std::vector<AST*>::iterator it = if_nodes.begin(); it != if_nodes.end(); ++it)
         if_body->children.push_back((*it));
@@ -476,6 +478,7 @@ AST* Parser::if_statement(Scope* scope) {
         AST* else_expr = this->expr(scope);
         this->eat(T_THEN);
         AST_Compound* else_body = new AST_Compound();
+        else_body->scope = scope;
         std::vector<AST*> else_nodes = this->statement_list(scope);
         for(std::vector<AST*>::iterator it = else_nodes.begin(); it != else_nodes.end(); ++it)
             else_body->children.push_back((*it));
@@ -486,7 +489,9 @@ AST* Parser::if_statement(Scope* scope) {
     if (this->current_token->type == T_ELSE) {
         this->eat(T_ELSE);
         AST_Integer* else_expr = new AST_Integer(new Token(T_INTEGER, "1"));
+        else_expr->scope = scope;
         AST_Compound* else_body = new AST_Compound();
+        else_body->scope = scope;
         std::vector<AST*> else_nodes = this->statement_list(scope);
         for(std::vector<AST*>::iterator it = else_nodes.begin(); it != else_nodes.end(); ++it)
             else_body->children.push_back((*it));
@@ -498,6 +503,7 @@ AST* Parser::if_statement(Scope* scope) {
     this->eat(T_IF);
     
     AST_If* _if  = new AST_If(if_expr, if_body, elses);
+    _if->scope = scope;
 
     return _if;
 };
@@ -505,6 +511,7 @@ AST* Parser::if_statement(Scope* scope) {
 AST_DoWhile* Parser::do_while(Scope* scope) {
     AST* expr = nullptr;
     AST_Compound* body = new AST_Compound();
+    body->scope = scope;
     std::vector<AST*> nodes;
 
     this->eat(T_DO);
@@ -524,7 +531,10 @@ AST_DoWhile* Parser::do_while(Scope* scope) {
     for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         body->children.push_back((*it));
 
-    return new AST_DoWhile(expr, body);
+    AST_DoWhile* dw = new AST_DoWhile(expr, body);
+    dw->scope = scope;
+
+    return dw;
 };
 
 /**
@@ -546,7 +556,10 @@ AST* Parser::variable_declaration(Scope* scope) {
         this->eat(T_ID);
     }
 
-    return new AST_VarDecl(tokens);
+    AST_VarDecl* vd = new AST_VarDecl(tokens);
+    vd->scope = scope;
+
+    return vd;
 };
 
 /**
@@ -569,6 +582,7 @@ AST_Var* Parser::variable(Scope* scope) {
  */
 AST* Parser::empty(Scope* scope) {
     AST_NoOp* node = new AST_NoOp();
+    node->scope = scope;
 
     return node;
 };
@@ -579,5 +593,5 @@ AST* Parser::empty(Scope* scope) {
  * @return AST*
  */
 AST* Parser::parse() {
-    return this->any_statement(nullptr);
+    return this->any_statement(global_scope);
 };

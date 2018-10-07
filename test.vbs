@@ -2,21 +2,13 @@ Dim b
 
 b = 0
 
+Function mu(x, y)
+    print(1)
+End Function
 
 Function foo(x, y)
-    Dim b
-    b = 0
-    Function multiply()
-        multiply = x * y
-    End Function
-
-    print("loop")
-    Do While b < 10
-        foo = multiply(x, y)
-        b = b + 1
-    Loop
-    print("loop done")
+    foo = mu(x, y)
 End Function
 
 
-print(foo(10, 5))
+print(foo(10, 10))

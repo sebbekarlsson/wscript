@@ -1,9 +1,9 @@
 #include "includes/Scope.hpp"
 
 
-Scope::Scope() {
-    this->owner_node = nullptr;
+Scope::Scope(std::string name) {
     this->return_node = nullptr;
+    this->name = name;
 };
 
 void Scope::set_variable(std::string key, anything value) {

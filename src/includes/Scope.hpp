@@ -9,7 +9,7 @@
 
 class Scope {
     public:
-        Scope();
+        Scope(std::string name);
 
         void set_variable(std::string key, anything);
         void define_function(AST_FunctionDefinition* definition);
@@ -21,12 +21,11 @@ class Scope {
 
         AST_FunctionDefinition* get_function_definition(std::string name);
 
-        AST& owner_node;
         AST* return_node;
 
-    private:
-        std::map<std::string, anything> variables;
+        std::string name;
 
+        std::map<std::string, anything> variables;
         std::vector<AST_FunctionDefinition*> function_definitions;
 };
 #endif
