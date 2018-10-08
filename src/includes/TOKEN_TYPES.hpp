@@ -23,6 +23,7 @@ std::string T_NULL = "NULL";
 std::string T_LPAREN = "LPAREN";
 std::string T_RPAREN = "RPAREN";
 std::string T_DOT = "DOT";
+std::string T_ATTRIBUTE = "ATTRIBUTE";
 std::string T_SEMI = "SEMI";
 std::string T_ASSIGN = "ASSIGN";
 std::string T_ID = "ID";

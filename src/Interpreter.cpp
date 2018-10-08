@@ -358,6 +358,17 @@ anything Interpreter::visit_AST_Return(AST_Return* node) {
     return this->visit(node->value);
 };
 
+anything Interpreter::visit_AST_AttributeAccess(AST_AttributeAccess* node) {
+    // TODO: visit the left node, fetch that scope and invite the right
+    // node to that scope.
+    //
+    // .. we might have to add `Scope` to all AST:s,
+    // this would mean that all AST:s could have a functions and variables...
+    // (which does make sense)
+    std::cout << this->visit(node->right) << std::endl;
+    return (anything)0;
+}
+
 int Interpreter::visit_AST_NoOp(AST_NoOp* node) { return 0; };
 
 anything Interpreter::interpret() {

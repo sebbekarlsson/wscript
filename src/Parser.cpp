@@ -294,8 +294,8 @@ std::vector<AST*> Parser::statement_list(Scope* scope) {
         results.push_back(this->statement(scope));
     }
 
-    if (this->current_token->type == T_ID)
-        this->error("Something bad happened");
+    //if (this->current_token->type == T_ID)
+    //    this->error("Something bad happened");
 
     return results;
 };
@@ -306,25 +306,44 @@ std::vector<AST*> Parser::statement_list(Scope* scope) {
  * @return AST*
  */
 AST* Parser::statement(Scope* scope) {
-    AST* node;
-
     if (this->current_token->type == T_FUNCTION_DEFINITION)
         return this->function_definition(scope);
     else if (this->current_token->type == T_FUNCTION_CALL)
         return this->function_call(scope);
-    else if (this->current_token->type == T_ID)
-        node = this->assignment_statement(scope);
     else if (this->current_token->type == T_DECLARE)
-        node = this->variable_declaration(scope);
+        return this->variable_declaration(scope);
     else if (this->current_token->type == T_IF)
-        node = this->if_statement(scope);
+        return this->if_statement(scope);
     else if (this->current_token->type == T_DO)
         return this->do_while(scope);
+    else if (this->current_token->type == T_ID)
+        return this->id_action(scope);
     else
-        node = this->empty(scope);
+        return this->empty(scope);
 
-    return node;
+    return nullptr;
 };
+
+AST* Parser::id_action(Scope* scope) {
+    AST* ast = this->variable(scope);
+
+    if (current_token->type == T_ASSIGN)
+        return this->assignment_statement((AST_Var*)ast, scope);
+    else if (current_token->type == T_DOT)
+        return this->attribute_access(ast, scope);
+};
+
+AST_AttributeAccess* Parser::attribute_access(AST* left, Scope* scope) {
+    this->eat(T_DOT);
+
+    AST_AttributeAccess* attr = new AST_AttributeAccess(
+        &*left,
+        this->statement(scope)
+    );
+    attr->scope = scope;
+
+    return attr;
+}
 
 /**
  * Parses a function call
@@ -430,8 +449,7 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
  *
  * @return AST*
  */
-AST* Parser::assignment_statement(Scope* scope) {
-    AST_Var* left = this->variable(scope);
+AST* Parser::assignment_statement(AST_Var* left, Scope* scope) {
     Token* token = this->current_token;
     this->eat(T_ASSIGN);
     AST* right = this->expr(scope);

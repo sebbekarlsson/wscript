@@ -17,6 +17,7 @@
 #include "AST/AST_FunctionDefinition.hpp"
 #include "AST/AST_DoWhile.hpp"
 #include "AST/AST_Return.hpp"
+#include "AST/AST_AttributeAccess.hpp"
 #include <string>
 #include "typedefs.hpp"
 
@@ -41,6 +42,7 @@ class NodeVisitor {
         virtual anything visit_AST_functionCall(AST_FunctionCall* node) = 0;
         virtual anything visit_AST_functionDefinition(AST_FunctionDefinition* node) = 0;
         virtual anything visit_AST_Return(AST_Return* node) = 0;
+        virtual anything visit_AST_AttributeAccess(AST_AttributeAccess* node) = 0;
         virtual std::string visit_AST_Str(AST_Str* node) = 0;
 };
 #endif
