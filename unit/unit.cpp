@@ -11,7 +11,7 @@
 #include "../src/includes/AST/AST_NoOp.hpp"
 
 
-Scope* global_scope = new Scope();
+Scope* global_scope = new Scope("global");
 
 extern std::string T_INTEGER;
 extern std::string T_FLOAT;

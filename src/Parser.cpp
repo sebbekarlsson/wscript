@@ -411,11 +411,8 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
     this->eat(T_END);
     this->eat(T_FUNCTION_DEFINITION);
 
-    // making sure all children of this function definition node are within
-    // the same scope as the function definition node.
-    for (std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+    for (std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         body->children.push_back((*it));
-    }
 
     fd = new AST_FunctionDefinition(
         function_name,
@@ -439,9 +436,7 @@ AST* Parser::assignment_statement(Scope* scope) {
     this->eat(T_ASSIGN);
     AST* right = this->expr(scope);
 
-    std::cout << "var:  " << left->value << " is in scope: " << scope->name << std::endl;
     if (left->value == scope->name) {
-        std::cout << "found return: " << left->value << std::endl;
         AST_Return* ret = new AST_Return(right);
         scope->return_node = ret;
         return ret;
@@ -483,7 +478,9 @@ AST* Parser::if_statement(Scope* scope) {
         for(std::vector<AST*>::iterator it = else_nodes.begin(); it != else_nodes.end(); ++it)
             else_body->children.push_back((*it));
 
-        elses.push_back(new AST_Else(else_expr, else_body, empty_else_vector));
+        AST_Else* aelse = new AST_Else(else_expr, else_body, empty_else_vector);
+        aelse->scope = scope; 
+        elses.push_back(aelse);
     }
 
     if (this->current_token->type == T_ELSE) {
@@ -496,13 +493,15 @@ AST* Parser::if_statement(Scope* scope) {
         for(std::vector<AST*>::iterator it = else_nodes.begin(); it != else_nodes.end(); ++it)
             else_body->children.push_back((*it));
 
-        elses.push_back(new AST_Else(else_expr, else_body, empty_else_vector));
+        AST_Else* aelse = new AST_Else(else_expr, else_body, empty_else_vector);
+        aelse->scope = scope;
+        elses.push_back(aelse);
     }
 
     this->eat(T_END);
     this->eat(T_IF);
     
-    AST_If* _if  = new AST_If(if_expr, if_body, elses);
+    AST_If* _if = new AST_If(if_expr, if_body, elses);
     _if->scope = scope;
 
     return _if;
