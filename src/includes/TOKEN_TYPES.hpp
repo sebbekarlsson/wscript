@@ -62,6 +62,7 @@ std::map<std::string, std::string> RESERVED_KEYWORDS = {
     {"Do", T_DO},
     {"Loop", T_LOOP},
     {"While", T_WHILE},
-    {"print", T_FUNCTION_CALL}
+    {"print", T_FUNCTION_CALL},
+    {"WScript", T_OBJECT}
 };
 #endif

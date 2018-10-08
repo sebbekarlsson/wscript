@@ -9,6 +9,7 @@
 #include "AST/AST_FunctionDefinition.hpp"
 #include "AST/AST_DoWhile.hpp"
 #include "AST/AST_AttributeAccess.hpp"
+#include "AST/AST_Object.hpp"
 
 
 class Parser {
@@ -36,6 +37,7 @@ class Parser {
         AST_Var* variable(Scope* scope);
         AST* empty(Scope* scope);
         AST* id_action(Scope* scope);
+        AST_Object* object(Scope* scope);
         AST_AttributeAccess* attribute_access(AST* left, Scope* scope);
         AST_FunctionCall* function_call(Scope* scope);
         AST_FunctionDefinition* function_definition(Scope* scope);

@@ -38,7 +38,8 @@ anything NodeVisitor::visit(AST* node) {
         return (anything)this->visit_AST_AttributeAccess((AST_AttributeAccess*) node);
     else if (dynamic_cast<AST_NoOp*>( node ))
         return (anything)this->visit_AST_NoOp((AST_NoOp*) node);
-    
+    else if (dynamic_cast<AST_Object*>( node ))
+        return (anything)this->visit_AST_Object((AST_Object*) node);
     return (anything)this->visit_default(node);
 };
 

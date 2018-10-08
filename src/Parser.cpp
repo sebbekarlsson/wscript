@@ -14,6 +14,7 @@
 #include "includes/AST/AST_PrintCall.hpp"
 #include "includes/AST/AST_UserDefinedFunctionCall.hpp"
 #include "includes/AST/AST_DoWhile.hpp"
+#include "includes/AST/builtin_objects/AST_WScript.hpp"
 #include <ctype.h>
 #include <iostream>
 #include <sstream>
@@ -32,6 +33,7 @@ extern std::string T_DOT;
 extern std::string T_BEGIN;
 extern std::string T_END;
 extern std::string T_ID;
+extern std::string T_OBJECT;
 extern std::string T_SEMI;
 extern std::string T_ASSIGN;
 extern std::string T_DECLARE;
@@ -316,7 +318,7 @@ AST* Parser::statement(Scope* scope) {
         return this->if_statement(scope);
     else if (this->current_token->type == T_DO)
         return this->do_while(scope);
-    else if (this->current_token->type == T_ID)
+    else if (this->current_token->type == T_ID || this->current_token->type == T_OBJECT)
         return this->id_action(scope);
     else
         return this->empty(scope);
@@ -325,13 +327,33 @@ AST* Parser::statement(Scope* scope) {
 };
 
 AST* Parser::id_action(Scope* scope) {
-    AST* ast = this->variable(scope);
+    AST* ast;
+
+    if (current_token->type == T_ID)
+        ast = this->variable(scope);
+    else
+        ast = this->object(scope);
 
     if (current_token->type == T_ASSIGN)
         return this->assignment_statement((AST_Var*)ast, scope);
     else if (current_token->type == T_DOT)
         return this->attribute_access(ast, scope);
+
+    return new AST_NoOp();
 };
+
+AST_Object* Parser::object(Scope* scope) {
+    if (current_token->value == "WScript") { // TODO: make this more dynamic
+        AST_WScript* obj = new AST_WScript();
+        obj->scope = scope;
+
+        this->eat(T_OBJECT);
+
+        return obj;
+    }
+
+    return nullptr;
+}
 
 AST_AttributeAccess* Parser::attribute_access(AST* left, Scope* scope) {
     this->eat(T_DOT);

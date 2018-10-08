@@ -318,6 +318,12 @@ int Interpreter::visit_AST_DoWhile(AST_DoWhile* node) {
 anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
     if (dynamic_cast<AST_UserDefinedFunctionCall*>( node )) {
         AST_UserDefinedFunctionCall* udfc = (AST_UserDefinedFunctionCall*) node;
+        
+        AST_BuiltinFunctionDefinition* bfd = node->get_scope()->get_builtin_function(udfc->name);
+
+        if (bfd != nullptr)
+            return bfd->call(node->args, this); 
+        
         udfc->definition = node->get_scope()->get_function_definition(udfc->name);
 
         if (udfc->definition == nullptr)
@@ -365,9 +371,21 @@ anything Interpreter::visit_AST_AttributeAccess(AST_AttributeAccess* node) {
     // .. we might have to add `Scope` to all AST:s,
     // this would mean that all AST:s could have a functions and variables...
     // (which does make sense)
-    std::cout << this->visit(node->right) << std::endl;
-    return (anything)0;
+    anything left = this->visit(node->left);
+
+    if (left.type() != typeid(AST_Object*))
+        this->error("Cannot access attributes from this data type");
+
+    AST_Object* element = (AST_Object*) boost::get<AST_Object*>( left );
+    node->right->scope = element->private_scope;
+    node->scope = element->private_scope;
+
+    return this->visit(node->right);
 }
+
+AST_Object* Interpreter::visit_AST_Object(AST_Object* node) {
+    return node;
+};
 
 int Interpreter::visit_AST_NoOp(AST_NoOp* node) { return 0; };
 
