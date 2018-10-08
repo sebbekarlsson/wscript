@@ -1,0 +1,1 @@
+scope should have return node, not the function

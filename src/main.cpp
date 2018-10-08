@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
 
     ResourceManager::load(argv[1]);
 
-    global_scope = new Scope();
+    global_scope = new Scope("global");
 
     Lexer* lexer = new Lexer(ResourceManager::get(argv[1]));
     Parser* parser = new Parser(lexer);

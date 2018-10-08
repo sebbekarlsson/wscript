@@ -1,6 +1,11 @@
 #include "includes/Scope.hpp"
 
 
+Scope::Scope(std::string name) {
+    this->return_node = nullptr;
+    this->name = name;
+};
+
 void Scope::set_variable(std::string key, anything value) {
     this->variables[key] = value;
 };

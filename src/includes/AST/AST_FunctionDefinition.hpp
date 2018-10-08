@@ -2,6 +2,7 @@
 #define AST_FUNCTIONDEFINITION_H
 #include "AST.hpp"
 #include "AST_Compound.hpp"
+#include "AST_Return.hpp"
 #include <vector>
 #include "../typedefs.hpp"
 #include "../Token.hpp"

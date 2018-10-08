@@ -267,7 +267,7 @@ Token* Lexer::_id() {
         this->advance();
     }
 
-    if (this->latest_token->type != T_FUNCTION_DEFINITION && this->peek_next(this->pos) == '(') {
+    if (this->latest_token->type != T_FUNCTION_DEFINITION && this->peek_next(this->pos) == '(' && this->peek_next(this->pos) != '=') {
         return new Token(T_FUNCTION_CALL, result);
     } else if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
         token = new Token(RESERVED_KEYWORDS[result], result);
