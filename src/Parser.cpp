@@ -12,6 +12,7 @@
 #include "includes/AST/AST_If.hpp"
 #include "includes/AST/AST_Else.hpp"
 #include "includes/AST/AST_PrintCall.hpp"
+#include "includes/AST/AST_CreateObjectCall.hpp"
 #include "includes/AST/AST_UserDefinedFunctionCall.hpp"
 #include "includes/AST/AST_DoWhile.hpp"
 #include "includes/AST/builtin_objects/AST_WScript.hpp"
@@ -430,11 +431,18 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
         fc = new AST_PrintCall(args);
         fc->scope = scope;
         return fc;
+    } else if (function_name == "CreateObject") {
+        fc = new AST_CreateObjectCall(args);
+        fc->scope = scope;
+        return fc;
     } else {
         udfc = new AST_UserDefinedFunctionCall(args, function_name);
         udfc->scope = scope;
         return udfc;
     }
+
+    delete[] fc;
+    delete[] udfc;
     
     return nullptr;
 };
@@ -607,6 +615,8 @@ AST_DoWhile* Parser::do_while(Scope* scope) {
 
 /**
  * Parses the declaration of a variable
+ *
+ * TODO: implement "Dim As {type}"
  *
  * @return AST*
  */
