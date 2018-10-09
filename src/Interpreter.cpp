@@ -373,10 +373,10 @@ anything Interpreter::visit_AST_AttributeAccess(AST_AttributeAccess* node) {
     // (which does make sense)
     anything left = this->visit(node->left);
 
-    if (left.type() != typeid(AST_Object*))
+    if (left.type() != typeid(AST*))
         this->error("Cannot access attributes from this data type");
 
-    AST_Object* element = (AST_Object*) boost::get<AST_Object*>( left );
+    AST* element = (AST*) boost::get<AST*>( left );
     node->right->scope = element->private_scope;
     node->scope = element->private_scope;
 

@@ -63,3 +63,7 @@ def test_14():
 
 def test_15():
     assert binexec('15.vbs') == 'Hello World'
+
+
+def test_16():
+    assert binexec('16.vbs') == 'called from hello'
