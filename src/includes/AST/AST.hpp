@@ -12,7 +12,9 @@ class AST {
         {}
 
         Scope* scope = nullptr;
+        Scope* private_scope = nullptr;
 
         Scope* get_scope();
+        Scope* get_private_scope();
 };
 #endif

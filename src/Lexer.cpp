@@ -16,6 +16,7 @@ extern std::string T_LPAREN;
 extern std::string T_RPAREN;
 extern std::string T_ASSIGN;
 extern std::string T_DOT;
+extern std::string T_ATTRIBUTE;
 extern std::string T_SEMI;
 extern std::string T_ID;
 extern std::string T_COMMA;
@@ -260,8 +261,6 @@ char Lexer::peek_next(int start) {
 Token* Lexer::_id() {
     std::string result = "";
 
-    Token* token;
-
     while (this->current_char != '\0' && isalnum(this->current_char)) {
         result += this->current_char;
         this->advance();
@@ -270,12 +269,12 @@ Token* Lexer::_id() {
     if (this->latest_token->type != T_FUNCTION_DEFINITION && this->peek_next(this->pos) == '(' && this->peek_next(this->pos) != '=') {
         return new Token(T_FUNCTION_CALL, result);
     } else if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
-        token = new Token(RESERVED_KEYWORDS[result], result);
+        return new Token(RESERVED_KEYWORDS[result], result);
     } else {
-        token = new Token(T_ID, result);
+        return new Token(T_ID, result);
     }
 
-    return token;
+    return nullptr;
 };
 
 /**

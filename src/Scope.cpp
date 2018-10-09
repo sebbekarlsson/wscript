@@ -14,6 +14,10 @@ void Scope::define_function(AST_FunctionDefinition* definition) {
     this->function_definitions.push_back(definition);
 };
 
+void Scope::define_builtin_function(AST_BuiltinFunctionDefinition* udfc) {
+    this->builtin_functions.push_back(udfc);
+};
+
 void Scope::free_var(std::string key) {
     this->variables.erase(key);
 };
@@ -33,6 +37,14 @@ AST_FunctionDefinition* Scope::get_function_definition(std::string name) {
     for (std::vector<AST_FunctionDefinition*>::iterator it = this->function_definitions.begin(); it != this->function_definitions.end(); ++it)
         if ((*it)->name == name)
             return (*it);
+
+    return nullptr;
+};
+
+AST_BuiltinFunctionDefinition* Scope::get_builtin_function(std::string name) {
+    for (std::vector<AST_BuiltinFunctionDefinition*>::iterator it = this->builtin_functions.begin(); it != this->builtin_functions.end(); ++it) {
+        if ((*it)->name == name)
+            return (*it);}
 
     return nullptr;
 };

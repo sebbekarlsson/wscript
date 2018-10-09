@@ -4,11 +4,18 @@
 
 extern Scope* global_scope;
 
-AST::AST() {}
+AST::AST() {
+    this->private_scope = new Scope("AST_NODE"); // TODO: maybe not all nodes -
+    // should have a private scope? ...
+}
 
 Scope* AST::get_scope() {
     if (this->scope == nullptr)
         return global_scope;
 
     return this->scope;
+};
+
+Scope* AST::get_private_scope() {
+    return this->private_scope;
 };

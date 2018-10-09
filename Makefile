@@ -13,6 +13,7 @@ endif
 EXEC = wscript.out
 SOURCES := $(wildcard src/*.cpp)
 SOURCES += $(wildcard src/*/*.cpp)
+SOURCES += $(wildcard src/*/*/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 OBJECTS_NO_MAIN := $(filter-out src/main.o,$(OBJECTS))
 
@@ -28,6 +29,9 @@ test:\
 
 unit.o: unit/unit.cpp
 	g++ -std=c++11 -g -Wall -c unit/unit.cpp
+
+%.o: %.cpp ../includes/*/*/%.hpp
+	g++ -c $(G_FLAGZ) $< -o $@
 
 %.o: %.cpp ../includes/*/%.hpp
 	g++ -c $(G_FLAGZ) $< -o $@

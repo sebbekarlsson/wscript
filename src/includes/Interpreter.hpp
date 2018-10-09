@@ -28,6 +28,9 @@ class Interpreter: public NodeVisitor {
         anything visit_AST_functionCall(AST_FunctionCall* node);
         anything visit_AST_functionDefinition(AST_FunctionDefinition* node);
         anything visit_AST_Return(AST_Return* node);
+        anything visit_AST_AttributeAccess(AST_AttributeAccess* node);
+        
+        AST_Object* visit_AST_Object(AST_Object* node);
 
         anything operation(anything left, std::string op, anything right);
         anything operation(float left, std::string op, float right);
