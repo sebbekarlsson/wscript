@@ -322,7 +322,7 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
         AST_BuiltinFunctionDefinition* bfd = node->get_scope()->get_builtin_function(udfc->name);
 
         if (bfd != nullptr)
-            return bfd->call(node->args, this); 
+            return this->visit(bfd->call(node->args, this));
         
         udfc->definition = node->get_scope()->get_function_definition(udfc->name);
 

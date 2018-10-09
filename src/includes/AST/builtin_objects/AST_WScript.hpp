@@ -7,7 +7,7 @@
 
 class AST_WScript: public AST_Object {
     public:
-        AST_WScript();
+        AST_WScript(Token* token);
         ~AST_WScript();
 };
 #endif

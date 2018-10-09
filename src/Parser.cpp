@@ -131,7 +131,19 @@ AST* Parser::factor(Scope* scope) {
         AST_Float* num = new AST_Float(token);
         num->scope = scope;
         return num;
+    } else if (token->type == T_OBJECT) {
+        this->eat(T_OBJECT);
+        AST_Object* obj;
 
+        if (token->value == "WScript")
+            obj = new AST_WScript(token);
+        else
+            obj = new AST_Object(token);
+
+        obj->scope = scope;
+        return obj;
+    } else if (this->current_token->type == T_ID || this->current_token->type == T_OBJECT || this->current_token->type == T_DOT) {
+        return this->id_action(scope);
     } else if (token->type == T_LPAREN) {
         this->eat(T_LPAREN);
         AST* node = this->expr(scope);
@@ -191,6 +203,7 @@ AST* Parser::expr(Scope* scope) {
     Token* token = nullptr;
 
     AST* node = this->term(scope);
+    bool is_binop = false;
     
     while(
         this->current_token->type == T_PLUS ||
@@ -200,27 +213,43 @@ AST* Parser::expr(Scope* scope) {
         this->current_token->type == T_LARGER_THAN ||
         this->current_token->type == T_LESS_OR_EQUALS ||
         this->current_token->type == T_LARGER_OR_EQUALS ||
-        this->current_token->type == T_EQUALS
+        this->current_token->type == T_EQUALS ||
+        this->current_token->type == T_DOT
     ) {
         token = this->current_token;
 
         if (token->type == T_PLUS) {
             this->eat(T_PLUS);
+            is_binop = true;
         } else if (token->type == T_MINUS) {
             this->eat(T_MINUS);
+            is_binop = true;
         } else if (token->type == T_NOT_EQUALS) {
             this->eat(T_NOT_EQUALS);
+            is_binop = true;
         } else if (token->type == T_LESS_THAN) {
             this->eat(T_LESS_THAN);
+            is_binop = true;
         } else if (token->type == T_LARGER_THAN) {
             this->eat(T_LARGER_THAN);
+            is_binop = true;
         } else if (token->type == T_LESS_OR_EQUALS) {
             this->eat(T_LESS_OR_EQUALS);
+            is_binop = true;
         } else if (token->type == T_EQUALS) {
             this->eat(T_EQUALS);
+            is_binop = true;
+        } else if (token->type == T_DOT) {
+            this->eat(T_DOT);
+            is_binop = false;
         }
 
-        node = new AST_BinOp(node, token, this->term(scope));
+        if (is_binop) {
+            node = new AST_BinOp(node, token, this->term(scope));
+        } else {
+            node = new AST_AttributeAccess(node, this->term(scope));
+        }
+
         node->scope = scope;
     };
 
@@ -319,7 +348,7 @@ AST* Parser::statement(Scope* scope) {
     else if (this->current_token->type == T_DO)
         return this->do_while(scope);
     else if (this->current_token->type == T_ID || this->current_token->type == T_OBJECT)
-        return this->id_action(scope);
+        return this->expr(scope);
     else
         return this->empty(scope);
 
@@ -339,12 +368,12 @@ AST* Parser::id_action(Scope* scope) {
     else if (current_token->type == T_DOT)
         return this->attribute_access(ast, scope);
 
-    return new AST_NoOp();
+    return ast;
 };
 
 AST_Object* Parser::object(Scope* scope) {
     if (current_token->value == "WScript") { // TODO: make this more dynamic
-        AST_WScript* obj = new AST_WScript();
+        AST_WScript* obj = new AST_WScript(this->current_token);
         obj->scope = scope;
 
         this->eat(T_OBJECT);
