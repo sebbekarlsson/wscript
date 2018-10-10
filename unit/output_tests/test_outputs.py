@@ -1,73 +1,49 @@
 from __init__ import binexec
 
 
-def test_0():
-    assert binexec('0.vbs') == '1'
+def test_print_vbs():
+    assert binexec('print.vbs') == 'hello'
 
 
-def test_1():
-    assert binexec('1.vbs') == '100'
+def test_wscript_echo_vbs():
+    assert binexec('WScript.Echo.vbs') == 'hello'
 
 
-def test_2():
-    assert binexec('2.vbs') is None
+def test_dim_one_vbs():
+    assert binexec('Dim_one.vbs') == '32'
 
 
-def test_3():
-    assert binexec('3.vbs') == '2.56'
+def test_dim_multiple_vbs():
+    assert binexec('Dim_multiple.vbs') == '32\n0\n12\nhello\nworld\n3'
 
 
-def test_4():
-    assert binexec('4.vbs') == '40'
+def test_function_vbs():
+    assert binexec('Function.vbs') == '16'
 
 
-def test_5():
-    assert binexec('5.vbs') == '10'
+def test_loop_vbs():
+    assert binexec('Loop.vbs') == '0\n1\n2\n3\n2\n1'
 
 
-def test_6():
-    assert binexec('6.vbs') == 'hello world'
+def test_boolean_expr_vbs():
+    assert binexec('boolean_expr.vbs') == '0\n1\n1\n0\n1'
 
 
-def test_7():
-    assert binexec('7.vbs') == 'hello 12'
+def test_if_vbs():
+    assert binexec('If.vbs') == '2\n3\n4'
 
 
-def test_8():
-    assert binexec('8.vbs') == '45.7'
+def test_else_vbs():
+    assert binexec('Else.vbs') == 'fruit'
 
 
-def test_9():
-    assert binexec('9.vbs') == 'hello 0.450000'
+def test_concat_vbs():
+    assert binexec('concat.vbs') == 'hello world\nhello world12\n57'
 
 
-def test_10():
-    assert binexec('10.vbs') == '1\n2\n3'
+def test_dictionary_vbs():
+    assert binexec('dictionary.vbs') == '120\nhello'
 
 
-def test_11():
-    assert binexec('11.vbs') == '1\n2\n3\n2\n1\n0'
-
-
-def test_12():
-    assert binexec('12.vbs') == '40'
-
-
-def test_13():
-    assert binexec('13.vbs') == 'hello\nworld\nstrawberries'
-
-
-def test_14():
-    assert binexec('14.vbs') == '324'
-
-
-def test_15():
-    assert binexec('15.vbs') == 'Hello World'
-
-
-def test_16():
-    assert binexec('16.vbs') == 'called from hello'
-
-
-def test_17():
-    assert binexec('17.vbs') == '120'
+def test_add_two_floats_vbs():
+    assert binexec('add_two_floats.vbs') == '4.4'

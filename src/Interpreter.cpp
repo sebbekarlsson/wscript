@@ -224,7 +224,7 @@ int Interpreter::visit_AST_Compound(AST_Compound* node) {
 
 anything Interpreter::visit_AST_Assign(AST_Assign* node) {
     std::string varname = node->left->value;
-    
+
     if (!node->get_scope()->has_variable(varname))
         this->error("Trying to assign to undeclared variable: `" + varname + "`");
 
@@ -342,12 +342,9 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
 
         anything ret = (anything)0;
         this->visit(udfc->call(this));
+
         if (udfc->definition->get_scope()->return_node != nullptr)
             ret = this->visit(udfc->definition->get_scope()->return_node);
-
-        // only for freeing memory
-        for (std::vector<Token*>::iterator it = udfc->definition->args.begin(); it != udfc->definition->args.end(); ++it)
-            udfc->definition->get_scope()->free_var((*it)->value);
 
         return ret;
     }

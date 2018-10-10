@@ -1,6 +1,7 @@
 Dim x, y
 
-x = "hello "
-y = 0.45
+
+x = 4.3
+y = 0.1
 
 print(x + y)

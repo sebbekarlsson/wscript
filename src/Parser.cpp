@@ -509,12 +509,14 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
  * @return AST*
  */
 AST* Parser::assignment_statement(AST_Var* left, Scope* scope) {
+    left->scope = scope;
     Token* token = this->current_token;
     this->eat(T_ASSIGN);
     AST* right = this->expr(scope);
 
     if (left->value == scope->name) {
         AST_Return* ret = new AST_Return(right);
+        ret->scope = scope;
         scope->return_node = ret;
         return ret;
     }
