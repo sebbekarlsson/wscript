@@ -13,8 +13,10 @@ class AST {
 
         Scope* scope = nullptr;
         Scope* private_scope = nullptr;
+        //Scope* parent_scope = nullptr;
 
         Scope* get_scope();
         Scope* get_private_scope();
+        //Scope* get_parent_scope();
 };
 #endif

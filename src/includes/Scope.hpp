@@ -26,7 +26,7 @@ class Scope {
         AST_FunctionDefinition* get_function_definition(std::string name);
         AST_BuiltinFunctionDefinition* get_builtin_function(std::string name);
 
-        AST_Return* return_node;
+        anything value;
 
         std::string name;
 

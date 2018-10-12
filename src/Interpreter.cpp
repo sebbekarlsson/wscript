@@ -334,6 +334,7 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
         if (missing_arguments > 0)
             this->error("Missing " + std::to_string(missing_arguments) + " arguments when calling: " + udfc->name);
 
+
         int i = 0;
         for (std::vector<Token*>::iterator it = udfc->definition->args.begin(); it != udfc->definition->args.end(); ++it) {
             udfc->definition->get_scope()->set_variable((*it)->value, this->visit(node->args[i]));
@@ -341,10 +342,8 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
         }
 
         anything ret = (anything)0;
-        this->visit(udfc->call(this));
-
-        if (udfc->definition->get_scope()->return_node != nullptr)
-            ret = this->visit(udfc->definition->get_scope()->return_node);
+        ret = this->visit(udfc->call(this));
+        ret = udfc->definition->scope->value;
 
         return ret;
     }
@@ -353,12 +352,14 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
 };
 
 anything Interpreter::visit_AST_functionDefinition(AST_FunctionDefinition* node) {
+    //node->get_parent_scope()->define_function(node);
     node->get_scope()->define_function(node);
     return new AST_NoOp();
 }
 
 anything Interpreter::visit_AST_Return(AST_Return* node) {
-    return this->visit(node->value);
+    node->scope->value = this->visit(node->value);
+    return node->scope->value;
 };
 
 anything Interpreter::visit_AST_AttributeAccess(AST_AttributeAccess* node) {
