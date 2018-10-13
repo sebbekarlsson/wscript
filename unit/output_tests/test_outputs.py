@@ -74,3 +74,7 @@ def test_access_string_char_vbs():
 
 def test_string_loop_vbs():
     assert binexec('string_loop.vbs') == 'h\ne\nl\nl\no'
+
+
+def test_dictionary_with_arrays_vbs():
+    assert binexec('dictionary_with_arrays.vbs') == '16,8,21,28,42'

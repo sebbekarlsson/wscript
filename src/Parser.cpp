@@ -239,6 +239,9 @@ AST* Parser::expr(Scope* scope) {
         } else if (token->type == T_LESS_OR_EQUALS) {
             this->eat(T_LESS_OR_EQUALS);
             is_binop = true;
+        } else if (token->type == T_LARGER_OR_EQUALS) {
+            this->eat(T_LARGER_OR_EQUALS);
+            is_binop = true;
         } else if (token->type == T_EQUALS) {
             this->eat(T_EQUALS);
             is_binop = true;
