@@ -492,7 +492,8 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
         args,
         body
     );
-    scope->define_function(fd);
+    fd->parent_scope = scope;
+    //scope->define_function(fd);
     //new_scope->define_function(fd);
     fd->scope = new_scope;
     body->scope = new_scope;

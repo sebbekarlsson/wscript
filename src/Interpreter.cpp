@@ -353,6 +353,7 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
 
 anything Interpreter::visit_AST_functionDefinition(AST_FunctionDefinition* node) {
     //node->get_parent_scope()->define_function(node);
+    node->get_parent_scope()->define_function(node);
     node->get_scope()->define_function(node);
     return new AST_NoOp();
 }
