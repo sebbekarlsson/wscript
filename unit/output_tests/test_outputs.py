@@ -62,3 +62,7 @@ def test_array_vbs():
 
 def test_array_ubound_vbs():
     assert binexec('array_ubound.vbs') == '4'
+
+
+def test_array_loop_vbs():
+    assert binexec('array_loop.vbs') == 'hello\nworld\nthis\nis\njohn'
