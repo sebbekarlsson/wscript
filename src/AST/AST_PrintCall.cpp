@@ -10,14 +10,18 @@ AST_PrintCall::AST_PrintCall(std::vector<AST*> args) : AST_FunctionCall(args) {}
 AST_PrintCall::~AST_PrintCall() {};
 
 AST* AST_PrintCall::call(Interpreter* interpreter) {
-    if (this->args.size()) {
+    if (args.size()) {
         for (
-            std::vector<AST*>::iterator it = this->args.begin();
-            it != this->args.end();
-            ++it
-        )
-            std::cout << interpreter->visit((*it)) << std::endl;
+                std::vector<AST*>::iterator it = args.begin();
+                it != args.end();
+                ++it
+            ) {
+
+            anything x = interpreter->visit((*it));
+            coutprint(x);
+        }
     }
 
-    return new AST_NoOp();
+    AST_NoOp* noop = new AST_NoOp();
+    return noop;
 };

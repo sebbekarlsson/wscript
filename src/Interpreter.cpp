@@ -386,6 +386,10 @@ AST_Object* Interpreter::visit_AST_Object(AST_Object* node) {
     return node;
 };
 
+anything Interpreter::visit_AST_Array(AST_Array* node) {
+    return node->items;
+};
+
 int Interpreter::visit_AST_NoOp(AST_NoOp* node) { return 0; };
 
 anything Interpreter::interpret() {

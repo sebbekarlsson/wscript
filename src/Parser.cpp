@@ -12,6 +12,8 @@
 #include "includes/AST/AST_If.hpp"
 #include "includes/AST/AST_Else.hpp"
 #include "includes/AST/AST_PrintCall.hpp"
+#include "includes/AST/AST_ArrayCall.hpp"
+#include "includes/AST/AST_UBoundCall.hpp"
 #include "includes/AST/AST_CreateObjectCall.hpp"
 #include "includes/AST/AST_UserDefinedFunctionCall.hpp"
 #include "includes/AST/AST_DoWhile.hpp"
@@ -433,6 +435,14 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
         return fc;
     } else if (function_name == "CreateObject") {
         fc = new AST_CreateObjectCall(args);
+        fc->scope = scope;
+        return fc;
+    } else if (function_name == "Array") {
+        fc = new AST_ArrayCall(args);
+        fc->scope = scope;
+        return fc;
+    } else if (function_name == "UBound") {
+        fc = new AST_UBoundCall(args);
         fc->scope = scope;
         return fc;
     } else {

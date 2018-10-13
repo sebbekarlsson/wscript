@@ -11,8 +11,11 @@ AST* AST_WScript_Echo::call(std::vector<AST*> args, Interpreter* interpreter) {
                 std::vector<AST*>::iterator it = args.begin();
                 it != args.end();
                 ++it
-            )
-            std::cout << interpreter->visit((*it)) << std::endl;
+            ) {
+
+            anything x = interpreter->visit((*it));
+            coutprint(x);
+        }
     }
 
     AST_NoOp* noop = new AST_NoOp();

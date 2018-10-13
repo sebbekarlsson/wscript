@@ -19,6 +19,7 @@
 #include "AST/AST_Return.hpp"
 #include "AST/AST_AttributeAccess.hpp"
 #include "AST/AST_Object.hpp"
+#include "AST/AST_Array.hpp"
 #include <string>
 #include "typedefs.hpp"
 
@@ -47,5 +48,6 @@ class NodeVisitor {
         virtual std::string visit_AST_Str(AST_Str* node) = 0;
 
         virtual AST_Object* visit_AST_Object(AST_Object* node) = 0;
+        virtual anything visit_AST_Array(AST_Array* node) = 0;
 };
 #endif

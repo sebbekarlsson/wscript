@@ -55,3 +55,6 @@ def test_recursion_vbs():
 # We are skipping this one for now...
 # def test_fibonacci_vbs():
 #     assert binexec('fibonacci.vbs') == '39'
+
+def test_array_ubound_vbs():
+    assert binexec('array_ubound.vbs') == '4'
