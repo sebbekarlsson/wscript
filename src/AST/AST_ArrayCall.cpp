@@ -9,13 +9,11 @@ AST_ArrayCall::AST_ArrayCall(std::vector<AST*> args) : AST_FunctionCall(args) {}
 AST_ArrayCall::~AST_ArrayCall() {};
 
 AST* AST_ArrayCall::call(Interpreter* interpreter) {
-    if (this->args.size() == 0)
-        interpreter->error("Array expects 1 argument");
+    AST_Array* arr = new AST_Array(nullptr);
 
-    anything type = interpreter->visit(this->args[0]);
+    for (std::vector<AST*>::iterator it = this->args.begin(); it != this->args.end(); ++it) {
+        arr->items.push_back(interpreter->visit((*it)));
+    }
 
-    if (type.type() != typeid(int))
-        interpreter->error("Array only accepts int arguments");
-
-    return new AST_Array(nullptr);
+    return arr;
 };
