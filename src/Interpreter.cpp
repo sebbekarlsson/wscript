@@ -317,6 +317,8 @@ int Interpreter::visit_AST_DoWhile(AST_DoWhile* node) {
 
 anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
     if (dynamic_cast<AST_UserDefinedFunctionCall*>( node )) {
+        anything ret = (anything)0;
+
         AST_UserDefinedFunctionCall* udfc = (AST_UserDefinedFunctionCall*) node;
         
         AST_BuiltinFunctionDefinition* bfd = node->get_scope()->get_builtin_function(udfc->name);
@@ -340,8 +342,7 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
             udfc->definition->get_scope()->set_variable((*it)->value, this->visit(node->args[i]));
             i++;
         }
-
-        anything ret = (anything)0;
+        
         ret = this->visit(udfc->call(this));
         ret = udfc->definition->scope->value;
 
