@@ -66,6 +66,8 @@ std::map<std::string, std::string> RESERVED_KEYWORDS = {
     {"As", T_AS},
     {"print", T_FUNCTION_CALL},
     {"WScript", T_OBJECT},
-    {"CreateObject", T_FUNCTION_CALL}
+    {"CreateObject", T_FUNCTION_CALL},
+    {"Array", T_FUNCTION_CALL},
+    {"UBound", T_FUNCTION_CALL}
 };
 #endif

@@ -315,6 +315,23 @@ int Interpreter::visit_AST_DoWhile(AST_DoWhile* node) {
     return 1;
 };
 
+anything Interpreter::visit_AST_ArrayAccess(AST_ArrayAccess* node) {
+    if (node->args.size() == 0)
+        this->error("Accessing array elements requires an argument for index");
+
+    anything index_node = this->visit(node->args[0]);
+
+    if (index_node.type() != typeid(int))
+        this->error("Accessing array elements requires an integer index");
+
+    int index = boost::get<int>(index_node);
+
+    if (index > (int)node->array_node->items.size() - 1)
+        this->error("Array index out of bounds");
+
+    return node->array_node->items[index];
+};
+
 anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
     if (dynamic_cast<AST_UserDefinedFunctionCall*>( node )) {
         anything ret = (anything)0;
@@ -325,6 +342,21 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
 
         if (bfd != nullptr)
             return this->visit(bfd->call(node->args, this));
+
+        if (udfc->get_scope()->has_variable(udfc->name)) {
+            anything var = udfc->get_scope()->get_variable(udfc->name);
+
+            if (var.type() == typeid(AST*)) {
+                AST* ast = boost::get<AST*>(var);
+
+                if (dynamic_cast<AST_Array*>(ast)) {
+                    AST_Array* arr = (AST_Array*)ast;
+                    AST_ArrayAccess* array_access = new AST_ArrayAccess(arr, node->args);
+
+                    return this->visit(array_access);
+                }
+            }
+        }
         
         udfc->definition = node->get_scope()->get_function_definition(udfc->name);
 
@@ -383,6 +415,10 @@ anything Interpreter::visit_AST_AttributeAccess(AST_AttributeAccess* node) {
 }
 
 AST_Object* Interpreter::visit_AST_Object(AST_Object* node) {
+    return node;
+};
+
+anything Interpreter::visit_AST_Array(AST_Array* node) {
     return node;
 };
 

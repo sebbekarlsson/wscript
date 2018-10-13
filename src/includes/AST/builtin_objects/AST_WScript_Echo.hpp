@@ -4,6 +4,7 @@
 #include <iostream>
 #include "../AST_NoOp.hpp"
 #include "../../Interpreter.hpp"
+#include "../../cout.hpp"
 
 
 class AST_WScript_Echo: public AST_BuiltinFunctionDefinition {
