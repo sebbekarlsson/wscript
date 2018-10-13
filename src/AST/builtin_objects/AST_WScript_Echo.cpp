@@ -1,4 +1,5 @@
 #include "../../includes/AST/builtin_objects/AST_WScript_Echo.hpp"
+#include "../../includes/typedefs.hpp"
 
 
 AST_WScript_Echo::AST_WScript_Echo(std::string name) : AST_BuiltinFunctionDefinition(name) {};

@@ -66,3 +66,11 @@ def test_array_ubound_vbs():
 
 def test_array_loop_vbs():
     assert binexec('array_loop.vbs') == 'hello\nworld\nthis\nis\njohn'
+
+
+def test_access_string_char_vbs():
+    assert binexec('access_string_char.vbs') == 'e'
+
+
+def test_string_loop_vbs():
+    assert binexec('string_loop.vbs') == 'h\ne\nl\nl\no'

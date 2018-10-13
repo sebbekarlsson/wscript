@@ -332,6 +332,23 @@ anything Interpreter::visit_AST_ArrayAccess(AST_ArrayAccess* node) {
     return node->array_node->items[index];
 };
 
+char Interpreter::visit_AST_StringAccess(AST_StringAccess* node) {
+    if (node->args.size() == 0)
+        this->error("Accessing array elements requires an argument for index");
+
+    anything index_node = this->visit(node->args[0]);
+
+    if (index_node.type() != typeid(int))
+        this->error("Accessing array elements requires an integer index");
+
+    int index = boost::get<int>(index_node);
+
+    if (index > (int)node->value.size() - 1)
+        this->error("Array index out of bounds");
+
+    return node->value[index];
+};
+
 anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
     if (dynamic_cast<AST_UserDefinedFunctionCall*>( node )) {
         anything ret = (anything)0;
@@ -354,7 +371,12 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
                     AST_ArrayAccess* array_access = new AST_ArrayAccess(arr, node->args);
 
                     return this->visit(array_access);
-                }
+                } 
+            } else if (var.type() == typeid(std::string)) {
+                std::string value = boost::get<std::string>(var);
+                AST_StringAccess* string_access = new AST_StringAccess(value, node->args);
+
+                return this->visit(string_access);
             }
         }
         
