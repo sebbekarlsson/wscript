@@ -15,5 +15,6 @@ AST* AST_WScript_Echo::call(std::vector<AST*> args, Interpreter* interpreter) {
             std::cout << interpreter->visit((*it)) << std::endl;
     }
 
-    return new AST_NoOp();
+    AST_NoOp* noop = new AST_NoOp();
+    return noop;
 };

@@ -2,8 +2,8 @@
 
 
 Scope::Scope(std::string name) {
-    this->return_node = nullptr;
     this->name = name;
+    this->value = 0;
 };
 
 void Scope::set_variable(std::string key, anything value) {

@@ -1,5 +1,6 @@
 Dim x
 
-x = 1
+
+x = 32
 
 print(x)

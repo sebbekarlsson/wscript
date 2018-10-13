@@ -441,8 +441,8 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
         return udfc;
     }
 
-    delete[] fc;
-    delete[] udfc;
+    delete fc;
+    delete udfc;
     
     return nullptr;
 };
@@ -454,18 +454,14 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
  */
 AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
     AST_FunctionDefinition* fd = nullptr;
-    AST_Return* return_node = nullptr;
     std::vector<Token*> args;
     AST_Compound* body = new AST_Compound();
-    body->scope = scope;
     std::vector<AST*> nodes;
     std::string function_name;
 
     this->eat(T_FUNCTION_DEFINITION);
     function_name = this->current_token->value;
     Scope* new_scope = new Scope(function_name);
-    new_scope->variables = scope->variables;
-    new_scope->function_definitions = scope->function_definitions;
     this->eat(T_ID);
     this->eat(T_LPAREN);
 
@@ -485,7 +481,6 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
     
     this->eat(T_RPAREN);
     nodes = this->statement_list(new_scope);
-    scope->return_node = new_scope->return_node;
     this->eat(T_END);
     this->eat(T_FUNCTION_DEFINITION);
 
@@ -497,8 +492,11 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
         args,
         body
     );
-    scope->define_function(fd);
+    fd->parent_scope = scope;
+    //scope->define_function(fd);
+    //new_scope->define_function(fd);
     fd->scope = new_scope;
+    body->scope = new_scope;
 
     return fd;
 };
@@ -509,13 +507,14 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
  * @return AST*
  */
 AST* Parser::assignment_statement(AST_Var* left, Scope* scope) {
+    left->scope = scope;
     Token* token = this->current_token;
     this->eat(T_ASSIGN);
     AST* right = this->expr(scope);
 
     if (left->value == scope->name) {
         AST_Return* ret = new AST_Return(right);
-        scope->return_node = ret;
+        ret->scope = scope;
         return ret;
     }
 

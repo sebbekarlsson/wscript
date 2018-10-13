@@ -7,6 +7,7 @@
 #include "AST/AST_FunctionDefinition.hpp"
 #include "AST/AST_UserDefinedFunctionCall.hpp"
 #include "AST/AST_BuiltinFunctionDefinition.hpp"
+#include "AST/AST_Return.hpp"
 
 
 class Scope {
@@ -25,7 +26,7 @@ class Scope {
         AST_FunctionDefinition* get_function_definition(std::string name);
         AST_BuiltinFunctionDefinition* get_builtin_function(std::string name);
 
-        AST* return_node;
+        anything value;
 
         std::string name;
 
