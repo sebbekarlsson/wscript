@@ -44,6 +44,8 @@ anything NodeVisitor::visit(AST* node) {
         return (anything)this->visit_AST_Array((AST_Array*) node);
     else if (dynamic_cast<AST_ArrayAccess*>( node ))
         return (anything)this->visit_AST_ArrayAccess((AST_ArrayAccess*) node);
+    else if (dynamic_cast<AST_StringAccess*>( node ))
+        return (anything)this->visit_AST_StringAccess((AST_StringAccess*) node);
 
     return (anything)this->visit_default(node);
 };

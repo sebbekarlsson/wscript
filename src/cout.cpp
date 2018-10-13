@@ -1,9 +1,20 @@
 #include "includes/cout.hpp"
+#include <sstream>
 
+
+void coutprint_char(char value) {
+    std::stringstream ss;
+    std::string target;
+    ss << value;
+    ss >> target;
+    std::cout << target << std::endl;
+};
 
 void coutprint(anything value) {
     if (value.type() == typeid(std::string))
         coutprint(boost::get<std::string>(value));
+    else if (value.type() == typeid(char))
+        coutprint_char((char)boost::get<char>(value));
     else if (value.type() == typeid(int))
         coutprint(boost::get<int>(value));
     else if (value.type() == typeid(float))

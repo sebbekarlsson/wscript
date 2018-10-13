@@ -10,5 +10,6 @@ typedef boost::variant<
     float,
     int,
     std::string,
+    char,
     AST*
 > anything;

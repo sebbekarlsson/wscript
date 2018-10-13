@@ -25,6 +25,8 @@ AST* AST_UBoundCall::call(Interpreter* interpreter) {
 
             return new AST_Integer(new Token(T_INTEGER, std::to_string(_arr->items.size())));
         }
+    } else if (arr.type() == typeid(std::string)) {
+        return new AST_Integer(new Token(T_INTEGER, std::to_string(boost::get<std::string>(arr).size())));
     }
 
     return nullptr;
