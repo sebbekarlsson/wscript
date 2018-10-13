@@ -163,7 +163,7 @@ AST* Parser::factor(Scope* scope) {
         return node;
     }
 
-    return nullptr;
+    return this->expr(scope);
 };
 
 /**

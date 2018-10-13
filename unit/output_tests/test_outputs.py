@@ -33,6 +33,10 @@ def test_if_vbs():
     assert binexec('If.vbs') == '2\n3\n4'
 
 
+def test_if_parentheses_on_left_vbs():
+    assert binexec('If_parentheses_on_left.vbs') == 'yes'
+
+
 def test_else_vbs():
     assert binexec('Else.vbs') == 'fruit'
 
