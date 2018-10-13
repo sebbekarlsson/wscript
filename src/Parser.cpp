@@ -441,8 +441,8 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
         return udfc;
     }
 
-    delete[] fc;
-    delete[] udfc;
+    delete fc;
+    delete udfc;
     
     return nullptr;
 };

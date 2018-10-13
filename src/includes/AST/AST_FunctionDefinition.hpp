@@ -13,8 +13,7 @@ class Interpreter;
 class AST_FunctionDefinition: public AST {
     public:
         AST_FunctionDefinition(std::string name, std::vector<Token*> args, AST_Compound* body);
-        virtual ~AST_FunctionDefinition()
-        {}
+        ~AST_FunctionDefinition();
 
         std::string name;
         std::vector<Token*> args;
