@@ -13,6 +13,6 @@ class AST_Array: public AST {
 
         Token* token;
 
-        std::vector<boost::any> items;
+        std::vector<anything> items;
 };
 #endif

@@ -10,6 +10,5 @@ typedef boost::variant<
     float,
     int,
     std::string,
-    AST*,
-    std::vector<boost::any>
+    AST*
 > anything;

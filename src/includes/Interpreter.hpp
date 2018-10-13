@@ -29,6 +29,7 @@ class Interpreter: public NodeVisitor {
         anything visit_AST_functionDefinition(AST_FunctionDefinition* node);
         anything visit_AST_Return(AST_Return* node);
         anything visit_AST_AttributeAccess(AST_AttributeAccess* node);
+        anything visit_AST_ArrayAccess(AST_ArrayAccess* node);
         
         AST_Object* visit_AST_Object(AST_Object* node);
         anything visit_AST_Array(AST_Array* node);

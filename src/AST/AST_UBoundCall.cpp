@@ -17,9 +17,14 @@ AST* AST_UBoundCall::call(Interpreter* interpreter) {
 
     anything arr = interpreter->visit(this->args[0]);
 
-    if (arr.type() == typeid(std::vector<boost::any>)) {
-        std::vector<boost::any> x = boost::get<std::vector<boost::any>>(arr);
-        return new AST_Integer(new Token(T_INTEGER, std::to_string(x.size())));
+    if (arr.type() == typeid(AST*)) {
+        AST* ast = boost::get<AST*>(arr);
+
+        if (dynamic_cast<AST_Array*>(ast)) {
+            AST_Array* _arr = (AST_Array*)ast;
+
+            return new AST_Integer(new Token(T_INTEGER, std::to_string(_arr->items.size())));
+        }
     }
 
     return nullptr;
