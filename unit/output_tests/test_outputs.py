@@ -52,6 +52,6 @@ def test_add_two_floats_vbs():
 def test_recursion_vbs():
     assert binexec('recursion.vbs') == '0\n1\n2\n3\n4\n4'
 
-
-def test_fibonacci_vbs():
-    assert binexec('fibonacci.vbs') == '39'
+# We are skipping this one for now...
+# def test_fibonacci_vbs():
+#     assert binexec('fibonacci.vbs') == '39'
