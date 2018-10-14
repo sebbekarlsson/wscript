@@ -28,6 +28,8 @@ AST* AST_CreateObjectCall::call(Interpreter* interpreter) {
 
         AST_ObjectCustom* cus = &(*someType->make_obj(0));
 
+        delete someType;
+
         return cus;
     }
 };
