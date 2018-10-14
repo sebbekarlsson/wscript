@@ -1,6 +1,8 @@
 #include "../includes/AST/AST_CreateObjectCall.hpp"
 #include "../includes/AST/builtin_objects/AST_Object_Dictionary.hpp"
 #include "../includes/Interpreter.hpp"
+#include "../includes/DLClass.hpp"
+#include "../includes/AST/AST_ObjectCustom.hpp"
 #include <iostream>
 
 
@@ -19,8 +21,15 @@ AST* AST_CreateObjectCall::call(Interpreter* interpreter) {
 
     std::string obj_type = boost::get<std::string>(type);
 
-    if (obj_type == "Scripting.Dictionary")
+    if (obj_type == "Scripting.Dictionary") {
         return new AST_Object_Dictionary(nullptr);
-    else
-        interpreter->error("Unknown object type: " + obj_type);
+    } else {
+        auto someType = new DLClass<AST_ObjectCustom>(obj_type);
+
+        AST_ObjectCustom* cus = &(*someType->make_obj(0));
+
+        delete someType;
+
+        return cus;
+    }
 };
