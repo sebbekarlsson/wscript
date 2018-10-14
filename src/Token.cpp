@@ -1,7 +1,7 @@
 #include "includes/Token.hpp"
 
 
-Token::Token(std::string type, std::string value) {
+Token::Token(TokenType type, std::string value) {
     this->type = type;
     this->value = value;
 };

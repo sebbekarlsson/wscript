@@ -35,19 +35,19 @@ class Interpreter: public NodeVisitor {
         AST_Object* visit_AST_Object(AST_Object* node);
         anything visit_AST_Array(AST_Array* node);
 
-        anything operation(anything left, std::string op, anything right);
-        anything operation(float left, std::string op, float right);
-        anything operation(float left, std::string op, std::string right);
-        anything operation(std::string left, std::string op, std::string right);
-        anything operation(std::string left, std::string op, int right);
-        anything operation(std::string left, std::string op, float right);
-        anything operation(int left, std::string op, std::string right);
-        anything operation(int left, std::string op, int right);
+        anything operation(anything left, TokenType op, anything right);
+        anything operation(float left, TokenType op, float right);
+        anything operation(float left, TokenType op, std::string right);
+        anything operation(std::string left, TokenType op, std::string right);
+        anything operation(std::string left, TokenType op, int right);
+        anything operation(std::string left, TokenType op, float right);
+        anything operation(int left, TokenType op, std::string right);
+        anything operation(int left, TokenType op, int right);
 
-        anything unary_operation(std::string op, anything right);
-        anything unary_operation(std::string op, int right);
-        anything unary_operation(std::string op, float right);
-        anything unary_operation(std::string op, std::string right);
+        anything unary_operation(TokenType op, anything right);
+        anything unary_operation(TokenType op, int right);
+        anything unary_operation(TokenType op, float right);
+        anything unary_operation(TokenType op, std::string right);
 
         anything interpret();
 };

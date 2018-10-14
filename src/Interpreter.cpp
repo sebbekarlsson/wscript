@@ -3,20 +3,6 @@
 #include <iostream>
 
 
-extern std::string T_INTEGER;
-extern std::string T_PLUS;
-extern std::string T_MINUS;
-extern std::string T_MULTIPLY;
-extern std::string T_DIVIDE;
-extern std::string T_LPAREN;
-extern std::string T_RPAREN;
-extern std::string T_LESS_THAN;
-extern std::string T_LARGER_THAN;
-extern std::string T_LARGER_OR_EQUALS;
-extern std::string T_LESS_OR_EQUALS;
-extern std::string T_NOT_EQUALS;
-extern std::string T_EQUALS;
-
 Interpreter::Interpreter(Parser* parser) {
     this->parser = parser;
 };
@@ -25,8 +11,8 @@ void Interpreter::error(std::string message) {
     throw std::runtime_error("[error][Interpreter]:(line=" + std::to_string(this->parser->lexer->line) + ",pos=" + std::to_string(this->parser->lexer->pos) + ") " + message);
 };
 
-anything Interpreter::operation(int left, std::string op, std::string right) {
-    if (op == T_PLUS)
+anything Interpreter::operation(int left, TokenType op, std::string right) {
+    if (op == TokenType::Plus)
         return std::to_string(left) + right;
 
     this->error(op + " is not supported for string and float");
@@ -34,8 +20,8 @@ anything Interpreter::operation(int left, std::string op, std::string right) {
     return "";
 };
 
-anything Interpreter::operation(std::string left, std::string op, int right) {
-    if (op == T_PLUS)
+anything Interpreter::operation(std::string left, TokenType op, int right) {
+    if (op == TokenType::Plus)
         return left + std::to_string(right);
 
     this->error(op + " is not supported for string and float");
@@ -44,8 +30,8 @@ anything Interpreter::operation(std::string left, std::string op, int right) {
 };
 
 
-anything Interpreter::operation(float left, std::string op, std::string right) {
-    if (op == T_PLUS)
+anything Interpreter::operation(float left, TokenType op, std::string right) {
+    if (op == TokenType::Plus)
         return std::to_string(left) + right;
 
     this->error(op + " is not supported for string and float");
@@ -53,8 +39,8 @@ anything Interpreter::operation(float left, std::string op, std::string right) {
     return "";
 };
 
-anything Interpreter::operation(std::string left, std::string op, float right) {
-    if (op == T_PLUS)
+anything Interpreter::operation(std::string left, TokenType op, float right) {
+    if (op == TokenType::Plus)
         return left + std::to_string(right);
 
     this->error(op + " is not supported for string and float");
@@ -62,57 +48,57 @@ anything Interpreter::operation(std::string left, std::string op, float right) {
     return "";
 };
 
-anything Interpreter::operation(float left, std::string op, float right) {
-    if (op == T_PLUS)
+anything Interpreter::operation(float left, TokenType op, float right) {
+    if (op == TokenType::Plus)
         return left + right;
-    else if (op == T_MINUS)
+    else if (op == TokenType::Minus)
         return left - right;
-    else if (op == T_MULTIPLY)
+    else if (op == TokenType::Multiply)
         return left * right;
-    else if (op == T_DIVIDE)
+    else if (op == TokenType::Divide)
         return left / right;
-    else if (op == T_NOT_EQUALS)
+    else if (op == TokenType::Noequals)
         return left != right;
-    else if (op == T_LESS_THAN)
+    else if (op == TokenType::Less_than)
         return left < right;
-    else if (op == T_LARGER_THAN)
+    else if (op == TokenType::Larger_than)
         return left > right;
-    else if (op == T_LARGER_OR_EQUALS)
+    else if (op == TokenType::Larger_or_equals)
         return left >= right;
-    else if (op == T_LESS_OR_EQUALS)
+    else if (op == TokenType::Less_or_equals)
         return left <= right;
-    else if (op == T_EQUALS)
+    else if (op == TokenType::Equals)
         return left == right;
 
     return 0.0f;
 };
 
-anything Interpreter::operation(int left, std::string op, int right) {
-    if (op == T_PLUS)
+anything Interpreter::operation(int left, TokenType op, int right) {
+    if (op == TokenType::Plus)
         return left + right;
-    else if (op == T_MINUS)
+    else if (op == TokenType::Minus)
         return left - right;
-    else if (op == T_MULTIPLY)
+    else if (op == TokenType::Multiply)
         return left * right;
-    else if (op == T_DIVIDE)
+    else if (op == TokenType::Divide)
         return left / right;
-    else if (op == T_NOT_EQUALS)
+    else if (op == TokenType::Noequals)
         return left != right;
-    else if (op == T_LESS_THAN)
+    else if (op == TokenType::Less_than)
         return left < right;
-    else if (op == T_LARGER_THAN)
+    else if (op == TokenType::Larger_than)
         return left > right;
-    else if (op == T_LARGER_OR_EQUALS)
+    else if (op == TokenType::Larger_or_equals)
         return left >= right;
-    else if (op == T_LESS_OR_EQUALS)
+    else if (op == TokenType::Less_or_equals)
         return left <= right;
-    else if (op == T_EQUALS)
+    else if (op == TokenType::Equals)
         return left == right;
 
     return 0;
 };
 
-anything Interpreter::operation(anything left, std::string op, anything right) {
+anything Interpreter::operation(anything left, TokenType op, anything right) {
     if (left.type() == typeid(int) && right.type() == typeid(int))
         return this->operation(boost::get<int>(left), op, boost::get<int>(right));
 
@@ -140,18 +126,18 @@ anything Interpreter::operation(anything left, std::string op, anything right) {
     return 0;
 };
 
-anything Interpreter::operation(std::string left, std::string op, std::string right) {
-     if (op == T_PLUS)
+anything Interpreter::operation(std::string left, TokenType op, std::string right) {
+     if (op == TokenType::Plus)
         return left + right;
-     if (op == T_EQUALS)
+     if (op == TokenType::Equals)
          return left == right;
-     if (op == T_NOT_EQUALS)
+     if (op == TokenType::Noequals)
          return left != right;
 
      this->error(op + " is not supported for string");
 };
 
-anything Interpreter::unary_operation(std::string op, anything right) {
+anything Interpreter::unary_operation(TokenType op, anything right) {
     if (right.type() == typeid(int))
         return this->unary_operation(op, boost::get<int>(right));
 
@@ -164,30 +150,30 @@ anything Interpreter::unary_operation(std::string op, anything right) {
     return 0;
 };
 
-anything Interpreter::unary_operation(std::string op, float right) {
-    if (op == T_PLUS)
+anything Interpreter::unary_operation(TokenType op, float right) {
+    if (op == TokenType::Plus)
         return +right;
-    if (op == T_MINUS)
+    if (op == TokenType::Minus)
         return -right;
-    if (op == T_NOT_EQUALS)
+    if (op == TokenType::Noequals)
         return !right;
 
     return 0;
 };
 
-anything Interpreter::unary_operation(std::string op, int right) {
-    if (op == T_PLUS)
+anything Interpreter::unary_operation(TokenType op, int right) {
+    if (op == TokenType::Plus)
         return +right;
-    if (op == T_MINUS)
+    if (op == TokenType::Minus)
         return -right;
-    if (op == T_NOT_EQUALS)
+    if (op == TokenType::Noequals)
         return !right;
 
     return 0;
 };
 
-anything Interpreter::unary_operation(std::string op, std::string right) {
-    if (op == T_NOT_EQUALS)
+anything Interpreter::unary_operation(TokenType op, std::string right) {
+    if (op == TokenType::Noequals)
         return right.empty();
 
     this->error(op + " is not supported for string");

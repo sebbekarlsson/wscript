@@ -23,43 +23,6 @@
 #include <sstream>
 
 
-extern std::string T_INTEGER;
-extern std::string T_STRING;
-extern std::string T_FLOAT;
-extern std::string T_PLUS;
-extern std::string T_MINUS;
-extern std::string T_MULTIPLY;
-extern std::string T_DIVIDE;
-extern std::string T_LPAREN;
-extern std::string T_RPAREN;
-extern std::string T_DOT;
-extern std::string T_BEGIN;
-extern std::string T_END;
-extern std::string T_ID;
-extern std::string T_OBJECT;
-extern std::string T_SEMI;
-extern std::string T_ASSIGN;
-extern std::string T_DECLARE;
-extern std::string T_NEWLINE;
-extern std::string T_LARGER_THAN;
-extern std::string T_LESS_THAN;
-extern std::string T_LARGER_OR_EQUALS;
-extern std::string T_LESS_OR_EQUALS;
-extern std::string T_NOT_EQUALS;
-extern std::string T_EQUALS;
-extern std::string T_IF;
-extern std::string T_ELSE;
-extern std::string T_ELSE_IF;
-extern std::string T_THEN;
-extern std::string T_EOF;
-extern std::string T_FUNCTION_CALL;
-extern std::string T_FUNCTION_DEFINITION;
-extern std::string T_COMMA;
-extern std::string T_COLON;
-extern std::string T_DO;
-extern std::string T_LOOP;
-extern std::string T_WHILE;
-
 extern Scope* global_scope;
 
 Parser::Parser(Lexer* lexer) {
@@ -77,11 +40,12 @@ Parser::Parser(Lexer* lexer) {
  *
  * @param std::string token_type - the expected current token type.
  */
-void Parser::eat(std::string token_type) {
+void Parser::eat(TokenType token_type) {
     if (this->current_token->type == token_type)
         this->current_token = this->lexer->get_next_token();
     else
-        this->error("Expected token type: `" + token_type + "`, but got `" + this->current_token->type + "`");
+        this->error("Unexpected token");
+        //this->error("Expected token type: `" + token_type + "`, but got `" + this->current_token->type + "`");
 };
 
 /**
@@ -99,43 +63,43 @@ void Parser::error(std::string message) {
 AST* Parser::factor(Scope* scope) {
     Token* token = this->current_token;
 
-    if (token->type == T_PLUS) {
-        this->eat(T_PLUS);
+    if (token->type == TokenType::Plus) {
+        this->eat(TokenType::Plus);
         AST_UnaryOp* node = new AST_UnaryOp(token, this->factor(scope));
         node->scope = scope;
         return node;
 
-    } else if (token->type == T_MINUS) {
-        this->eat(T_MINUS);
+    } else if (token->type == TokenType::Minus) {
+        this->eat(TokenType::Minus);
         AST_UnaryOp* node = new AST_UnaryOp(token, this->factor(scope));
         node->scope = scope;
         return node;
     
-    } else if (token->type == T_NOT_EQUALS) {
-        this->eat(T_NOT_EQUALS);
+    } else if (token->type == TokenType::Noequals) {
+        this->eat(TokenType::Noequals);
         AST_UnaryOp* node = new AST_UnaryOp(token, this->factor(scope));
         node->scope = scope;
         return node;
 
-    } else if (token->type == T_INTEGER) {
-        this->eat(T_INTEGER);
+    } else if (token->type == TokenType::Integer) {
+        this->eat(TokenType::Integer);
         AST_Integer* num = new AST_Integer(token);
         num->scope = scope;
         return num;
 
-    } else if (token->type == T_STRING) {
-        this->eat(T_STRING);
+    } else if (token->type == TokenType::String) {
+        this->eat(TokenType::String);
         AST_Str* node = new AST_Str(token);
         node->scope = scope;
         return node;
     
-    } else if (token->type == T_FLOAT) {
-        this->eat(T_FLOAT);
+    } else if (token->type == TokenType::Float) {
+        this->eat(TokenType::Float);
         AST_Float* num = new AST_Float(token);
         num->scope = scope;
         return num;
-    } else if (token->type == T_OBJECT) {
-        this->eat(T_OBJECT);
+    } else if (token->type == TokenType::Object) {
+        this->eat(TokenType::Object);
         AST_Object* obj;
 
         if (token->value == "WScript")
@@ -145,15 +109,15 @@ AST* Parser::factor(Scope* scope) {
 
         obj->scope = scope;
         return obj;
-    } else if (this->current_token->type == T_ID || this->current_token->type == T_OBJECT || this->current_token->type == T_DOT) {
+    } else if (this->current_token->type == TokenType::Id || this->current_token->type == TokenType::Object || this->current_token->type == TokenType::Dot) {
         return this->id_action(scope);
-    } else if (token->type == T_LPAREN) {
-        this->eat(T_LPAREN);
+    } else if (token->type == TokenType::Lparen) {
+        this->eat(TokenType::Lparen);
         AST* node = this->expr(scope);
-        this->eat(T_RPAREN);
+        this->eat(TokenType::Rparen);
         node->scope = scope;
         return node;
-    } else if (token->type == T_FUNCTION_CALL) {
+    } else if (token->type == TokenType::Function_call) {
         AST* node = this->function_call(scope);
         node->scope = scope;
         return node;
@@ -178,15 +142,15 @@ AST* Parser::term(Scope* scope) {
     AST* node = this->factor(scope);
     
     while (
-        this->current_token->type == T_MULTIPLY ||
-        this->current_token->type == T_DIVIDE
+        this->current_token->type == TokenType::Multiply ||
+        this->current_token->type == TokenType::Divide
     ) {
         token = this->current_token;
 
-        if (token->type == T_MULTIPLY) {
-            this->eat(T_MULTIPLY);
-        } else if (token->type == T_DIVIDE) {
-            this->eat(T_DIVIDE);
+        if (token->type == TokenType::Multiply) {
+            this->eat(TokenType::Multiply);
+        } else if (token->type == TokenType::Divide) {
+            this->eat(TokenType::Divide);
         }
 
         node = new AST_BinOp(node, token, this->factor(scope));
@@ -209,44 +173,44 @@ AST* Parser::expr(Scope* scope) {
     bool is_binop = false;
     
     while(
-        this->current_token->type == T_PLUS ||
-        this->current_token->type == T_MINUS ||
-        this->current_token->type == T_NOT_EQUALS ||
-        this->current_token->type == T_LESS_THAN ||
-        this->current_token->type == T_LARGER_THAN ||
-        this->current_token->type == T_LESS_OR_EQUALS ||
-        this->current_token->type == T_LARGER_OR_EQUALS ||
-        this->current_token->type == T_EQUALS ||
-        this->current_token->type == T_DOT
+        this->current_token->type == TokenType::Plus ||
+        this->current_token->type == TokenType::Minus ||
+        this->current_token->type == TokenType::Noequals ||
+        this->current_token->type == TokenType::Less_than ||
+        this->current_token->type == TokenType::Larger_than ||
+        this->current_token->type == TokenType::Less_or_equals ||
+        this->current_token->type == TokenType::Larger_or_equals ||
+        this->current_token->type == TokenType::Equals ||
+        this->current_token->type == TokenType::Dot
     ) {
         token = this->current_token;
 
-        if (token->type == T_PLUS) {
-            this->eat(T_PLUS);
+        if (token->type == TokenType::Plus) {
+            this->eat(TokenType::Plus);
             is_binop = true;
-        } else if (token->type == T_MINUS) {
-            this->eat(T_MINUS);
+        } else if (token->type == TokenType::Minus) {
+            this->eat(TokenType::Minus);
             is_binop = true;
-        } else if (token->type == T_NOT_EQUALS) {
-            this->eat(T_NOT_EQUALS);
+        } else if (token->type == TokenType::Noequals) {
+            this->eat(TokenType::Noequals);
             is_binop = true;
-        } else if (token->type == T_LESS_THAN) {
-            this->eat(T_LESS_THAN);
+        } else if (token->type == TokenType::Less_than) {
+            this->eat(TokenType::Less_than);
             is_binop = true;
-        } else if (token->type == T_LARGER_THAN) {
-            this->eat(T_LARGER_THAN);
+        } else if (token->type == TokenType::Larger_than) {
+            this->eat(TokenType::Larger_than);
             is_binop = true;
-        } else if (token->type == T_LESS_OR_EQUALS) {
-            this->eat(T_LESS_OR_EQUALS);
+        } else if (token->type == TokenType::Less_or_equals) {
+            this->eat(TokenType::Less_or_equals);
             is_binop = true;
-        } else if (token->type == T_LARGER_OR_EQUALS) {
-            this->eat(T_LARGER_OR_EQUALS);
+        } else if (token->type == TokenType::Larger_or_equals) {
+            this->eat(TokenType::Larger_or_equals);
             is_binop = true;
-        } else if (token->type == T_EQUALS) {
-            this->eat(T_EQUALS);
+        } else if (token->type == TokenType::Equals) {
+            this->eat(TokenType::Equals);
             is_binop = true;
-        } else if (token->type == T_DOT) {
-            this->eat(T_DOT);
+        } else if (token->type == TokenType::Dot) {
+            this->eat(TokenType::Dot);
             is_binop = false;
         }
 
@@ -269,7 +233,7 @@ AST* Parser::expr(Scope* scope) {
  */
 AST* Parser::program(Scope* scope) {
     AST* node = this->compound_statement(scope);
-    this->eat(T_DOT);
+    this->eat(TokenType::Dot);
 
     return node;
 };
@@ -299,9 +263,9 @@ AST* Parser::any_statement(Scope* scope) {
 AST* Parser::compound_statement(Scope* scope) {
     std::vector<AST*> nodes;
 
-    this->eat(T_BEGIN);
+    this->eat(TokenType::Begin);
     nodes = this->statement_list(scope);
-    this->eat(T_END);
+    this->eat(TokenType::End);
 
     AST_Compound* root = new AST_Compound();
     root->scope = scope;
@@ -321,17 +285,17 @@ std::vector<AST*> Parser::statement_list(Scope* scope) {
 
     results.push_back(node);
 
-    while (this->current_token->type == T_COLON) {
-        this->eat(T_COLON);
+    while (this->current_token->type == TokenType::Colon) {
+        this->eat(TokenType::Colon);
         results.push_back(this->statement(scope));
     }
     
-    while (this->current_token->type == T_NEWLINE) {
-        this->eat(T_NEWLINE);
+    while (this->current_token->type == TokenType::Newline) {
+        this->eat(TokenType::Newline);
         results.push_back(this->statement(scope));
     }
 
-    //if (this->current_token->type == T_ID)
+    //if (this->current_token->type == TokenType::Id)
     //    this->error("Something bad happened");
 
     return results;
@@ -343,17 +307,17 @@ std::vector<AST*> Parser::statement_list(Scope* scope) {
  * @return AST*
  */
 AST* Parser::statement(Scope* scope) {
-    if (this->current_token->type == T_FUNCTION_DEFINITION)
+    if (this->current_token->type == TokenType::Function_definition)
         return this->function_definition(scope);
-    else if (this->current_token->type == T_FUNCTION_CALL)
+    else if (this->current_token->type == TokenType::Function_call)
         return this->function_call(scope);
-    else if (this->current_token->type == T_DECLARE)
+    else if (this->current_token->type == TokenType::Declare)
         return this->variable_declaration(scope);
-    else if (this->current_token->type == T_IF)
+    else if (this->current_token->type == TokenType::If)
         return this->if_statement(scope);
-    else if (this->current_token->type == T_DO)
+    else if (this->current_token->type == TokenType::Do)
         return this->do_while(scope);
-    else if (this->current_token->type == T_ID || this->current_token->type == T_OBJECT)
+    else if (this->current_token->type == TokenType::Id || this->current_token->type == TokenType::Object)
         return this->expr(scope);
     else
         return this->empty(scope);
@@ -364,14 +328,14 @@ AST* Parser::statement(Scope* scope) {
 AST* Parser::id_action(Scope* scope) {
     AST* ast;
 
-    if (current_token->type == T_ID)
+    if (current_token->type == TokenType::Id)
         ast = this->variable(scope);
     else
         ast = this->object(scope);
 
-    if (current_token->type == T_ASSIGN)
+    if (current_token->type == TokenType::Assign)
         return this->assignment_statement((AST_Var*)ast, scope);
-    else if (current_token->type == T_DOT)
+    else if (current_token->type == TokenType::Dot)
         return this->attribute_access(ast, scope);
 
     return ast;
@@ -382,7 +346,7 @@ AST_Object* Parser::object(Scope* scope) {
         AST_WScript* obj = new AST_WScript(this->current_token);
         obj->scope = scope;
 
-        this->eat(T_OBJECT);
+        this->eat(TokenType::Object);
 
         return obj;
     }
@@ -391,7 +355,7 @@ AST_Object* Parser::object(Scope* scope) {
 }
 
 AST_AttributeAccess* Parser::attribute_access(AST* left, Scope* scope) {
-    this->eat(T_DOT);
+    this->eat(TokenType::Dot);
 
     AST_AttributeAccess* attr = new AST_AttributeAccess(
         &*left,
@@ -411,23 +375,23 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
     std::vector<AST*> args;
     std::string function_name = this->current_token->value;
 
-    this->eat(T_FUNCTION_CALL);
-    this->eat(T_LPAREN);
+    this->eat(TokenType::Function_call);
+    this->eat(TokenType::Lparen);
 
     // if we encounter a RPAREN, we assume no arguments are specified
     // and we dont have to try and parse any arguments.
     // Because of this, functions are not required to have any arguments.
-    if (this->current_token->type != T_RPAREN) {
+    if (this->current_token->type != TokenType::Rparen) {
         AST* node = this->expr(scope);
         args.push_back(node);
 
-        while(this->current_token->type == T_COMMA) {
-            this->eat(T_COMMA);
+        while(this->current_token->type == TokenType::Comma) {
+            this->eat(TokenType::Comma);
             args.push_back(this->expr(scope));
         }
     }
     
-    this->eat(T_RPAREN);
+    this->eat(TokenType::Rparen);
 
     AST_FunctionCall* fc;
     AST_UserDefinedFunctionCall* udfc;
@@ -472,30 +436,30 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
     std::vector<AST*> nodes;
     std::string function_name;
 
-    this->eat(T_FUNCTION_DEFINITION);
+    this->eat(TokenType::Function_definition);
     function_name = this->current_token->value;
     Scope* new_scope = new Scope(function_name);
-    this->eat(T_ID);
-    this->eat(T_LPAREN);
+    this->eat(TokenType::Id);
+    this->eat(TokenType::Lparen);
 
     // if we encounter a RPAREN, we assume no arguments are specified
     // and we dont have to try and parse any arguments.
     // Because of this, functions are not required to have any arguments.
-    if (this->current_token->type != T_RPAREN) {
+    if (this->current_token->type != TokenType::Rparen) {
         args.push_back(this->current_token);
-        this->eat(T_ID);
+        this->eat(TokenType::Id);
 
-        while(this->current_token->type == T_COMMA) {
-            this->eat(T_COMMA);
+        while(this->current_token->type == TokenType::Comma) {
+            this->eat(TokenType::Comma);
             args.push_back(this->current_token);
-            this->eat(T_ID);
+            this->eat(TokenType::Id);
         }
     }
     
-    this->eat(T_RPAREN);
+    this->eat(TokenType::Rparen);
     nodes = this->statement_list(new_scope);
-    this->eat(T_END);
-    this->eat(T_FUNCTION_DEFINITION);
+    this->eat(TokenType::End);
+    this->eat(TokenType::Function_definition);
 
     for (std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         body->children.push_back((*it));
@@ -522,7 +486,7 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
 AST* Parser::assignment_statement(AST_Var* left, Scope* scope) {
     left->scope = scope;
     Token* token = this->current_token;
-    this->eat(T_ASSIGN);
+    this->eat(TokenType::Assign);
     AST* right = this->expr(scope);
 
     if (left->value == scope->name) {
@@ -544,9 +508,9 @@ AST* Parser::if_statement(Scope* scope) {
     std::vector<AST*> if_nodes;
     std::vector<AST_Else*> empty_else_vector;
 
-    this->eat(T_IF);
+    this->eat(TokenType::If);
     AST* if_expr = this->expr(scope);
-    this->eat(T_THEN);
+    this->eat(TokenType::Then);
     if_nodes = this->statement_list(scope);
 
     AST_Compound* if_body = new AST_Compound();
@@ -557,10 +521,10 @@ AST* Parser::if_statement(Scope* scope) {
 
     std::vector<AST_Else*> elses;
 
-    while (this->current_token->type == T_ELSE_IF) {
-        this->eat(T_ELSE_IF);
+    while (this->current_token->type == TokenType::Else_if) {
+        this->eat(TokenType::Else_if);
         AST* else_expr = this->expr(scope);
-        this->eat(T_THEN);
+        this->eat(TokenType::Then);
         AST_Compound* else_body = new AST_Compound();
         else_body->scope = scope;
         std::vector<AST*> else_nodes = this->statement_list(scope);
@@ -572,9 +536,9 @@ AST* Parser::if_statement(Scope* scope) {
         elses.push_back(aelse);
     }
 
-    if (this->current_token->type == T_ELSE) {
-        this->eat(T_ELSE);
-        AST_Integer* else_expr = new AST_Integer(new Token(T_INTEGER, "1"));
+    if (this->current_token->type == TokenType::Else) {
+        this->eat(TokenType::Else);
+        AST_Integer* else_expr = new AST_Integer(new Token(TokenType::Integer, "1"));
         else_expr->scope = scope;
         AST_Compound* else_body = new AST_Compound();
         else_body->scope = scope;
@@ -587,8 +551,8 @@ AST* Parser::if_statement(Scope* scope) {
         elses.push_back(aelse);
     }
 
-    this->eat(T_END);
-    this->eat(T_IF);
+    this->eat(TokenType::End);
+    this->eat(TokenType::If);
     
     AST_If* _if = new AST_If(if_expr, if_body, elses);
     _if->scope = scope;
@@ -602,17 +566,17 @@ AST_DoWhile* Parser::do_while(Scope* scope) {
     body->scope = scope;
     std::vector<AST*> nodes;
 
-    this->eat(T_DO);
+    this->eat(TokenType::Do);
 
-    if (this->current_token->type == T_WHILE) {
-        this->eat(T_WHILE);
+    if (this->current_token->type == TokenType::While) {
+        this->eat(TokenType::While);
         expr = this->expr(scope);
         nodes = this->statement_list(scope);
-        this->eat(T_LOOP);
+        this->eat(TokenType::Loop);
     } else {
         nodes = this->statement_list(scope);
-        this->eat(T_LOOP);
-        this->eat(T_WHILE);
+        this->eat(TokenType::Loop);
+        this->eat(TokenType::While);
         expr = this->expr(scope);
     }
 
@@ -635,15 +599,15 @@ AST_DoWhile* Parser::do_while(Scope* scope) {
 AST* Parser::variable_declaration(Scope* scope) {
     std::vector<Token*> tokens;
     
-    this->eat(T_DECLARE);
+    this->eat(TokenType::Declare);
 
     tokens.push_back(this->current_token);
-    this->eat(T_ID);
+    this->eat(TokenType::Id);
 
-    while (this->current_token->type == T_COMMA) {
-        this->eat(T_COMMA);
+    while (this->current_token->type == TokenType::Comma) {
+        this->eat(TokenType::Comma);
         tokens.push_back(this->current_token);
-        this->eat(T_ID);
+        this->eat(TokenType::Id);
     }
 
     AST_VarDecl* vd = new AST_VarDecl(tokens);
@@ -660,7 +624,7 @@ AST* Parser::variable_declaration(Scope* scope) {
 AST_Var* Parser::variable(Scope* scope) {
     AST_Var* node = new AST_Var(this->current_token);
     node->scope = scope;
-    this->eat(T_ID);
+    this->eat(TokenType::Id);
 
     return node;
 };

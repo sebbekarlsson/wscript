@@ -1,5 +1,5 @@
-#ifndef AST_DOWHILE_H
-#define AST_DOWHILE_H
+#ifndef AST_DO_WHILE_H
+#define AST_DO_WHILE_H
 #include "AST.hpp"
 #include "AST_Compound.hpp"
 

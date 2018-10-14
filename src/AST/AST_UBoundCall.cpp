@@ -5,8 +5,6 @@
 #include <iostream>
 
 
-extern std::string T_INTEGER;
-
 AST_UBoundCall::AST_UBoundCall(std::vector<AST*> args) : AST_FunctionCall(args) {};
 
 AST_UBoundCall::~AST_UBoundCall() {};
@@ -23,10 +21,10 @@ AST* AST_UBoundCall::call(Interpreter* interpreter) {
         if (dynamic_cast<AST_Array*>(ast)) {
             AST_Array* _arr = (AST_Array*)ast;
 
-            return new AST_Integer(new Token(T_INTEGER, std::to_string(_arr->items.size())));
+            return new AST_Integer(new Token(TokenType::Integer, std::to_string(_arr->items.size())));
         }
     } else if (arr.type() == typeid(std::string)) {
-        return new AST_Integer(new Token(T_INTEGER, std::to_string(boost::get<std::string>(arr).size())));
+        return new AST_Integer(new Token(TokenType::Integer, std::to_string(boost::get<std::string>(arr).size())));
     }
 
     return nullptr;
