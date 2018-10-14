@@ -1,3 +1,4 @@
+#include "../includes/AST/AST_Object.hpp"
 #include "../includes/AST/AST_CreateObjectCall.hpp"
 #include "../includes/AST/builtin_objects/AST_Object_Dictionary.hpp"
 #include "../includes/Interpreter.hpp"

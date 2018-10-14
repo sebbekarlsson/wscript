@@ -2,6 +2,7 @@
 #define TOKEN_TYPES_H
 #include "TokenType.hpp"
 #include <string>
+#include <map>
 // https://www.promotic.eu/en/pmdoc/ScriptLangs/VBScript/DataTypes.htm
 
 std::map<std::string, TokenType> RESERVED_KEYWORDS = {
