@@ -13,15 +13,6 @@
 
 Scope* global_scope = new Scope("global");
 
-extern std::string T_INTEGER;
-extern std::string T_FLOAT;
-extern std::string T_PLUS;
-extern std::string T_MULTIPLY;
-extern std::string T_DIVIDE;
-extern std::string T_DECLARE;
-extern std::string T_ID;
-extern std::string T_NEWLINE;
-    
 Lexer* lexer = new Lexer(" ");
 Parser* parser = new Parser(lexer);
 Interpreter* interpreter = new Interpreter(parser);
@@ -32,26 +23,26 @@ TEST_CASE("Lexer", "[Testing Lexer]") {
         std::string("x = 2 + 2 + 5.45")
     );
 
-    REQUIRE(lex->get_next_token()->type == T_DECLARE);
-    REQUIRE(lex->get_next_token()->type == T_ID);
-    REQUIRE(lex->get_next_token()->type == T_NEWLINE);
-    REQUIRE(lex->get_next_token()->type == T_ID);
-    REQUIRE(lex->get_next_token()->type == T_ASSIGN);
-    REQUIRE(lex->get_next_token()->type == T_INTEGER);
-    REQUIRE(lex->get_next_token()->type == T_PLUS);
-    REQUIRE(lex->get_next_token()->type == T_INTEGER);
-    REQUIRE(lex->get_next_token()->type == T_PLUS);
-    REQUIRE(lex->get_next_token()->type == T_FLOAT);
+    REQUIRE(lex->get_next_token()->type == TokenType::Declare);
+    REQUIRE(lex->get_next_token()->type == TokenType::Id);
+    REQUIRE(lex->get_next_token()->type == TokenType::Newline);
+    REQUIRE(lex->get_next_token()->type == TokenType::Id);
+    REQUIRE(lex->get_next_token()->type == TokenType::Assign);
+    REQUIRE(lex->get_next_token()->type == TokenType::Integer);
+    REQUIRE(lex->get_next_token()->type == TokenType::Plus);
+    REQUIRE(lex->get_next_token()->type == TokenType::Integer);
+    REQUIRE(lex->get_next_token()->type == TokenType::Plus);
+    REQUIRE(lex->get_next_token()->type == TokenType::Float);
 };
 
 TEST_CASE("AST_BinOp", "[Testing AST_BinOp]") {
-    AST_Integer* num0 = new AST_Integer(new Token(T_INTEGER, "10"));
-    AST_Integer* num1 = new AST_Integer(new Token(T_INTEGER, "20"));
+    AST_Integer* num0 = new AST_Integer(new Token(TokenType::Integer, "10"));
+    AST_Integer* num1 = new AST_Integer(new Token(TokenType::Integer, "20"));
 
-    AST_BinOp* BinOp_PLUS = new AST_BinOp(num0, new Token(T_PLUS, "+"), num1);
-    AST_BinOp* BinOp_MINUS = new AST_BinOp(num0, new Token(T_MINUS, "-"), num1);
-    AST_BinOp* BinOp_MULTIPLY = new AST_BinOp(num0, new Token(T_MULTIPLY, "*"), num1);
-    AST_BinOp* BinOp_DIVIDE = new AST_BinOp(num1, new Token(T_DIVIDE, "/"), num0);
+    AST_BinOp* BinOp_PLUS = new AST_BinOp(num0, new Token(TokenType::Plus, "+"), num1);
+    AST_BinOp* BinOp_MINUS = new AST_BinOp(num0, new Token(TokenType::Minus, "-"), num1);
+    AST_BinOp* BinOp_MULTIPLY = new AST_BinOp(num0, new Token(TokenType::Multiply, "*"), num1);
+    AST_BinOp* BinOp_DIVIDE = new AST_BinOp(num1, new Token(TokenType::Divide, "/"), num0);
 
     REQUIRE(boost::get<int>(interpreter->visit(BinOp_PLUS)) == 30);
     REQUIRE(boost::get<int>(interpreter->visit(BinOp_MINUS)) == -10);

@@ -19,7 +19,7 @@ class Parser {
         Lexer* lexer;
         Token* current_token;
 
-        void eat(std::string token_type);
+        void eat(TokenType token_type);
         void error(std::string message);
 
         AST* factor(Scope* scope);

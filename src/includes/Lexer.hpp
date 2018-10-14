@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "Token.hpp"
+#include "TokenType.hpp"
 
 
 class Lexer {

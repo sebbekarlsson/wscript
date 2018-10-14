@@ -4,41 +4,14 @@
 #include <map>
 
 
-extern std::string T_INTEGER;
-extern std::string T_STRING;
-extern std::string T_FLOAT;
-extern std::string T_PLUS;
-extern std::string T_MINUS;
-extern std::string T_MULTIPLY;
-extern std::string T_DIVIDE;
-extern std::string T_EOF;
-extern std::string T_LPAREN;
-extern std::string T_RPAREN;
-extern std::string T_ASSIGN;
-extern std::string T_DOT;
-extern std::string T_ATTRIBUTE;
-extern std::string T_SEMI;
-extern std::string T_ID;
-extern std::string T_COMMA;
-extern std::string T_NEWLINE;
-extern std::string T_IF;
-extern std::string T_LARGER_THAN;
-extern std::string T_LESS_THAN;
-extern std::string T_LARGER_OR_EQUALS;
-extern std::string T_LESS_OR_EQUALS;
-extern std::string T_NOT_EQUALS;
-extern std::string T_EQUALS;
-extern std::string T_COLON;
-extern std::string T_FUNCTION_DEFINITION;
-extern std::string T_FUNCTION_CALL;
-extern std::map<std::string, std::string> RESERVED_KEYWORDS;
+extern std::map<std::string, TokenType> RESERVED_KEYWORDS;
 
 Lexer::Lexer(std::string text) {
     this->text = text;
     this->pos = 0;
     this->line = 0;
     this->current_char = this->text.at(this->pos);
-    this->latest_token = new Token("", "");
+    this->latest_token = new Token(TokenType::Empty, "");
 };
 
 Token* Lexer::get_next_token() {
@@ -66,7 +39,7 @@ Token* Lexer::_get_next_token() {
 
         if (this->current_char == '\n' || (int)this->current_char == 10) {
             this->advance();
-            return new Token(T_NEWLINE, s);
+            return new Token(TokenType::Newline, s);
         }
 
         if (this->current_char == '\'') {
@@ -87,96 +60,96 @@ Token* Lexer::_get_next_token() {
         if (this->current_char == '<' && this->peek() == '>') {
             this->advance();
             this->advance();
-            return new Token(T_NOT_EQUALS, s);
+            return new Token(TokenType::Noequals, s);
         }
 
         if (this->current_char == '>' && this->peek() == '=') {
             this->advance();
             this->advance();
-            return new Token(T_LARGER_OR_EQUALS, s);
+            return new Token(TokenType::Larger_or_equals, s);
         }
 
         if (this->current_char == '<' && this->peek() == '=') {
             this->advance();
             this->advance();
-            return new Token(T_LESS_OR_EQUALS, s);
+            return new Token(TokenType::Less_or_equals, s);
         }
         
         if (this->current_char == '=' && this->peek() == '=') {
             this->advance();
             this->advance();
-            return new Token(T_EQUALS, "=");
+            return new Token(TokenType::Equals, "=");
         }
 
         if (this->current_char == '=') {
             this->advance();
-            return new Token(T_ASSIGN, "=");
+            return new Token(TokenType::Assign, "=");
         }
 
         if (this->current_char == '>') {
             this->advance();
-            return new Token(T_LARGER_THAN, s);
+            return new Token(TokenType::Larger_than, s);
         }
 
         if (this->current_char == '<') {
             this->advance();
-            return new Token(T_LESS_THAN, s);
+            return new Token(TokenType::Less_than, s);
         }
 
         if (this->current_char == ',') {
             this->advance();
-            return new Token(T_COMMA, s);
+            return new Token(TokenType::Comma, s);
         };
 
         if (this->current_char == ';') {
             this->advance();
-            return new Token(T_SEMI, s);
+            return new Token(TokenType::Semi, s);
         }
 
         if (this->current_char == '.') {
             this->advance();
-            return new Token(T_DOT, s);
+            return new Token(TokenType::Dot, s);
         }
 
         if (this->current_char == '+') {
             this->advance();
-            return new Token(T_PLUS, s);
+            return new Token(TokenType::Plus, s);
         }
 
         if (this->current_char == '-') {
             this->advance();
-            return new Token(T_MINUS, s);
+            return new Token(TokenType::Minus, s);
         }
 
         if (this->current_char == '*') {
             this->advance();
-            return new Token(T_MULTIPLY, s);
+            return new Token(TokenType::Multiply, s);
         }
 
         if (this->current_char == '/') {
             this->advance();
-            return new Token(T_DIVIDE, s);
+            return new Token(TokenType::Divide, s);
         }
 
         if (this->current_char == '(') {
             this->advance();
-            return new Token(T_LPAREN, "(");
+            return new Token(TokenType::Lparen, "(");
         }
 
         if (this->current_char == ')') {
             this->advance();
-            return new Token(T_RPAREN, ")");
+            return new Token(TokenType::Rparen, ")");
         }
 
         if (this->current_char == ':') {
             this->advance();
-            return new Token(T_COLON, s);
+            return new Token(TokenType::Colon, s);
         }
 
         this->error("Unexpected: `" + s + "`");
     }
 
-    return new Token(T_EOF, T_EOF);
+    return new Token(TokenType::Eof, "");
 };
 
 /**
@@ -203,9 +176,9 @@ Token* Lexer::number() {
             this->advance();
         }
 
-        token = new Token(T_FLOAT, result);
+        token = new Token(TokenType::Float, result);
     } else {
-        token = new Token(T_INTEGER, result);
+        token = new Token(TokenType::Integer, result);
     }
 
     return token;
@@ -227,7 +200,7 @@ Token* Lexer::str() {
 
     this->advance();
 
-    return new Token(T_STRING, result);
+    return new Token(TokenType::String, result);
 };
 
 char Lexer::peek() {
@@ -268,10 +241,10 @@ Token* Lexer::_id() {
 
     if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
         return new Token(RESERVED_KEYWORDS[result], result);
-    } else if (this->latest_token->type != T_FUNCTION_DEFINITION && this->peek_next(this->pos) == '(' && this->peek_next(this->pos) != '=') {
-        return new Token(T_FUNCTION_CALL, result);
+    } else if (this->latest_token->type != TokenType::Function_definition && this->peek_next(this->pos) == '(' && this->peek_next(this->pos) != '=') {
+        return new Token(TokenType::Function_call, result);
     } else {
-        return new Token(T_ID, result);
+        return new Token(TokenType::Id, result);
     }
 
     return nullptr;

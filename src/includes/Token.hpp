@@ -1,13 +1,14 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 #include <string>
+#include "TokenType.hpp"
 
 
 class Token {
     public:
-        Token(std::string type, std::string value);
+        Token(TokenType type, std::string value);
 
-        std::string type;
+        TokenType type;
         std::string value;
 
         std::string get_string();
