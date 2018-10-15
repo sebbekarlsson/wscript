@@ -11,8 +11,10 @@ class AST_Assign: public AST {
         ~AST_Assign();
 
         Token* token;
-        AST_Var* left;
         Token* op;
+        
         AST* right;
+        
+        AST_Var* left;
 };
 #endif

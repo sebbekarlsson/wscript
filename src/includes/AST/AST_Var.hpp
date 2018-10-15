@@ -10,6 +10,7 @@ class AST_Var: public AST {
         ~AST_Var();
 
         Token* token;
+
         std::string value;
 };
 #endif

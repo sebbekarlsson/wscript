@@ -11,6 +11,7 @@ class AST_UnaryOp: public AST {
 
         Token* op;
         Token* token;
+
         AST* expr;
 };
 #endif

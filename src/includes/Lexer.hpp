@@ -12,7 +12,7 @@ class Lexer {
 
         std::string text;
 
-        char current_char = '\0';
+        char current_char;
 
         int pos;
         int line;
@@ -20,7 +20,7 @@ class Lexer {
         Token* latest_token;
 
         Token* get_next_token();
-        Token* _get_next_token();
+
         Token* number();
         Token* str();
         Token* _id();
@@ -32,5 +32,8 @@ class Lexer {
         void skip_whitespace();
         void skip_comment();
         void error(std::string message);
+
+    private:
+        Token* _get_next_token();
 };
 #endif

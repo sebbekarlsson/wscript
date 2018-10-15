@@ -14,6 +14,10 @@ class Scope {
     public:
         Scope(std::string name);
 
+        anything value;
+
+        std::string name;
+
         void set_variable(std::string key, anything);
         void define_function(AST_FunctionDefinition* definition);
         void define_builtin_function(AST_BuiltinFunctionDefinition* udfc);
@@ -25,10 +29,6 @@ class Scope {
 
         AST_FunctionDefinition* get_function_definition(std::string name);
         AST_BuiltinFunctionDefinition* get_builtin_function(std::string name);
-
-        anything value;
-
-        std::string name;
 
         std::map<std::string, anything> variables;
         std::vector<AST_FunctionDefinition*> function_definitions;

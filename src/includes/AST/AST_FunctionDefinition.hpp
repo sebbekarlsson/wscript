@@ -16,7 +16,9 @@ class AST_FunctionDefinition: public AST {
         ~AST_FunctionDefinition();
 
         std::string name;
+
         std::vector<Token*> args;
+
         AST_Compound* body;
 };
 #endif

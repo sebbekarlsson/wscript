@@ -10,8 +10,9 @@ class AST_BinOp: public AST {
         ~AST_BinOp();
 
         Token* token;
-        AST* left;
         Token* op;
+        
+        AST* left;
         AST* right;
 };
 #endif

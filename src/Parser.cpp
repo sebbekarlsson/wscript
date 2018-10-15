@@ -172,7 +172,7 @@ AST* Parser::term(Scope* scope) {
  * Tells the interpreter to parse a mathematical expression,
  * arithmetic expression parsing.
  *
- * @return std::string
+ * @return AST*
  */
 AST* Parser::expr(Scope* scope) {
     Token* token = nullptr;
@@ -302,9 +302,6 @@ std::vector<AST*> Parser::statement_list(Scope* scope) {
         this->eat(TokenType::Newline);
         results.push_back(this->statement(scope));
     }
-
-    //if (this->current_token->type == TokenType::Id)
-    //    this->error("Something bad happened");
 
     return results;
 };
@@ -478,8 +475,6 @@ AST_FunctionDefinition* Parser::function_definition(Scope* scope) {
         body
     );
     fd->parent_scope = scope;
-    //scope->define_function(fd);
-    //new_scope->define_function(fd);
     fd->scope = new_scope;
     body->scope = new_scope;
 

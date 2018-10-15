@@ -10,6 +10,7 @@ class AST_ArrayAccess: public AST {
         ~AST_ArrayAccess();
 
         AST_Array* array_node;
+
         std::vector<AST*> args;
 };
 #endif

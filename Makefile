@@ -20,7 +20,7 @@ OBJECTS_NO_MAIN := $(filter-out src/main.o,$(OBJECTS))
 $(info $(OBJECTS_NO_MAIN))
 
 $(EXEC): $(OBJECTS)
-	g++ $(OBJECTS) $(FLAGZ) -o $(EXEC) -fPIC
+	g++ $(OBJECTS) $(FLAGZ) -o $(EXEC)
 
 test:\
     $(OBJECTS_NO_MAIN) unit.o
@@ -31,13 +31,13 @@ unit.o: unit/unit.cpp
 	g++ -std=c++11 -g -Wall -c unit/unit.cpp -ldl -fPIC
 
 %.o: %.cpp ../../includes/AST/builtin_objects/%.hpp
-	g++ -c $(G_FLAGZ) $< -o $@ -fPIC
+	g++ -c $(G_FLAGZ) $< -o $@
 
 %.o: %.cpp ../includes/AST/%.hpp
-	g++ -c $(G_FLAGZ) $< -o $@ -fPIC
+	g++ -c $(G_FLAGZ) $< -o $@
 
 %.o: %.cpp includes/%.hpp
-	g++ -c $(G_FLAGZ) $< -o $@ -fPIC
+	g++ -c $(G_FLAGZ) $< -o $@
 #libwscript.a: $(OBJECTS_NO_MAIN)
 #	ar rcs $@ $^
 

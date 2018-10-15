@@ -9,11 +9,13 @@ void coutprint(anything value);
 
 void coutprint(std::string value);
 
-void coutprint(int value);
+void coutprint_char(char value);
 
 void coutprint(float value);
 
 void coutprint(bool value);
 
 void coutprint(AST* value);
+
+void coutprint(int value);
 #endif

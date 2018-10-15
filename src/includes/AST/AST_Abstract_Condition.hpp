@@ -14,6 +14,7 @@ class AST_Abstract_Condition: public AST {
 
         AST* expr;
         AST* body;
+
         std::vector<AST_Else*> ast_elses;
 };
 #endif

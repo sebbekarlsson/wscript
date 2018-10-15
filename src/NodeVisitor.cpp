@@ -2,9 +2,10 @@
 #include <iostream>
 
 
-// there are problems with (anything)this method and the problem is
-// that it always returns an integer. This makes it difficult
-// to work with other types such as floats, doubles, strings, objects etc..
+void NodeVisitor::error(std::string message) {
+    throw std::runtime_error("[error][NodeVisitor]: " + message);
+};
+
 anything NodeVisitor::visit(AST* node) {
     if (dynamic_cast<AST_BinOp*>( node ))
         return (anything)this->visit_AST_BinOp((AST_BinOp*) node);
@@ -53,6 +54,6 @@ anything NodeVisitor::visit(AST* node) {
 };
 
 anything NodeVisitor::visit_default(AST* node) {
-    // TODO: Throw error here
+    this->error("Encountered an unhandled AST node");
     return (anything)0;
 };

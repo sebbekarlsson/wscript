@@ -15,6 +15,7 @@ class AST_UserDefinedFunctionCall: public AST_FunctionCall {
         ~AST_UserDefinedFunctionCall();
 
         AST_FunctionDefinition* definition;
+
         std::string name;
 
         AST* call(Interpreter* interpreter);

@@ -14,6 +14,11 @@ Lexer::Lexer(std::string text) {
     this->latest_token = new Token(TokenType::Empty, "");
 };
 
+/**
+ * Used to get the next token
+ *
+ * @return Token*
+ */
 Token* Lexer::get_next_token() {
     this->latest_token = this->_get_next_token();
 
@@ -21,7 +26,8 @@ Token* Lexer::get_next_token() {
 };
 
 /**
- * Collects the next token in the text
+ * Private method that should never be called.
+ * Use get_next_token instead
  *
  * @return Token*
  */
@@ -78,12 +84,12 @@ Token* Lexer::_get_next_token() {
         if (this->current_char == '=' && this->peek() == '=') {
             this->advance();
             this->advance();
-            return new Token(TokenType::Equals, "=");
+            return new Token(TokenType::Equals, s);
         }
 
         if (this->current_char == '=') {
             this->advance();
-            return new Token(TokenType::Assign, "=");
+            return new Token(TokenType::Assign, s);
         }
 
         if (this->current_char == '>') {
@@ -133,12 +139,12 @@ Token* Lexer::_get_next_token() {
 
         if (this->current_char == '(') {
             this->advance();
-            return new Token(TokenType::Lparen, "(");
+            return new Token(TokenType::Lparen, s);
         }
 
         if (this->current_char == ')') {
             this->advance();
-            return new Token(TokenType::Rparen, ")");
+            return new Token(TokenType::Rparen, s);
         }
 
         if (this->current_char == ':') {
@@ -184,6 +190,12 @@ Token* Lexer::number() {
     return token;
 };
 
+/**
+ * Parse a quoted part of the text,
+ * creates a Token with the TokenType::String
+ *
+ * @return Token*
+ */
 Token* Lexer::str() {
     std::string result = "";
     
@@ -203,6 +215,11 @@ Token* Lexer::str() {
     return new Token(TokenType::String, result);
 };
 
+/**
+ * Get the next char without changing position
+ *
+ * @return char
+ */
 char Lexer::peek() {
     int peek_pos = this->pos + 1;
 
@@ -213,6 +230,13 @@ char Lexer::peek() {
     return this->text.at(peek_pos);
 };
 
+/**
+ * Get the next non-whitespace char without changing position
+ *
+ * @param int start
+ *
+ * @return char
+ */
 char Lexer::peek_next(int start) {
     int peek_pos = start;
     char c = '\0';
@@ -231,6 +255,12 @@ char Lexer::peek_next(int start) {
     return c;
 };
 
+/**
+ * Parses an ID and returns a token with a TokenType that matches
+ * the type of ID.
+ *
+ * @return Token*
+ */
 Token* Lexer::_id() {
     std::string result = "";
 
@@ -247,7 +277,7 @@ Token* Lexer::_id() {
         return new Token(TokenType::Id, result);
     }
 
-    return nullptr;
+    this->error("Found unknown ID: " + result);
 };
 
 /**
@@ -275,11 +305,19 @@ void Lexer::skip_whitespace() {
         this->advance();
 };
 
+/**
+ * Tells the lexer to skip chars until outside of comment
+ */
 void Lexer::skip_comment() {
     while (this->current_char != '\n')
         this->advance();
 };
 
+/**
+ * Throws an error
+ *
+ * @throws std::runtime_error
+ */
 void Lexer::error(std::string message) {
     throw std::runtime_error("[error][Lexer]:(line=" + std::to_string(this->line) + ",pos=" + std::to_string(this->pos) + ") " + message);
 };
