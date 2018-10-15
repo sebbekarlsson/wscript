@@ -236,18 +236,6 @@ AST* Parser::expr(Scope* scope) {
 };
 
 /**
- * @deprecated
- *
- * @return AST*
- */
-AST* Parser::program(Scope* scope) {
-    AST* node = this->compound_statement(scope);
-    this->eat(TokenType::Dot);
-
-    return node;
-};
-
-/**
  * This literally tries to parse anything.
  *
  * @return AST*
@@ -256,25 +244,6 @@ AST* Parser::any_statement(Scope* scope) {
     std::vector<AST*> nodes;
 
     nodes = this->statement_list(scope);
-
-    AST_Compound* root = new AST_Compound();
-    root->scope = scope;
-
-    for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
-        root->children.push_back((*it));
-
-    return root;
-};
-
-/**
- * @return AST*
- */
-AST* Parser::compound_statement(Scope* scope) {
-    std::vector<AST*> nodes;
-
-    this->eat(TokenType::Begin);
-    nodes = this->statement_list(scope);
-    this->eat(TokenType::End);
 
     AST_Compound* root = new AST_Compound();
     root->scope = scope;

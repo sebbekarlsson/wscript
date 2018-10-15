@@ -25,9 +25,7 @@ class Parser {
         AST* factor(Scope* scope);
         AST* term(Scope* scope);
         AST* expr(Scope* scope);
-        AST* program(Scope* scope);
         AST* any_statement(Scope* scope);
-        AST* compound_statement(Scope* scope);
         AST* statement(Scope* scope);
         AST* assignment_statement(AST_Var* left, Scope* scope);
         AST* if_statement(Scope* scope);
