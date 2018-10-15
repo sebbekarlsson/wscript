@@ -87,3 +87,7 @@ def test_dictionary_with_arrays_vbs():
 
 def test_empty_vbs():
     assert binexec('Empty.vbs') == 'Empty'
+
+
+def test_isempty_vbs():
+    assert binexec('isEmpty.vbs') == '1\n0'
