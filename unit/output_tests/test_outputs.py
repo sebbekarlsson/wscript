@@ -60,6 +60,7 @@ def test_recursion_vbs():
 # def test_fibonacci_vbs():
 #     assert binexec('fibonacci.vbs') == '39'
 
+
 def test_array_vbs():
     assert binexec('array.vbs') == 'hello\nme'
 
@@ -82,3 +83,7 @@ def test_string_loop_vbs():
 
 def test_dictionary_with_arrays_vbs():
     assert binexec('dictionary_with_arrays.vbs') == '16,8,21,28,42'
+
+
+def test_empty_vbs():
+    assert binexec('Empty.vbs') == 'Empty'

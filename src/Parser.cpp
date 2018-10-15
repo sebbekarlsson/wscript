@@ -17,6 +17,7 @@
 #include "includes/AST/AST_CreateObjectCall.hpp"
 #include "includes/AST/AST_UserDefinedFunctionCall.hpp"
 #include "includes/AST/AST_DoWhile.hpp"
+#include "includes/AST/AST_Empty.hpp"
 #include "includes/AST/builtin_objects/AST_WScript.hpp"
 #include <ctype.h>
 #include <iostream>
@@ -98,6 +99,13 @@ AST* Parser::factor(Scope* scope) {
         AST_Float* num = new AST_Float(token);
         num->scope = scope;
         return num;
+    
+    } else if (token->type == TokenType::Empty) {
+        this->eat(TokenType::Empty);
+        AST_Empty* emp = new AST_Empty(token);
+        emp->scope = scope;
+        return emp;
+
     } else if (token->type == TokenType::Object) {
         this->eat(TokenType::Object);
         AST_Object* obj;

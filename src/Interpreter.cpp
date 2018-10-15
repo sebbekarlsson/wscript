@@ -98,6 +98,13 @@ anything Interpreter::operation(int left, TokenType op, int right) {
     return 0;
 };
 
+anything Interpreter::operation(AST* left, TokenType op, AST* right) {
+    if (op == TokenType::Noequals)
+        return left != right;
+    else if (op == TokenType::Equals)
+        return left == right;
+}
+
 anything Interpreter::operation(anything left, TokenType op, anything right) {
     if (left.type() == typeid(int) && right.type() == typeid(int))
         return this->operation(boost::get<int>(left), op, boost::get<int>(right));
@@ -122,6 +129,20 @@ anything Interpreter::operation(anything left, TokenType op, anything right) {
 
     if (left.type() == typeid(float) && right.type() == typeid(std::string))
         return this->operation(boost::get<float>(left), op, boost::get<std::string>(right));
+
+    if (left.type() == typeid(AST*) && right.type() == typeid(AST*)) {
+        AST* ast = boost::get<AST*>(right);
+        if (dynamic_cast<AST_Empty*>(ast)) {
+            return this->operation(boost::get<AST*>(left), op, (AST_Empty*)ast);
+        }
+    }
+
+    if (right.type() == typeid(AST*) && left.type() == typeid(AST*)) {
+        AST* ast = boost::get<AST*>(right);
+        if (dynamic_cast<AST_Empty*>(ast)) {
+            return this->operation(boost::get<AST*>(left), op, (AST_Empty*)ast);
+        }
+    }
 
     return 0;
 };
@@ -225,12 +246,15 @@ anything Interpreter::visit_AST_Var(AST_Var* node) {
     std::string varname = node->value;
     anything value = node->get_scope()->get_variable(varname);
 
+    if (value.type() == typeid(AST*))
+        value = this->visit(boost::get<AST*>(value));
+
     return value;
 };
 
 int Interpreter::visit_AST_VarDecl(AST_VarDecl* node) {
     for (std::vector<Token*>::iterator it = node->tokens.begin(); it != node->tokens.end(); ++it)
-        node->get_scope()->set_variable((*it)->value, "");
+        node->get_scope()->set_variable((*it)->value, new AST_Empty(nullptr));
 
     return 0;
 };
@@ -437,6 +461,10 @@ AST_Object* Interpreter::visit_AST_Object(AST_Object* node) {
 };
 
 anything Interpreter::visit_AST_Array(AST_Array* node) {
+    return node;
+}
+
+AST_Empty* Interpreter::visit_AST_Empty(AST_Empty* node) {
     return node;
 };
 

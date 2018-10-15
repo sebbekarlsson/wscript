@@ -17,6 +17,7 @@ std::map<std::string, TokenType> RESERVED_KEYWORDS = {
     {"Do", TokenType::Do},
     {"Loop", TokenType::Loop},
     {"While", TokenType::While},
+    {"Empty", TokenType::Empty},
     {"As", TokenType::As},
     {"print", TokenType::Function_call},
     {"WScript", TokenType::Object},

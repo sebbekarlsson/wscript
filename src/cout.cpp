@@ -1,4 +1,5 @@
 #include "includes/cout.hpp"
+#include "includes/AST/AST_Empty.hpp"
 #include <sstream>
 
 
@@ -44,5 +45,8 @@ void coutprint(bool value) {
 };
 
 void coutprint(AST* value) {
-    std::cout << value << std::endl;
+    if (dynamic_cast<AST_Empty*>(value))
+        std::cout << "Empty" << std::endl;
+    else
+        std::cout << value << std::endl;
 };

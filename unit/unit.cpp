@@ -20,7 +20,8 @@ Interpreter* interpreter = new Interpreter(parser);
 TEST_CASE("Lexer", "[Testing Lexer]") {
     Lexer* lex = new Lexer(
         std::string("Dim x\n") +
-        std::string("x = 2 + 2 + 5.45")
+        std::string("x = 2 + 2 + 5.45\n") +
+        std::string("Dim a\na = Empty")
     );
 
     REQUIRE(lex->get_next_token()->type == TokenType::Declare);
@@ -33,6 +34,13 @@ TEST_CASE("Lexer", "[Testing Lexer]") {
     REQUIRE(lex->get_next_token()->type == TokenType::Integer);
     REQUIRE(lex->get_next_token()->type == TokenType::Plus);
     REQUIRE(lex->get_next_token()->type == TokenType::Float);
+    REQUIRE(lex->get_next_token()->type == TokenType::Newline);
+    REQUIRE(lex->get_next_token()->type == TokenType::Declare);
+    REQUIRE(lex->get_next_token()->type == TokenType::Id);
+    REQUIRE(lex->get_next_token()->type == TokenType::Newline);
+    REQUIRE(lex->get_next_token()->type == TokenType::Id);
+    REQUIRE(lex->get_next_token()->type == TokenType::Assign);
+    REQUIRE(lex->get_next_token()->type == TokenType::Empty);
 };
 
 TEST_CASE("AST_BinOp", "[Testing AST_BinOp]") {

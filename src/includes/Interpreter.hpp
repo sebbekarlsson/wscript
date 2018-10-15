@@ -34,8 +34,10 @@ class Interpreter: public NodeVisitor {
         
         AST_Object* visit_AST_Object(AST_Object* node);
         anything visit_AST_Array(AST_Array* node);
+        AST_Empty* visit_AST_Empty(AST_Empty* node);
 
         anything operation(anything left, TokenType op, anything right);
+        anything operation(AST* left, TokenType op, AST* right);
         anything operation(float left, TokenType op, float right);
         anything operation(float left, TokenType op, std::string right);
         anything operation(std::string left, TokenType op, std::string right);

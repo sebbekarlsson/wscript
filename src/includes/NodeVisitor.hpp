@@ -21,6 +21,7 @@
 #include "AST/AST_ArrayAccess.hpp"
 #include "AST/AST_StringAccess.hpp"
 #include "AST/AST_Object.hpp"
+#include "AST/AST_Empty.hpp"
 #include "AST/AST_Array.hpp"
 #include <string>
 #include "typedefs.hpp"
@@ -50,6 +51,7 @@ class NodeVisitor {
         virtual anything visit_AST_ArrayAccess(AST_ArrayAccess* node) = 0;
         virtual std::string visit_AST_Str(AST_Str* node) = 0;
         virtual char visit_AST_StringAccess(AST_StringAccess* node) = 0;
+        virtual AST_Empty* visit_AST_Empty(AST_Empty* node) = 0;
 
         virtual AST_Object* visit_AST_Object(AST_Object* node) = 0;
         virtual anything visit_AST_Array(AST_Array* node) = 0;

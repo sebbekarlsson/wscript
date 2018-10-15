@@ -19,6 +19,7 @@ enum TokenType
     Array,
     Empty,
     Null,
+    Nothing,
     Lparen,
     Rparen,
     Dot,
