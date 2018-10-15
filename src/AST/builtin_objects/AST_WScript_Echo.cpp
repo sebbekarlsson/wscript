@@ -2,7 +2,9 @@
 #include "../../includes/typedefs.hpp"
 
 
-AST_WScript_Echo::AST_WScript_Echo(std::string name) : AST_BuiltinFunctionDefinition(name) {};
+AST_WScript_Echo::AST_WScript_Echo(std::string name) : AST_BuiltinFunctionDefinition(name) {
+    this->unlimited_args = true;
+};
 
 AST_WScript_Echo::~AST_WScript_Echo() {};
 

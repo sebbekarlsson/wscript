@@ -5,6 +5,8 @@
 
 AST_Object_Dictionary_Add::AST_Object_Dictionary_Add(std::string name, AST_Object* obj) : AST_BuiltinFunctionDefinition(name) {
     this->obj = obj;
+    this->expected_args.push_back(TokenType::String);
+    this->expected_args.push_back(TokenType::Anything);
 };
 
 AST_Object_Dictionary_Add::~AST_Object_Dictionary_Add() {};

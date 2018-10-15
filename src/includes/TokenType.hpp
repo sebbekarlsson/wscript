@@ -48,6 +48,7 @@ enum TokenType
     Do,
     While,
     Loop,
-    Colon
+    Colon,
+    Anything
 };
 #endif

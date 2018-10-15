@@ -336,6 +336,8 @@ char Interpreter::visit_AST_StringAccess(AST_StringAccess* node) {
 };
 
 anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
+    int missing_arguments = 0;
+
     if (dynamic_cast<AST_UserDefinedFunctionCall*>( node )) {
         anything ret = (anything)0;
 
@@ -343,9 +345,17 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
         
         AST_BuiltinFunctionDefinition* bfd = node->get_scope()->get_builtin_function(udfc->name);
 
-        if (bfd != nullptr)
-            return this->visit(bfd->call(node->args, this));
+        if (bfd != nullptr) {
+            if (!bfd->unlimited_args) {
+                missing_arguments = bfd->expected_args.size() - node->args.size();
+                if (missing_arguments > 0)
+                    this->error("Missing " + std::to_string(missing_arguments) + " arguments when calling: " + bfd->name);
+            }
 
+            return this->visit(bfd->call(node->args, this));
+        }
+
+        // be ble to access array and string elements using `(` and `)`
         if (udfc->get_scope()->has_variable(udfc->name)) {
             anything var = udfc->get_scope()->get_variable(udfc->name);
 
@@ -371,7 +381,7 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
         if (udfc->definition == nullptr)
             this->error("Could not find definition for: " + udfc->name);
 
-        int missing_arguments = udfc->definition->args.size() - node->args.size();
+        missing_arguments = udfc->definition->args.size() - node->args.size();
 
         if (missing_arguments > 0)
             this->error("Missing " + std::to_string(missing_arguments) + " arguments when calling: " + udfc->name);

@@ -17,6 +17,9 @@ class AST_BuiltinFunctionDefinition: public AST {
         {}
 
         std::string name;
+        std::vector<TokenType> expected_args;
+
+        bool unlimited_args;
         
         virtual AST* call(std::vector<AST*> args, Interpreter* interpreter) = 0;
 };
