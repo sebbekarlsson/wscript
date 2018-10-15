@@ -91,3 +91,7 @@ def test_empty_vbs():
 
 def test_isempty_vbs():
     assert binexec('isEmpty.vbs') == '1\n0'
+
+
+def test_dictionary_exists_vbs():
+    assert binexec('dictionary_exists.vbs') == '1\n0\n0'
