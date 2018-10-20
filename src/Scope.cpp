@@ -6,6 +6,14 @@ Scope::Scope(std::string name) {
     this->value = 0;
 };
 
+Scope::~Scope() {
+    this->variables.clear();
+    this->function_definitions.clear();
+    this->builtin_functions.clear();
+    this->name = "";
+    this->value = nullptr;
+};
+
 void Scope::set_variable(std::string key, anything value) {
     this->variables[key] = value;
 };

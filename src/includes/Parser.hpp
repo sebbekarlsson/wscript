@@ -15,6 +15,7 @@
 class Parser {
     public:
         Parser(Lexer* lexer);
+        ~Parser();
 
         Lexer* lexer;
         Token* current_token;

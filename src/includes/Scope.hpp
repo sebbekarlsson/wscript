@@ -13,6 +13,7 @@
 class Scope {
     public:
         Scope(std::string name);
+        ~Scope();
 
         anything value;
 

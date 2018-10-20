@@ -7,6 +7,7 @@
 class Interpreter: public NodeVisitor {
     public:
         Interpreter(Parser* parser);
+        ~Interpreter();
 
         Parser* parser;
 

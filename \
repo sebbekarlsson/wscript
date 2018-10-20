@@ -34,9 +34,7 @@ Parser::Parser(Lexer* lexer) {
 
 Parser::~Parser() {
     delete this->lexer;
-
-    if (this->current_token != nullptr)
-        delete this->current_token;
+    delete this->current_token;
 };
 
 /**
@@ -258,8 +256,6 @@ AST* Parser::any_statement(Scope* scope) {
     for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         root->children.push_back((*it));
 
-    nodes.clear();
-
     return root;
 };
 
@@ -406,7 +402,6 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
         return udfc;
     }
 
-    args.clear();
     delete fc;
     delete udfc;
     

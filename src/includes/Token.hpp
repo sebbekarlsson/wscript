@@ -7,6 +7,7 @@
 class Token {
     public:
         Token(TokenType type, std::string value);
+        ~Token();
 
         TokenType type;
         std::string value;

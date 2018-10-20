@@ -9,6 +9,7 @@
 class Lexer {
     public:
         Lexer(std::string text);
+        ~Lexer();
 
         std::string text;
 

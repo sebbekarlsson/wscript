@@ -14,6 +14,13 @@ Lexer::Lexer(std::string text) {
     this->latest_token = new Token(TokenType::Empty, "");
 };
 
+Lexer::~Lexer() {
+    this->text.clear();
+    this->pos = 0;
+    this->line = 0;
+    this->current_char = '\0';
+};
+
 /**
  * Used to get the next token
  *
@@ -45,113 +52,162 @@ Token* Lexer::_get_next_token() {
 
         if (this->current_char == '\n' || (int)this->current_char == 10) {
             this->advance();
+            ss.clear();
+            s.clear();
             return new Token(TokenType::Newline, s);
         }
 
         if (this->current_char == '\'') {
+            s.clear();
+            ss.clear();
             this->advance();
             this->skip_comment();
             continue;
         }
 
-        if (this->current_char == '"')
+        if (this->current_char == '"') {
+            s.clear();
+            ss.clear();
             return this->str();
+        }
 
-        if (isdigit(this->current_char))
+        if (isdigit(this->current_char)) {
+            s.clear();
+            ss.clear();
             return this->number();
+        }
 
-        if (isalpha(this->current_char))
+        if (isalpha(this->current_char)) {
+            s.clear();
+            ss.clear();
             return this->_id();
+        }
 
         if (this->current_char == '<' && this->peek() == '>') {
+            s.clear();
+            ss.clear();
             this->advance();
             this->advance();
             return new Token(TokenType::Noequals, s);
         }
 
         if (this->current_char == '>' && this->peek() == '=') {
+            s.clear();
+            ss.clear();
             this->advance();
             this->advance();
             return new Token(TokenType::Larger_or_equals, s);
         }
 
         if (this->current_char == '<' && this->peek() == '=') {
+            s.clear();
+            ss.clear();
             this->advance();
             this->advance();
             return new Token(TokenType::Less_or_equals, s);
         }
         
         if (this->current_char == '=' && this->peek() == '=') {
+            s.clear();
+            ss.clear();
             this->advance();
             this->advance();
             return new Token(TokenType::Equals, s);
         }
 
         if (this->current_char == '=') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Assign, s);
         }
 
         if (this->current_char == '>') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Larger_than, s);
         }
 
         if (this->current_char == '<') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Less_than, s);
         }
 
         if (this->current_char == ',') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Comma, s);
-        };
+        }
 
         if (this->current_char == ';') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Semi, s);
         }
 
         if (this->current_char == '.') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Dot, s);
         }
 
         if (this->current_char == '+') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Plus, s);
         }
 
         if (this->current_char == '-') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Minus, s);
         }
 
         if (this->current_char == '*') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Multiply, s);
         }
 
         if (this->current_char == '/') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Divide, s);
         }
 
         if (this->current_char == '(') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Lparen, s);
         }
 
         if (this->current_char == ')') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Rparen, s);
         }
 
         if (this->current_char == ':') {
+            s.clear();
+            ss.clear();
             this->advance();
             return new Token(TokenType::Colon, s);
         }
 
+        s.clear();
+        ss.clear();
         this->error("Unexpected: `" + s + "`");
     }
 
@@ -187,6 +243,8 @@ Token* Lexer::number() {
         token = new Token(TokenType::Integer, result);
     }
 
+    result.clear();
+
     return token;
 };
 
@@ -197,6 +255,7 @@ Token* Lexer::number() {
  * @return Token*
  */
 Token* Lexer::str() {
+    Token* tok;
     std::string result = "";
     
     this->advance();
@@ -212,7 +271,11 @@ Token* Lexer::str() {
 
     this->advance();
 
-    return new Token(TokenType::String, result);
+    tok = new Token(TokenType::String, result);
+
+    result.clear();
+
+    return tok;
 };
 
 /**
@@ -262,6 +325,7 @@ char Lexer::peek_next(int start) {
  * @return Token*
  */
 Token* Lexer::_id() {
+    Token* tok;
     std::string result = "";
 
     while (this->current_char != '\0' && isalnum(this->current_char)) {
@@ -270,14 +334,19 @@ Token* Lexer::_id() {
     }
 
     if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
-        return new Token(RESERVED_KEYWORDS[result], result);
+        tok = new Token(RESERVED_KEYWORDS[result], result);
     } else if (this->latest_token->type != TokenType::Function_definition && this->peek_next(this->pos) == '(' && this->peek_next(this->pos) != '=') {
-        return new Token(TokenType::Function_call, result);
+        tok = new Token(TokenType::Function_call, result);
     } else {
-        return new Token(TokenType::Id, result);
+        tok = new Token(TokenType::Id, result);
     }
 
-    this->error("Found unknown ID: " + result);
+    if (tok == nullptr)
+        this->error("Found unknown ID: " + result);
+
+    result.clear();
+
+    return tok;
 };
 
 /**

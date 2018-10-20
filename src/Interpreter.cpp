@@ -7,6 +7,10 @@ Interpreter::Interpreter(Parser* parser) {
     this->parser = parser;
 };
 
+Interpreter::~Interpreter() {
+    delete this->parser;
+};
+
 void Interpreter::error(std::string message) {
     throw std::runtime_error("[error][Interpreter]:(line=" + std::to_string(this->parser->lexer->line) + ",pos=" + std::to_string(this->parser->lexer->pos) + ") " + message);
 };
@@ -103,6 +107,8 @@ anything Interpreter::operation(AST* left, TokenType op, AST* right) {
         return left != right;
     else if (op == TokenType::Equals)
         return left == right;
+
+    return 0;
 }
 
 anything Interpreter::operation(anything left, TokenType op, anything right) {
@@ -156,6 +162,7 @@ anything Interpreter::operation(std::string left, TokenType op, std::string righ
          return left != right;
 
      this->error(op + " is not supported for string");
+     return 0;
 };
 
 anything Interpreter::unary_operation(TokenType op, anything right) {

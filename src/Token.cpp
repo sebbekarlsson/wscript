@@ -6,6 +6,10 @@ Token::Token(TokenType type, std::string value) {
     this->value = value;
 };
 
+Token::~Token() {
+    this->value = "";
+};
+
 std::string Token::get_string() {
     return this->value;
 };

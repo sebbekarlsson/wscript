@@ -25,5 +25,10 @@ int main(int argc, char** argv) {
 
     interpreter->interpret();
 
+    ResourceManager::unload(argv[1]);
+
+    delete interpreter;
+    delete global_scope;
+
     return EXIT_SUCCESS;
 }

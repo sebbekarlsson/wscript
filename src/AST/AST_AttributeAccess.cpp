@@ -7,4 +7,7 @@ AST_AttributeAccess::AST_AttributeAccess(AST* left, AST* right) {
 };
 
 
-AST_AttributeAccess::~AST_AttributeAccess() {};
+AST_AttributeAccess::~AST_AttributeAccess() {
+    delete this->left;
+    delete this->right;
+};

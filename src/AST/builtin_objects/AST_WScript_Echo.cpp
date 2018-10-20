@@ -6,7 +6,9 @@ AST_WScript_Echo::AST_WScript_Echo(std::string name) : AST_BuiltinFunctionDefini
     this->unlimited_args = true;
 };
 
-AST_WScript_Echo::~AST_WScript_Echo() {};
+AST_WScript_Echo::~AST_WScript_Echo() {
+    this->expected_args.clear();
+};
 
 AST* AST_WScript_Echo::call(std::vector<AST*> args, Interpreter* interpreter) {
     if (args.size()) {
@@ -22,5 +24,8 @@ AST* AST_WScript_Echo::call(std::vector<AST*> args, Interpreter* interpreter) {
     }
 
     AST_NoOp* noop = new AST_NoOp();
+
+    args.clear();
+
     return noop;
 };
