@@ -103,3 +103,7 @@ def test_dictionary_keys_vbs():
 
 def test_dictionary_items_vbs():
     assert binexec('dictionary_items.vbs') == '[\nJohn\n,\n123\n,\n]'
+
+
+def test_dictionary_removeall_vbs():
+    assert binexec('dictionary_removeall.vbs') == '1\n1\n0\n0'

@@ -8,6 +8,7 @@ AST_Object_Dictionary::AST_Object_Dictionary(Token* token) : AST_Object(token) {
     this->private_scope->define_builtin_function(new AST_Object_Dictionary_Exists("Exists", this));
     this->private_scope->define_builtin_function(new AST_Object_Dictionary_Keys("Keys", this));
     this->private_scope->define_builtin_function(new AST_Object_Dictionary_Items("Items", this));
+    this->private_scope->define_builtin_function(new AST_Object_Dictionary_RemoveAll("RemoveAll", this));
 };
 
 AST_Object_Dictionary::~AST_Object_Dictionary() {};
