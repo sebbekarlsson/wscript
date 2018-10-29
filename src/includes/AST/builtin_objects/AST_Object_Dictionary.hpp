@@ -4,6 +4,7 @@
 #include "AST_Object_Dictionary_Add.hpp"
 #include "AST_Object_Dictionary_Exists.hpp"
 #include "AST_Object_Dictionary_Keys.hpp"
+#include "AST_Object_Dictionary_Items.hpp"
 
 
 class AST_Object_Dictionary: public AST_Object {

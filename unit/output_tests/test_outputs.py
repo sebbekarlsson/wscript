@@ -99,3 +99,7 @@ def test_dictionary_exists_vbs():
 
 def test_dictionary_keys_vbs():
     assert binexec('dictionary_keys.vbs') == '[\nname\n,\nx\n,\n]'
+
+
+def test_dictionary_items_vbs():
+    assert binexec('dictionary_items.vbs') == '[\nJohn\n,\n123\n,\n]'
