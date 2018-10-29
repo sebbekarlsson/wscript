@@ -7,7 +7,9 @@ AST_Object_Dictionary_RemoveAll::AST_Object_Dictionary_RemoveAll(std::string nam
     this->obj = obj;
 };
 
-AST_Object_Dictionary_RemoveAll::~AST_Object_Dictionary_RemoveAll() {};
+AST_Object_Dictionary_RemoveAll::~AST_Object_Dictionary_RemoveAll() {
+    delete this->obj;
+};
 
 AST* AST_Object_Dictionary_RemoveAll::call(std::vector<AST*> args, Interpreter* interpreter) {
     this->obj->get_private_scope()->variables.clear();

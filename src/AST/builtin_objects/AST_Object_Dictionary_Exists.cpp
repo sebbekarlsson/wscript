@@ -9,7 +9,9 @@ AST_Object_Dictionary_Exists::AST_Object_Dictionary_Exists(std::string name, AST
     this->expected_args.push_back(TokenType::String);
 }
 
-AST_Object_Dictionary_Exists::~AST_Object_Dictionary_Exists() {};
+AST_Object_Dictionary_Exists::~AST_Object_Dictionary_Exists() {
+    delete this->obj;
+};
 
 AST* AST_Object_Dictionary_Exists::call(std::vector<AST*> args, Interpreter* interpreter) {
     anything x = interpreter->visit(args[0]);

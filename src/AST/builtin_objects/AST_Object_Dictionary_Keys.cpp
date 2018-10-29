@@ -8,7 +8,9 @@ AST_Object_Dictionary_Keys::AST_Object_Dictionary_Keys(std::string name, AST_Obj
     this->obj = obj;
 }
 
-AST_Object_Dictionary_Keys::~AST_Object_Dictionary_Keys() {};
+AST_Object_Dictionary_Keys::~AST_Object_Dictionary_Keys() {
+    delete this->obj;
+};
 
 AST* AST_Object_Dictionary_Keys::call(std::vector<AST*> args, Interpreter* interpreter) {
     AST_Array* arr = new AST_Array(nullptr);

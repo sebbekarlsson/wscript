@@ -9,7 +9,9 @@ AST_Object_Dictionary_Add::AST_Object_Dictionary_Add(std::string name, AST_Objec
     this->expected_args.push_back(TokenType::Anything);
 };
 
-AST_Object_Dictionary_Add::~AST_Object_Dictionary_Add() {};
+AST_Object_Dictionary_Add::~AST_Object_Dictionary_Add() {
+    delete this->obj;
+};
 
 AST* AST_Object_Dictionary_Add::call(std::vector<AST*> args, Interpreter* interpreter) {
     if (args.size() < 2)
