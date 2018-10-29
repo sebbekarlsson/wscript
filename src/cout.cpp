@@ -47,6 +47,19 @@ void coutprint(bool value) {
 void coutprint(AST* value) {
     if (dynamic_cast<AST_Empty*>(value))
         std::cout << "Empty" << std::endl;
+    else if (dynamic_cast<AST_Array*>(value))
+        coutprint((AST_Array*)value);
     else
         std::cout << value << std::endl;
+};
+
+void coutprint(AST_Array* value) {
+    // TODO: implement better "to string" method for this
+    
+    std::cout << "[" << std::endl;
+    for (unsigned int i = 0; i < value->items.size(); i++) {
+        coutprint(value->items[i]);
+        std::cout << "," << std::endl;
+    }
+    std::cout << "]" << std::endl;
 };
