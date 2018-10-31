@@ -4,6 +4,7 @@
 #include "includes/Parser.hpp"
 #include "includes/Interpreter.hpp"
 #include "includes/Scope.hpp"
+#include "includes/initialize_scope.hpp"
 
 
 Scope* global_scope;
@@ -18,6 +19,7 @@ int main(int argc, char** argv) {
     ResourceManager::load(argv[1]);
 
     global_scope = new Scope("global");
+    initialize_scope(global_scope);
 
     Lexer* lexer = new Lexer(ResourceManager::get(argv[1]));
     Parser* parser = new Parser(lexer);

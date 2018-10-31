@@ -1,19 +1,21 @@
-#include "../includes/AST/AST_UBoundCall.hpp"
-#include "../includes/AST/AST_Integer.hpp"
+#include "../includes/AST/AST_Function_UBound.hpp"
 #include "../includes/AST/AST_Array.hpp"
-#include "../includes/Interpreter.hpp"
+#include "../includes/typedefs.hpp"
 #include <iostream>
 
 
-AST_UBoundCall::AST_UBoundCall(std::vector<AST*> args) : AST_FunctionCall(args) {};
+AST_Function_UBound::AST_Function_UBound(std::string name) : AST_BuiltinFunctionDefinition(name) {
+    this->expected_args.push_back(TokenType::Anything);
+}
 
-AST_UBoundCall::~AST_UBoundCall() {};
+AST_Function_UBound::~AST_Function_UBound() {
+};
 
-AST* AST_UBoundCall::call(Interpreter* interpreter) {
-    if (this->args.size() == 0)
+AST* AST_Function_UBound::call(std::vector<AST*> args, Interpreter* interpreter) {
+    if (args.size() == 0)
         interpreter->error("UBound requires 1 argument");
 
-    anything arr = interpreter->visit(this->args[0]);
+    anything arr = interpreter->visit(args[0]);
 
     if (arr.type() == typeid(AST*)) {
         AST* ast = boost::get<AST*>(arr);

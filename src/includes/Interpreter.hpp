@@ -4,6 +4,8 @@
 #include "Parser.hpp"
 
 
+extern Scope* global_scope;
+
 class Interpreter: public NodeVisitor {
     public:
         Interpreter(Parser* parser);

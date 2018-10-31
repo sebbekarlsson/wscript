@@ -375,6 +375,8 @@ anything Interpreter::visit_AST_functionCall(AST_FunctionCall* node) {
         AST_UserDefinedFunctionCall* udfc = (AST_UserDefinedFunctionCall*) node;
         
         AST_BuiltinFunctionDefinition* bfd = node->get_scope()->get_builtin_function(udfc->name);
+        if (bfd == nullptr)
+            bfd = global_scope->get_builtin_function(udfc->name);
 
         if (bfd != nullptr) {
             if (!bfd->unlimited_args) {

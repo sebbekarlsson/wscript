@@ -11,12 +11,6 @@
 #include "includes/AST/AST_VarDecl.hpp"
 #include "includes/AST/AST_If.hpp"
 #include "includes/AST/AST_Else.hpp"
-#include "includes/AST/AST_PrintCall.hpp"
-#include "includes/AST/AST_ArrayCall.hpp"
-#include "includes/AST/AST_UBoundCall.hpp"
-#include "includes/AST/AST_SplitCall.hpp"
-#include "includes/AST/AST_isEmptyCall.hpp"
-#include "includes/AST/AST_CreateObjectCall.hpp"
 #include "includes/AST/AST_UserDefinedFunctionCall.hpp"
 #include "includes/AST/AST_DoWhile.hpp"
 #include "includes/AST/AST_Empty.hpp"
@@ -378,44 +372,14 @@ AST_FunctionCall* Parser::function_call(Scope* scope) {
     
     this->eat(TokenType::Rparen);
 
-    AST_FunctionCall* fc;
-    AST_UserDefinedFunctionCall* udfc;
+    AST_UserDefinedFunctionCall* udfc = new AST_UserDefinedFunctionCall(
+        args,
+        function_name
+    );
 
-    if (function_name == "print") {
-        fc = new AST_PrintCall(args);
-        fc->scope = scope;
-        return fc;
-    } else if (function_name == "CreateObject") {
-        fc = new AST_CreateObjectCall(args);
-        fc->scope = scope;
-        return fc;
-    } else if (function_name == "Array") {
-        fc = new AST_ArrayCall(args);
-        fc->scope = scope;
-        return fc;
-    } else if (function_name == "UBound") {
-        fc = new AST_UBoundCall(args);
-        fc->scope = scope;
-        return fc;
-    } else if (function_name == "Split") {
-        fc = new AST_SplitCall(args);
-        fc->scope = scope;
-        return fc;
-    } else if (function_name == "isEmpty") {
-        fc = new AST_isEmptyCall(args);
-        fc->scope = scope;
-        return fc;
-    } else {
-        udfc = new AST_UserDefinedFunctionCall(args, function_name);
-        udfc->scope = scope;
-        return udfc;
-    }
+    udfc->scope = scope;
 
-    args.clear();
-    delete fc;
-    delete udfc;
-    
-    return nullptr;
+    return udfc;
 };
 
 /**
