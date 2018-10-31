@@ -107,3 +107,9 @@ def test_dictionary_items_vbs():
 
 def test_dictionary_removeall_vbs():
     assert binexec('dictionary_removeall.vbs') == '1\n1\n0\n0'
+
+
+def test_split_vbs():
+    assert binexec('split.vbs') ==\
+        '[\nhello\n,\nworld\n,\nthis\n,\nis\n,\nsplit\n,\n]' +\
+        '\n[\nhello\n,\nworld\n,\n]'

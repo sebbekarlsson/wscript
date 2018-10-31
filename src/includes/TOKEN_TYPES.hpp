@@ -24,6 +24,7 @@ std::map<std::string, TokenType> RESERVED_KEYWORDS = {
     {"CreateObject", TokenType::Function_call},
     {"Array", TokenType::Function_call},
     {"UBound", TokenType::Function_call},
+    {"Split", TokenType::Function_call},
     {"isEmpty", TokenType::Function_call}
 };
 #endif
