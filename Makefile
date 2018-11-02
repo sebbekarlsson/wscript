@@ -38,17 +38,23 @@ unit.o: unit/unit.cpp
 
 %.o: %.cpp includes/%.hpp
 	g++ -c $(G_FLAGZ) $< -o $@
-#libwscript.a: $(OBJECTS_NO_MAIN)
-#	ar rcs $@ $^
 
 libwscript.so: $(OBJECTS_NO_MAIN)
 	$(LINK.c) -shared $^ -o $@
-#libwscript.so: $(OBJECTS_NO_MAIN)
-#	ar rcs $@ $^
+
+
+install:
+	-rm /usr/local/lib/libwscript.*
+	-rm -rf /usr/local/include/wscript
+	make
+	make libwscript.so
+	cp -r src/includes /usr/local/include/wscript
+	cp libwscript.so /usr/local/lib/libwscript.so
 
 clean:
 	-rm *.out
 	-rm *.o
+	-rm *.so
 	-rm src/*.o
 	-rm src/*/*.o
 	-rm src/*/*/*.o
