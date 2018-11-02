@@ -44,6 +44,11 @@ End If
 > To run the unit tests, you will have to have these installed:
 * python2.7
 * python-virtualenv
+
+> You will also have to install the default extensions:
+
+    ./install-extensions.sh
+
 > If you have them installed, you can simply run:
 
     ./run_tests.sh

@@ -113,3 +113,7 @@ def test_split_vbs():
     assert binexec('split.vbs') ==\
         '[\nhello\n,\nworld\n,\nthis\n,\nis\n,\nsplit\n,\n]' +\
         '\n[\nhello\n,\nworld\n,\n]'
+
+
+def test_extension_requests_vbs():
+    assert '<html>' in binexec('extension_requests.vbs')
