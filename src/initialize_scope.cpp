@@ -8,10 +8,10 @@
 
 
 void initialize_scope(Scope* scope) {
-    scope->define_builtin_function(new AST_Function_Split("Split"));
-    scope->define_builtin_function(new AST_Function_UBound("UBound"));
-    scope->define_builtin_function(new AST_Function_isEmpty("isEmpty"));
-    scope->define_builtin_function(new AST_Function_CreateObject("CreateObject"));
+    scope->define_builtin_function(new AST_Function_Split("split"));
+    scope->define_builtin_function(new AST_Function_UBound("ubound"));
+    scope->define_builtin_function(new AST_Function_isEmpty("isempty"));
+    scope->define_builtin_function(new AST_Function_CreateObject("createobject"));
     scope->define_builtin_function(new AST_Function_Print("print"));
-    scope->define_builtin_function(new AST_Function_Array("Array"));
+    scope->define_builtin_function(new AST_Function_Array("array"));
 };

@@ -6,18 +6,24 @@
 // https://www.promotic.eu/en/pmdoc/ScriptLangs/VBScript/DataTypes.htm
 
 std::map<std::string, TokenType> RESERVED_KEYWORDS = {
-    {"End", TokenType::End},
-    {"Dim", TokenType::Declare},
-    {"If", TokenType::If},
-    {"Else", TokenType::Else},
-    {"ElseIf", TokenType::Else_if},
-    {"Then", TokenType::Then},
-    {"Function", TokenType::Function_definition},
-    {"Do", TokenType::Do},
-    {"Loop", TokenType::Loop},
-    {"While", TokenType::While},
-    {"Empty", TokenType::Empty},
-    {"As", TokenType::As},
-    {"WScript", TokenType::Object}
+    {"end", TokenType::End},
+    {"dim", TokenType::Declare},
+    {"if", TokenType::If},
+    {"else", TokenType::Else},
+    {"elseif", TokenType::Else_if},
+    {"then", TokenType::Then},
+    {"function", TokenType::Function_definition},
+    {"do", TokenType::Do},
+    {"loop", TokenType::Loop},
+    {"while", TokenType::While},
+    {"empty", TokenType::Empty},
+    {"as", TokenType::As},
+    {"print", TokenType::Function_call},
+    {"wscript", TokenType::Object},
+    {"createobject", TokenType::Function_call},
+    {"array", TokenType::Function_call},
+    {"ubound", TokenType::Function_call},
+    {"split", TokenType::Function_call},
+    {"isempty", TokenType::Function_call}
 };
 #endif

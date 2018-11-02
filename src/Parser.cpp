@@ -113,7 +113,15 @@ AST* Parser::factor(Scope* scope) {
         this->eat(TokenType::Object);
         AST_Object* obj;
 
-        if (token->value == "WScript")
+
+        std::transform(
+            token->value.begin(),
+            token->value.end(),
+            token->value.begin(),
+            ::tolower
+        );
+
+        if (token->value == "wscript")
             obj = new AST_WScript(token);
         else
             obj = new AST_Object(token);
@@ -321,7 +329,14 @@ AST* Parser::id_action(Scope* scope) {
 };
 
 AST_Object* Parser::object(Scope* scope) {
-    if (current_token->value == "WScript") { // TODO: make this more dynamic
+    std::transform(
+        current_token->value.begin(),
+        current_token->value.end(),
+        current_token->value.begin(),
+        ::tolower
+    );
+
+    if (current_token->value == "wscript") { // TODO: make this more dynamic
         AST_WScript* obj = new AST_WScript(this->current_token);
         obj->scope = scope;
 

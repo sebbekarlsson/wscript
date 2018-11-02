@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include <map>
+#include <algorithm>
 
 
 extern std::map<std::string, TokenType> RESERVED_KEYWORDS;
@@ -332,6 +333,8 @@ Token* Lexer::_id() {
         result += this->current_char;
         this->advance();
     }
+
+    std::transform(result.begin(), result.end(), result.begin(), ::tolower);
 
     if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
         tok = new Token(RESERVED_KEYWORDS[result], result);
