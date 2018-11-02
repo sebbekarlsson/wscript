@@ -16,10 +16,10 @@ Lexer::Lexer(std::string text) {
 };
 
 Lexer::~Lexer() {
-    this->text.clear();
+    /*this->text.clear();
     this->pos = 0;
     this->line = 0;
-    this->current_char = '\0';
+    this->current_char = '\0';*/
 };
 
 /**
@@ -207,8 +207,8 @@ Token* Lexer::_get_next_token() {
             return new Token(TokenType::Colon, s);
         }
 
-        s.clear();
-        ss.clear();
+        //s.clear();
+        //ss.clear();
         this->error("Unexpected: `" + s + "`");
     }
 
@@ -274,7 +274,7 @@ Token* Lexer::str() {
 
     tok = new Token(TokenType::String, result);
 
-    result.clear();
+    //result.clear();
 
     return tok;
 };
@@ -335,7 +335,7 @@ Token* Lexer::_id() {
     }
 
     std::transform(result.begin(), result.end(), result.begin(), ::tolower);
-
+    
     if (RESERVED_KEYWORDS.find(result) != RESERVED_KEYWORDS.end()) {
         tok = new Token(RESERVED_KEYWORDS[result], result);
     } else if (this->latest_token->type != TokenType::Function_definition && this->peek_next(this->pos) == '(' && this->peek_next(this->pos) != '=') {
@@ -347,7 +347,7 @@ Token* Lexer::_id() {
     if (tok == nullptr)
         this->error("Found unknown ID: " + result);
 
-    result.clear();
+    //result.clear();
 
     return tok;
 };

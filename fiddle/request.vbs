@@ -1,8 +1,9 @@
-Dim request
+Dim request, x
 
 
 request = CreateObject("../libwscriptrequests/libwscriptrequests.so")
-request.Open("GET", "https://www.example.org", 1)
+print(request)
+request.Open("GET", "http://example.org" ,1)
 request.Send()
 
-print(request.responseText)
+print(request.responsetext)

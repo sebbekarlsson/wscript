@@ -29,7 +29,8 @@ int main(int argc, char** argv) {
 
     ResourceManager::unload(argv[1]);
 
-    delete interpreter;
+    // undefined behaviour
+    //delete interpreter;
     delete global_scope;
 
     return EXIT_SUCCESS;

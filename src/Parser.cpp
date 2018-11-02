@@ -261,7 +261,7 @@ AST* Parser::any_statement(Scope* scope) {
     for(std::vector<AST*>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         root->children.push_back((*it));
 
-    nodes.clear();
+    //nodes.clear();
 
     return root;
 };
